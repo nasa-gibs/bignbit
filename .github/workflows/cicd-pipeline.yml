@@ -386,4 +386,5 @@ jobs:
         env:
           AWS_DEFAULT_REGION: ${{ env.AWS_REGION }}
         run: |
+          aws sts get-caller-identity
           ./bin/deploy.sh --app-version ${{ env.THE_VERSION }} --tf-venue ${{ vars.TF_VENUE }} --lambda_container_image_uri ${{ env.CONTAINER_IMAGE_URI }}
