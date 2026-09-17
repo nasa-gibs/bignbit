@@ -343,6 +343,8 @@ jobs:
       CONTAINER_IMAGE_URI: ${{ needs.docker.outputs.container_image_uri }}
       TF_MODULE_ARTIFACT_NAME: ${{ needs.build.outputs.tf_module_artifact_name }}
       TF_VAR_gibs_account_id: ${{ secrets.GIBS_ACCOUNT_ID }}
+      # SANDBOX deploys to us-east-1; all other venues use us-west-2
+      AWS_REGION: ${{ needs.build.outputs.deploy_env == 'SANDBOX' && 'us-east-1' || 'us-west-2' }}
     if: |
       github.ref == 'refs/heads/develop' ||
       startsWith(github.ref, 'refs/heads/release') ||
@@ -359,7 +361,7 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v6.1.0
         with:
-          aws-region: us-west-2
+          aws-region: ${{ env.AWS_REGION }}
           role-session-name: GitHubActions
           aws-access-key-id: ${{ secrets[vars.AWS_ACCESS_KEY_ID_SECRET_NAME] }}
           aws-secret-access-key: ${{ secrets[vars.AWS_SECRET_ACCESS_KEY_SECRET_NAME] }}
@@ -382,6 +384,6 @@ jobs:
         id: terraform-deploy
         working-directory: examples/cumulus-tf
         env:
-          AWS_DEFAULT_REGION: us-west-2
+          AWS_DEFAULT_REGION: ${{ env.AWS_REGION }}
         run: |
           ./bin/deploy.sh --app-version ${{ env.THE_VERSION }} --tf-venue ${{ vars.TF_VENUE }} --lambda_container_image_uri ${{ env.CONTAINER_IMAGE_URI }}
