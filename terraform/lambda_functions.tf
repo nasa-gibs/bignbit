@@ -29,6 +29,10 @@ resource aws_ecr_repository "lambda-image-repo" {
 resource null_resource ecr_login {
   triggers = {
     image_uri = var.lambda_container_image_uri
+    # Re-run whenever the target ECR repo changes. Without this, a recreated or
+    # emptied repo is not detected (triggers only saw image_uri), so the login
+    # and push below are skipped and Lambda ends up pointing at a missing image.
+    ecr_repo = aws_ecr_repository.lambda-image-repo.repository_url
   }
 
   provisioner "local-exec" {
@@ -44,6 +48,9 @@ resource null_resource upload_ecr_image {
   depends_on = [null_resource.ecr_login]
   triggers = {
     image_uri = var.lambda_container_image_uri
+    # Tie the push to the ECR repo identity so a recreated/empty repo forces a
+    # re-push instead of being skipped on an unchanged image_uri.
+    ecr_repo = aws_ecr_repository.lambda-image-repo.repository_url
   }
 
   provisioner "local-exec" {
