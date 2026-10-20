@@ -46,12 +46,12 @@ jobs:
       pyproject_name: ${{ steps.poetry-build.outputs.pyproject_name }}
       tf_module_artifact_name: ${{ steps.poetry-build.outputs.tf_module_artifact_name }}
     steps:
-      - uses: getsentry/action-github-app-token@v4.0.0
+      - uses: actions/create-github-app-token@v3
         name: CICD Token
         id: cicd-app
         with:
-          app_id: ${{ secrets.CICD_APP_ID }}
-          private_key: ${{ secrets.CICD_APP_PRIVATE_KEY }}
+          client-id: ${{ secrets.CICD_APP_CLIENT_ID }}
+          private-key: ${{ secrets.CICD_APP_PRIVATE_KEY }}
       - uses: actions/checkout@v7
         with:
           repository: ${{ github.repository }}
