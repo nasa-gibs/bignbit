@@ -49,21 +49,22 @@ def get_edl_creds() -> tuple[str, str]:
     global ED_USER  # pylint: disable=W0603
     global ED_PASS  # pylint: disable=W0603
 
-    ssm = boto3.client('ssm')
+    if not ED_USER or not ED_PASS:
+        ssm = boto3.client('ssm')
 
-    if not ED_USER:
-        edl_user_ssm_name = os.environ.get('EDL_USER_SSM')
-        ssm_edl_user = ssm.get_parameter(
-            Name=edl_user_ssm_name, WithDecryption=True
-        )['Parameter']['Value']
-        ED_USER = ssm_edl_user
+        if not ED_USER:
+            edl_user_ssm_name = os.environ.get('EDL_USER_SSM')
+            ssm_edl_user = ssm.get_parameter(
+                Name=edl_user_ssm_name, WithDecryption=True
+            )['Parameter']['Value']
+            ED_USER = ssm_edl_user
 
-    if not ED_PASS:
-        edl_pass_ssm_name = os.environ.get('EDL_PASS_SSM')
-        ssm_edl_pass = ssm.get_parameter(
-            Name=edl_pass_ssm_name, WithDecryption=True
-        )['Parameter']['Value']
-        ED_PASS = ssm_edl_pass
+        if not ED_PASS:
+            edl_pass_ssm_name = os.environ.get('EDL_PASS_SSM')
+            ssm_edl_pass = ssm.get_parameter(
+                Name=edl_pass_ssm_name, WithDecryption=True
+            )['Parameter']['Value']
+            ED_PASS = ssm_edl_pass
 
     return ED_USER, ED_PASS
 
