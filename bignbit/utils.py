@@ -49,7 +49,7 @@ def get_edl_creds() -> tuple[str, str]:
     global ED_USER  # pylint: disable=W0603
     global ED_PASS  # pylint: disable=W0603
 
-    ssm = boto3.client('ssm', region_name='us-west-2')
+    ssm = boto3.client('ssm')
 
     if not ED_USER:
         edl_user_ssm_name = os.environ.get('EDL_USER_SSM')
