@@ -12,10 +12,25 @@ provider "aws" {
   }
 }
 
+# The bignbit staging bucket must live in a fixed region (us-west-2 for Harmony) regardless
+# of the region used by the rest of the stack. AWS provider v5.x cannot set a per-resource
+# region, so we pin a dedicated aliased provider here and pass it to the module as aws.staging.
+provider "aws" {
+  alias  = "bignbit-staging"
+  region = var.bignbit_staging_bucket_region
+  default_tags {
+    tags = merge(local.default_tags, {
+      application = local.bignbit_appname,
+      Version     = var.app_version,
+    })
+  }
+}
+
 module "bignbit_module" {
   source = "../../terraform"
   providers = {
-    aws = aws.bignbit-aws
+    aws         = aws.bignbit-aws
+    aws.staging = aws.bignbit-staging
   }
 
   count = 1

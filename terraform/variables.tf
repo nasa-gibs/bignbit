@@ -54,11 +54,11 @@ variable "bignbit_staging_bucket" {
   default = ""
 }
 
-variable "bignbit_staging_bucket_region" {
-  type = string
-  description = "Region for the S3 bucket where generated images will be saved. Defaults to us-west-2 for Harmony compatibility. See: https://github.com/nasa/harmony/blob/0f82b4f405373fe8c07eaa41a3840b0554356504/services/harmony/app/markdown/cloud-access.md?plain=1#L3"
-  default = "us-west-2"
-}
+# NOTE: The staging bucket's region is controlled by the `aws.staging` aliased provider
+# that the consumer passes into this module (see required_providers in main.tf), not by a
+# variable. AWS provider v5.x cannot set a per-resource region, so it must come from the
+# provider configuration. Point `aws.staging` at us-west-2 for Harmony compatibility. See:
+# https://github.com/nasa/harmony/blob/0f82b4f405373fe8c07eaa41a3840b0554356504/services/harmony/app/markdown/cloud-access.md
 
 variable "harmony_staging_path" {
   type = string
