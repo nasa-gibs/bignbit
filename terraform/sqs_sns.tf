@@ -1,11 +1,18 @@
 
+resource "aws_sqs_queue" "gibs_mock_queue" {
+  count                       = var.create_gibs_mock_queue ? 1 : 0
+  name                        = "${local.aws_resources_name}-gibs-mock-queue.fifo"
+  fifo_queue                  = true
+  content_based_deduplication = true
+}
+
 data "aws_iam_policy_document" "gibs_response_topic_policy" {
   statement {
     sid       = "${local.aws_resources_name}-grant-gitc-publish-sns"
     effect    = "Allow"
     principals {
       identifiers = compact([
-        var.gibs_account_id,
+        var.create_gibs_mock_queue ? "" : var.gibs_account_id,
         data.aws_caller_identity.current.account_id
       ])
       type        = "AWS"
@@ -120,7 +127,7 @@ data "aws_iam_policy_document" "gibs_request_queue_policy" {
     sid       = "${replace(title(replace(local.aws_resources_name, "-", " ")), " ", "")}GrantSendToGitc"
     effect    = "Allow"
     actions   = ["sqs:SendMessage"]
-    resources = ["arn:aws:sqs:*:${var.gibs_account_id}:${var.gibs_queue_name}"]
+    resources = var.create_gibs_mock_queue ? [aws_sqs_queue.gibs_mock_queue[0].arn] : ["arn:aws:sqs:*:${var.gibs_account_id}:${var.gibs_queue_name}"]
   }
 
   statement {
@@ -132,8 +139,12 @@ data "aws_iam_policy_document" "gibs_request_queue_policy" {
       "sqs:GetQueueUrl",
       "sqs:GetQueueAttributes",
     ]
-    resources = ["arn:aws:sqs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:*",
-                 "arn:aws:sqs:${var.gibs_region}:${var.gibs_account_id}:${var.gibs_queue_name}"]
+    resources = var.create_gibs_mock_queue ? [
+      "arn:aws:sqs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:*"
+    ] : [
+      "arn:aws:sqs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:*",
+      "arn:aws:sqs:${var.gibs_region}:${var.gibs_account_id}:${var.gibs_queue_name}"
+    ]
   }
 }
 

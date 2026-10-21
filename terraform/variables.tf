@@ -81,6 +81,12 @@ variable "gibs_account_id" {
   description = "AWS account ID for GIBS"
 }
 
+variable "create_gibs_mock_queue" {
+  type        = bool
+  default     = false
+  description = "When true, creates an internal SQS FIFO queue to stand in for the external GIBS queue. Use in sandbox/sit environments."
+}
+
 variable "edl_user_ssm" {
   type = string
   description = "Name of SSM parameter containing EDL username for querying CMR"

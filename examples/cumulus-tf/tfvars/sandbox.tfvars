@@ -6,6 +6,7 @@ prefix = "gitc-sandbox"
 gibs_region="mocked"
 gibs_queue_name="mocked"
 gibs_account_id="mocked"
+create_gibs_mock_queue=true
 
-force_delete_ecr             = true
-force_destroy_staging_bucket = true
+force_delete_ecr             = false
+force_destroy_staging_bucket = false

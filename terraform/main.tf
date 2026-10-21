@@ -37,4 +37,7 @@ locals {
 
   current_aws_region = data.aws_region.current.name
 
+  gibs_sqs_region = var.create_gibs_mock_queue ? data.aws_region.current.name : var.gibs_region
+  gibs_sqs_url    = var.create_gibs_mock_queue ? aws_sqs_queue.gibs_mock_queue[0].url : "https://sqs.${var.gibs_region}.amazonaws.com/${var.gibs_account_id}/${var.gibs_queue_name}"
+
 }

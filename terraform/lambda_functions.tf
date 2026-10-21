@@ -359,8 +359,8 @@ resource "aws_lambda_function" "send_to_gitc" {
       STACK_NAME                  = local.aws_resources_name
       CUMULUS_MESSAGE_ADAPTER_DIR = "/opt/"
       REGION                      = data.aws_region.current.name
-      GIBS_REGION                 = var.gibs_region
-      GIBS_SQS_URL                = "https://sqs.${var.gibs_region}.amazonaws.com/${var.gibs_account_id}/${var.gibs_queue_name}"
+      GIBS_REGION                 = local.gibs_sqs_region
+      GIBS_SQS_URL                = local.gibs_sqs_url
       GIBS_RESPONSE_TOPIC_ARN     = aws_sns_topic.gibs_response_topic.arn
     }
   }
