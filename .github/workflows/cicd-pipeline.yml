@@ -152,8 +152,16 @@ jobs:
         with:
           terraform_version: ${{ env.TERRAFORM_VERSION }}
           terraform_wrapper: false
+      # Validate through the example root config, not the bare terraform/ module. The module
+      # declares `configuration_aliases = [aws.staging]` (so the staging bucket can live in a
+      # fixed region under AWS provider v5), which means it can only be validated when a caller
+      # supplies that provider — a standalone `terraform validate` on terraform/ cannot. The
+      # example wires the provider in. AWS_REGION satisfies the unconfigured provider blocks
+      # during init; validate itself makes no AWS API calls, so no credentials are needed here.
       - name: Validate Terraform
-        working-directory: terraform
+        working-directory: examples/cumulus-tf
+        env:
+          AWS_REGION: us-east-1
         run: |
           terraform init -backend=false -upgrade
           terraform validate -no-color
