@@ -104,3 +104,23 @@ variable "harmony_job_status_max_delay_seconds" {
     description = "Maximum delay in seconds for Harmony job status checks"
     default = 20
 }
+
+variable "lambda_timeouts" {
+  type        = map(number)
+  description = "Configurable map of lambda timeouts"
+  default     = {}
+  validation {
+    condition = alltrue([for k, v in var.lambda_timeouts : v >= 1 && v <= 900])
+    error_message = "All lambda timeouts must be between 1 and 900 inclusive."
+  }
+}
+
+variable "lambda_memory_sizes" {
+  type        = map(number)
+  description = "Configurable map of lambda memory sizes"
+  default     = {}
+  validation {
+    condition = alltrue([for k, v in var.lambda_memory_sizes : v >= 128 && v <= 10240])
+    error_message = "All lambda memory sizes must be between 128 and 10240 inclusive."
+  }
+}

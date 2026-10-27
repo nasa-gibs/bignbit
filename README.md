@@ -121,6 +121,42 @@ This module uses the following input variables:
 | harmony_job_status_max_attempts      | number       | Maximum number of attempts to check Harmony job status                                                                           | 15                                                                  |
 | harmony_job_status_backoff_rate      | number       | Backoff rate for Harmony job status checks                                                                                       | 1.0                                                                 |
 | harmony_job_status_max_delay_seconds | number       | Maximum delay in seconds for Harmony job status checks                                                                           | 20                                                                  |
+| lambda_timeouts                      | map(number)  | Configurable map of lambda timeouts whose keys are the unprefixed lambda name and the value is a number of seconds between 1 and 900 inclusive                                                                            | {}                                                                   |
+| lambda_memory_sizes                  | map(number)  | Configurable map of lambda memory whose keys are the unprefixed lambda name and the value is a number of megabytes of memory sizes between  128 and 10240 inclusive                                                                           | {}                                                                   |
+
+### Module Inputs Deep Dive
+
+- `lambda_timeouts` is a configurable map variable aimed at providing more flexibility in the deployed timeout settings made to various lambdas. An example of this map with the available lambdas and their default values is provided below:
+  ```
+  lambda_timeouts = {
+      "get_dataset_configuration" = 30
+      "get_granule_umm_json" = 30
+      "get_collection_concept_id" = 30
+      "identify_image_file" = 30
+      "submit_harmony_job" = 60
+      "handle_big_result" = 300
+      "get_harmony_job_status" = 60
+      "apply_opera_hls_treatment" = 30
+      "send_to_gitc" = 15
+      "handle_gitc_response" = 45
+  }
+  ```
+- `lambda_memory_sizes` is a configurable map variable aimed at providing more flexibility in the deployed memory size settings made to various lambdas. An example of this map with the available lambdas and their default values is provided below:
+  ```
+  lambda_memory_sizes = {
+      "get_dataset_configuration" = 256
+      "get_granule_umm_json" = 256
+      "get_collection_concept_id" = 256
+      "identify_image_file" = 256
+      "submit_harmony_job" = 256
+      "handle_big_result" = 1024
+      "get_harmony_job_status" = 256
+      "apply_opera_hls_treatment" = 512
+      "send_to_gitc" = 256
+      "handle_gitc_response" = 256
+  }
+  ```
+
 
 ## Module Outputs
 

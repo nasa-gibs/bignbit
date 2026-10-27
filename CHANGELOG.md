@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - GITC-9675: Validate dataset configurations against a bundled JSON schema in the `get_dataset_configuration` lambda
 ### Changed
+- [issue/218](https://github.com/nasa-gibs/bignbit/issues/218): Add configurable timeout and memory size variables for deployed lambda resources. Add lambda timeout error `Sandbox.Timedout` to BigNBit workflow retry logic.
 ### Deprecated
 ### Removed
 ### Fixed

@@ -49,6 +49,32 @@ module "bignbit_module" {
     Version     = var.app_version
   })
   lambda_container_image_uri = var.lambda_container_image_uri
+
+  lambda_timeouts = {
+    "get_dataset_configuration" = 30
+    "get_granule_umm_json" = 30
+    "get_collection_concept_id" = 30
+    "identify_image_file" = 30
+    "submit_harmony_job" = 60
+    "handle_big_result" = 300
+    "get_harmony_job_status" = 60
+    "apply_opera_hls_treatment" = 30
+    "send_to_gitc" = 15
+    "handle_gitc_response" = 45
+  }
+
+  lambda_memory_sizes = {
+    "get_dataset_configuration" = 256
+    "get_granule_umm_json" = 256
+    "get_collection_concept_id" = 256
+    "identify_image_file" = 256
+    "submit_harmony_job" = 256
+    "handle_big_result" = 1024
+    "get_harmony_job_status" = 256
+    "apply_opera_hls_treatment" = 512
+    "send_to_gitc" = 256
+    "handle_gitc_response" = 256
+  }
 }
 
 /*
