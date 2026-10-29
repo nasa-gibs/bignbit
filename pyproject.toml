@@ -14,7 +14,7 @@ cumulus-message-adapter = "^2.0"
 harmony-py = "^1.5.0"
 cumulus-process = "^1.7.0"
 python-graphql-client = "^0.4.3"
-urllib3 = "^2.7"
+urllib3 = "^2.8"
 requests = "^2.34.2"
 # GDAL is optional so that conda/micromamba can own it during local dev and CI (where it
 # provides libgdal.so alongside the python bindings; see conda-environment.yaml). Only the

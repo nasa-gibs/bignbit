@@ -3524,4 +3524,4 @@ gdal = ["gdal"]
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.12"
-content-hash = "8859ec789e0ea2edb7185d7593d1158169f8d2c9cc53c0fccbb7b4290b2724cc"
+content-hash = "5e2f2131b2a45c6e2f696ba993d82e720b19fe2e7e7884a398cb720c717265dd"
