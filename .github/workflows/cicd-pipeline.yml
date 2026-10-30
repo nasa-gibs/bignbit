@@ -152,12 +152,6 @@ jobs:
         with:
           terraform_version: ${{ env.TERRAFORM_VERSION }}
           terraform_wrapper: false
-      # Validate through the example root config, not the bare terraform/ module. The module
-      # declares `configuration_aliases = [aws.staging]` (so the staging bucket can live in a
-      # fixed region under AWS provider v5), which means it can only be validated when a caller
-      # supplies that provider — a standalone `terraform validate` on terraform/ cannot. The
-      # example wires the provider in. AWS_REGION satisfies the unconfigured provider blocks
-      # during init; validate itself makes no AWS API calls, so no credentials are needed here.
       - name: Validate Terraform
         working-directory: examples/cumulus-tf
         env:
@@ -165,22 +159,21 @@ jobs:
         run: |
           terraform init -backend=false -upgrade
           terraform validate -no-color
-      # TEMPORARILY DISABLED during new-org migration — re-enable once SONAR_TOKEN is configured
-      # - name: SonarCloud Scan
-      #   uses: sonarsource/sonarqube-scan-action@v8.2.0
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      #   with:
-      #     args: >
-      #       -Dsonar.organization=${{ github.repository_owner }}
-      #       -Dsonar.projectKey=${{ github.repository_owner }}_${{ github.event.repository.name }}
-      #       -Dsonar.python.coverage.reportPaths=build/reports/coverage.xml
-      #       -Dsonar.sources=bignbit/
-      #       -Dsonar.tests=tests/
-      #       -Dsonar.projectName=${{ github.repository }}
-      #       -Dsonar.projectVersion=${{ env.software_version }}
-      #       -Dsonar.python.version=3.12
+      - name: SonarCloud Scan
+        uses: sonarsource/sonarqube-scan-action@v8.2.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: >
+            -Dsonar.organization=${{ github.repository_owner }}
+            -Dsonar.projectKey=${{ github.repository_owner }}_${{ github.event.repository.name }}
+            -Dsonar.python.coverage.reportPaths=build/reports/coverage.xml
+            -Dsonar.sources=bignbit/
+            -Dsonar.tests=tests/
+            -Dsonar.projectName=${{ github.repository }}
+            -Dsonar.projectVersion=${{ env.software_version }}
+            -Dsonar.python.version=3.12
       - name: Run Snyk as a blocking step
         uses: snyk/actions/python-3.12@master
         env:
