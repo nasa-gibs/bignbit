@@ -3,10 +3,10 @@ terraform {
     aws = {
       source  = "hashicorp/aws"
       version = ">= 5.100"
-      # The staging bucket must live in a fixed region (us-west-2 for Harmony) that is
-      # independent of the region used by the rest of the stack. AWS provider v5.x cannot
-      # set a per-resource region, so the consumer must pass an aliased provider pinned to
-      # that region. (A per-resource `region` argument only exists in provider v6+.)
+
+      # A separate provider for the staging bucket to be placed in the us-west-2 region for Harmony compatibility
+      # independent of other resources. This is a workaround for Terraform's 5.x.x AWS provider which doesn't allow
+      # for per-resource regions and should be removed once we upgrade to 6.x.x. See 
       configuration_aliases = [aws.staging]
     }
     null = {

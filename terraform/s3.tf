@@ -17,6 +17,17 @@ resource "aws_s3_bucket" "bignbit_staging_bucket" {
   }
 }
 
+check "bignbit_staging_bucket_in_us-west-2" {
+  assert {
+    condition = var.bignbit_staging_bucket_region_override || data.aws_region.staging.name == "us-west-2"
+    error_message = "The aws.staging provider on the bignbit module should be configured for the us-west-2 region for Harmony compatibility. See: https://github.com/nasa/harmony/blob/0f82b4f405373fe8c07eaa41a3840b0554356504/services/harmony/app/markdown/cloud-access.md?plain=1#L3. To override this check, enable `bignbit_staging_bucket_region_override`. Overriding this will break Harmony compatibility."
+  }
+
+  data "aws_region" "staging" {
+    provider = aws.staging
+  }
+}
+
 resource "aws_s3_bucket_ownership_controls" "disable_acls" {
   provider = aws.staging
   count    = local.create_bucket ? 1 : 0

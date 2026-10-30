@@ -54,11 +54,11 @@ variable "bignbit_staging_bucket" {
   default = ""
 }
 
-# NOTE: The staging bucket's region is controlled by the `aws.staging` aliased provider
-# that the consumer passes into this module (see required_providers in main.tf), not by a
-# variable. AWS provider v5.x cannot set a per-resource region, so it must come from the
-# provider configuration. Point `aws.staging` at us-west-2 for Harmony compatibility. See:
-# https://github.com/nasa/harmony/blob/0f82b4f405373fe8c07eaa41a3840b0554356504/services/harmony/app/markdown/cloud-access.md
+variable "bignbit_staging_bucket_region_override" {
+  type = bool
+  description = "Bypass the S3 bucket region check for us-west-2. Warning: This will break Harmony compatibility."
+  default = false
+}
 
 variable "harmony_staging_path" {
   type = string
