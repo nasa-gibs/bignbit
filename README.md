@@ -87,11 +87,11 @@ _Visual representation of the bignbit step function state machine:_
 2. Add a new terraform script to the `cumulus-deploy-tf` scripts used to deploy cumulus. This script
 should define the bignbit module and the bignbit step function state machine. See an example in [browse_image_workflow.tf](/examples/cumulus-tf/browse_image_workflow.tf).
 
-   > [!NOTE]
-   > bignbit requires its staging bucket to be placed in the us-west-2 region for Harmony compatibility. You will need to
-   > pass a separate provider to the bignbit Terraform module via `aws.staging` if your other resources are placed outside the
-   > `us-west-2` region. If your installation is already being placed in the `us-west-2` region, you may pass the same AWS
-   > provider for `aws.staging` as the rest of your installation.
+> [!NOTE]
+> bignbit requires its staging bucket to be placed in the `us-west-2` region for Harmony compatibility. You will need to
+> pass a separate provider to the bignbit Terraform module via `aws.staging` if your other resources are placed outside the
+> `us-west-2` region. If your installation is already being placed in the `us-west-2` region, you may pass the same AWS
+> provider for `aws.staging` as the rest of your installation.
 
 3. [Configure one or more collections](#configuring-a-collection)
 
