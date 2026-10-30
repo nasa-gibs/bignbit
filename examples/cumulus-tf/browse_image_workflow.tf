@@ -12,10 +12,22 @@ provider "aws" {
   }
 }
 
+provider "aws" {
+  alias  = "bignbit-staging"
+  region = var.bignbit_staging_bucket_region
+  default_tags {
+    tags = merge(local.default_tags, {
+      application = local.bignbit_appname,
+      Version     = var.app_version,
+    })
+  }
+}
+
 module "bignbit_module" {
   source = "../../terraform"
   providers = {
-    aws = aws.bignbit-aws
+    aws         = aws.bignbit-aws
+    aws.staging = aws.bignbit-staging
   }
 
   count = 1

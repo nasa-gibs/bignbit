@@ -3,6 +3,11 @@ terraform {
     aws = {
       source  = "hashicorp/aws"
       version = ">= 5.100"
+
+      # A separate provider for the staging bucket to be placed in the us-west-2 region for Harmony compatibility
+      # independent of other resources. This is a workaround for Terraform's 5.x.x AWS provider which doesn't allow
+      # for per-resource regions and should be removed once we upgrade to 6.x.x
+      configuration_aliases = [aws.staging]
     }
     null = {
       source  = "hashicorp/null"
@@ -31,5 +36,8 @@ locals {
   } : var.default_tags
 
   current_aws_region = data.aws_region.current.name
+
+  gibs_sqs_region = var.create_gibs_mock_queue ? data.aws_region.current.name : var.gibs_region
+  gibs_sqs_url    = var.create_gibs_mock_queue ? aws_sqs_queue.gibs_mock_queue[0].url : "https://sqs.${var.gibs_region}.amazonaws.com/${var.gibs_account_id}/${var.gibs_queue_name}"
 
 }
