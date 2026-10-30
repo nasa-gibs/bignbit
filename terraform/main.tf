@@ -6,7 +6,7 @@ terraform {
 
       # A separate provider for the staging bucket to be placed in the us-west-2 region for Harmony compatibility
       # independent of other resources. This is a workaround for Terraform's 5.x.x AWS provider which doesn't allow
-      # for per-resource regions and should be removed once we upgrade to 6.x.x. See 
+      # for per-resource regions and should be removed once we upgrade to 6.x.x
       configuration_aliases = [aws.staging]
     }
     null = {
