@@ -310,6 +310,27 @@ An example CNM-S message produced by this module:
 5. Install python package and dependencies `poetry install`
 6. Verify tests pass `poetry run pytest tests/`
 
+## MacOS (pyenv)
+
+An alternative to the conda-based setup above. Conda normally provides GDAL, so with pyenv GDAL is installed
+separately via Homebrew.
+
+1. Install pyenv, poetry and GDAL: `brew install pyenv poetry gdal`
+2. Add pyenv to your shell, then close your terminal and re-open it. Run `echo $SHELL` to see which shell you use.
+   - zsh: `echo 'eval "$(pyenv init -)"' >> ~/.zshrc`
+   - bash: `echo 'eval "$(pyenv init -)"' >> ~/.bash_profile`
+3. Install Python 3.12 and pin it for this repo:
+   ```bash
+   pyenv install 3.12
+   pyenv local 3.12
+   ```
+4. Create the virtual environment with poetry, using the pyenv python: `poetry env use "$(pyenv which python)"`
+   Activate it: `eval $(poetry env activate)`
+5. Check the installed GDAL version with `gdal-config --version`. The `gdal` python package version in `pyproject.toml`
+   must match the installed `libgdal` version.
+6. Install python package and dependencies, including the optional GDAL bindings: `poetry install -E gdal`
+7. Verify tests pass `poetry run pytest tests/`
+
 > [!IMPORTANT]
 > If developing on a `darwin_arm64` based mac, running terraform locally may result
 > in an error message during `terraform init`: "Provider registry.terraform.io/hashicorp/null v2.1.2

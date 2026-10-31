@@ -104,6 +104,7 @@ def get_edl_auth(venue: str) -> str:
     nrc = netrc.netrc()
     edl_user = ''
     edl_pass = ''
+    cred_source = '~/.netrc'
     for host_url in nrc.hosts.keys():
         if (venue == 'OPS' and host_url == 'urs.earthdata.nasa.gov') or (venue == 'UAT' and host_url == 'uat.urs.earthdata.nasa.gov'):
             edl_user, _, pss = nrc.hosts[host_url]
@@ -111,6 +112,8 @@ def get_edl_auth(venue: str) -> str:
             break
     if edl_user == '':
         edl_user, edl_pass = get_edl_creds()
+        cred_source = 'SSM'
+    print(f'{venue}: Authenticating to CMR as EDL user "{edl_user}" (credentials from {cred_source})')
 
     return get_cmr_user_token(edl_user, edl_pass, venue)
 
@@ -147,6 +150,7 @@ def validate_collection(
         provider: str,
         short_name: str,
         collection_id: str | None,
+        version: str | None = None,
 ) -> dict[str, Any]:
     """
     Search CMR database for the matching collection(s) on both production and uat
@@ -163,6 +167,9 @@ def validate_collection(
         Short name of the collection
     collection_id: str | None
         Collection concept ID. Will only match one venue if specified.
+    version: str | None
+        Collection version (e.g., 003). If specified, only that version is matched and the
+        concept ID found in each venue is reported.
     """
     search_params = {
         'provider': provider,
@@ -170,6 +177,8 @@ def validate_collection(
     }
     if collection_id:
         search_params['concept_id'] = collection_id
+    if version:
+        search_params['version'] = version
     match_dict: dict[str, Any] = {}
     matches: list[int] = []
     for venue in ['UAT', 'OPS']:
@@ -177,10 +186,13 @@ def validate_collection(
         matches.append(len(umm_json))
         match_dict[venue] = find_best_collection(umm_json)
         print(f'{venue}: Found {len(umm_json)} matching collections.')
+        if version and match_dict[venue]:
+            print(f'{venue}: Collection id for version {version} is {match_dict[venue]["meta"]["concept-id"]}')
 
     if not any(matches):
+        version_msg = f' version {version}' if version else ''
         raise CollectionNotFoundError(
-            f'Unable to find a collection matching {provider} and {short_name} in either CMR venue.'
+            f'Unable to find a collection matching {provider} and {short_name}{version_msg} in either CMR venue. Check that the collection exists and the EDL user has permission to read it'
         )
 
     return match_dict
@@ -259,7 +271,19 @@ def create_dataset_config(
         **kwargs,
 ) -> str:
     """Main function to create a dataset config for a single collection."""
-    collections = validate_collection(provider, short_name, kwargs.get('collectionId'))
+    version = kwargs.pop('version', None)
+    collections = validate_collection(provider, short_name, kwargs.get('collectionId'), version)
+    if version and not kwargs.get('collectionId'):
+        # Concept ids are venue-specific, so only use the one found if it is unambiguous
+        found_ids = {venue: c['meta']['concept-id'] for venue, c in collections.items() if c}
+        if len(found_ids) == 1:
+            venue, kwargs['collectionId'] = next(iter(found_ids.items()))
+            print(f'Setting collectionId to {kwargs["collectionId"]} (found in {venue} only)')
+        else:
+            warnings.warn(
+                f'Version {version} matched in multiple venues ({", ".join(found_ids)}) with different '
+                'concept ids; collectionId was not set. Use --collectionId to choose one.'
+            )
     img_variables = validate_img_variables(collections, kwargs.get('imgVariables'))
     dataset_config_json = build_config_json(img_variables, **kwargs)
     config_fname = f'{short_name}.cfg'
@@ -312,6 +336,15 @@ Examples:
             'CMR collection id, use if the collection name is ambiguous. '
             'WARNING: since collection ids are venue-specific, the output config '
             'will need to be re-generated when deploying to a separate venue.'
+        )
+    )
+    parser.add_argument(
+        '--version',
+        type=str,
+        help=(
+            'Collection version (e.g., 003). Narrows the CMR lookup to that version and prints the '
+            'matching collection id for each venue. If the version matches in only one venue and '
+            '--collectionId is not given, that collection id is written to the dataset config.'
         )
     )
     parser.add_argument(
