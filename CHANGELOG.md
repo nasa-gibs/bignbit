@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Deprecated
 ### Removed
 ### Fixed
+- GITC-9361: `handle_big_result` failed with "Invalid format for Job ID 'status'" on harmony-py 1.7+. Fetching results now skips harmony-py's job status poll (`allow_incomplete=True`), since the job is already known to be finished. Requires harmony-py >= 1.8.0
 ### Security
 
 ## [0.8.4]
