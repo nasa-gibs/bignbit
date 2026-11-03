@@ -5,6 +5,5 @@ terraform {
     # We can't use variables in the key name here, so we need to be extra
     # careful with this!
     key = "services/bignbit/terraform.tfstate"
-    region = "us-west-2"
   }
 }

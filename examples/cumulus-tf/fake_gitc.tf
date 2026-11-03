@@ -1,5 +1,5 @@
 resource "aws_sqs_queue" "gitc_input_queue" {
-  count = local.environment == "sit" ? 1 : 0
+  count = local.use_mock_gitc ? 1 : 0
 
   name = "${local.ec2_resources_name}-fake-gitc-IN.fifo"
   fifo_queue = true
@@ -12,7 +12,7 @@ resource "aws_sqs_queue" "gitc_input_queue" {
 }
 
 resource "aws_sqs_queue" "gitc_input_deadletter" {
-  count = local.environment == "sit" ? 1 : 0
+  count = local.use_mock_gitc ? 1 : 0
 
   name = "${local.ec2_resources_name}-fake-gitc-IN-dlq.fifo"
   fifo_queue = true
@@ -24,7 +24,7 @@ resource "aws_sqs_queue" "gitc_input_deadletter" {
 }
 
 resource "aws_lambda_function" "fakeGitcProcessing" {
-  count = local.environment == "sit" ? 1 : 0
+  count = local.use_mock_gitc ? 1 : 0
 
   filename         = "./bin/fake_gitc.py.zip"
   function_name    = "${local.ec2_resources_name}-fake_gitc"
@@ -45,14 +45,14 @@ resource "aws_lambda_function" "fakeGitcProcessing" {
 
 
 resource "aws_lambda_event_source_mapping" "gibs_response_event_trigger" {
-  count = local.environment == "sit" ? 1 : 0
+  count = local.use_mock_gitc ? 1 : 0
 
   event_source_arn = aws_sqs_queue.gitc_input_queue[0].arn
   function_name    = aws_lambda_function.fakeGitcProcessing[0].arn
 }
 
 data "aws_iam_policy_document" "gitc_input_role_policy" {
-  count = local.environment == "sit" ? 1 : 0
+  count = local.use_mock_gitc ? 1 : 0
 
   statement {
     sid       = "${replace(title(replace(local.ec2_resources_name, "-", " ")), " ", "")}GrantReadGitcInput"
@@ -75,7 +75,7 @@ data "aws_iam_policy_document" "gitc_input_role_policy" {
 }
 
 resource "aws_iam_role_policy" "allow_lambda_role_to_read_sqs_messages" {
-  count = local.environment == "sit" ? 1 : 0
+  count = local.use_mock_gitc ? 1 : 0
 
   name_prefix   = local.ec2_resources_name
   role   = aws_iam_role.iam_execution.name

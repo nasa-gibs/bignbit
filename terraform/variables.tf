@@ -54,6 +54,12 @@ variable "bignbit_staging_bucket" {
   default = ""
 }
 
+variable "bignbit_staging_bucket_region_override" {
+  type = bool
+  description = "Bypass the S3 bucket region check for us-west-2. Warning: This will break Harmony compatibility."
+  default = false
+}
+
 variable "harmony_staging_path" {
   type = string
   description = "Path relative to bignbit_staging_bucket where harmony results will be saved."
@@ -73,6 +79,12 @@ variable "gibs_queue_name" {
 variable "gibs_account_id" {
   type = string
   description = "AWS account ID for GIBS"
+}
+
+variable "create_gibs_mock_queue" {
+  type        = bool
+  default     = false
+  description = "When true, creates an internal SQS FIFO queue to stand in for the external GIBS queue. Use in sandbox/sit environments."
 }
 
 variable "edl_user_ssm" {

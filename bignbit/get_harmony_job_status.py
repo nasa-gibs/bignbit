@@ -123,7 +123,10 @@ def check_harmony_job(
     if job_status.get('status') == 'successful':
         # Check that the harmony job returned data to confirm that the job was successful
         try:
-            result_urls = list(harmony_client.result_urls(harmony_job_id, link_type=LinkType.s3))
+            # The job is already known to be successful, so skip harmony-py's
+            # wait-for-completion poll (see process_harmony_results in handle_big_result)
+            result_urls = list(harmony_client.result_urls(harmony_job_id, link_type=LinkType.s3,
+                                                          allow_incomplete=True))
         except (requests.exceptions.ConnectionError, requests.exceptions.Timeout) as exc:
             raise HarmonyTransientError(
                 f'Harmony API returned a transient error fetching result URLs for job {harmony_job_id}: {exc}'

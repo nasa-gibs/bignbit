@@ -2,10 +2,12 @@
 import hashlib
 import io
 import json
+import re
 import xml.etree.ElementTree as ET
 from unittest.mock import MagicMock, patch
 import boto3
 import pytest
+import responses
 from botocore.response import StreamingBody
 from moto import mock_aws
 
@@ -83,6 +85,60 @@ def test_process_harmony_results_no_data():
     cmr_environment = 'UAT'
     file_dicts = process_harmony_results(harmony_job, cmr_environment)
     assert file_dicts == []
+
+
+@mock_aws
+def test_process_harmony_results_fresh_harmony_session():
+    """
+    Regression test: on a fresh (unauthenticated) Harmony session, every request is first
+    redirected through the EDL login. requests turns a redirected POST into a GET, so polling
+    POST /jobs/status arrives as GET /jobs/status, which Harmony rejects ("Invalid format for
+    Job ID 'status'"). Fetching results for an already-finished job must not poll that endpoint.
+    """
+    bignbit.utils.HARMONY_CLIENT = None
+    bignbit.utils.ED_USER = 'test'
+    bignbit.utils.ED_PASS = 'test'
+    harmony = 'https://harmony.uat.earthdata.nasa.gov'
+    edl = 'https://uat.urs.earthdata.nasa.gov/oauth/authorize'
+    job_id = '0c8ce8fb-741b-4f73-9c05-2ebecc97c485'
+    session = {'authenticated': False, 'return_to': None}
+
+    def require_login(handler):
+        def callback(request):
+            if not session['authenticated']:
+                session['return_to'] = request.url
+                return 303, {'Location': edl}, 'See Other'
+            return handler(request)
+        return callback
+
+    def oauth_redirect(_request):
+        session['authenticated'] = True
+        return 307, {'Location': session['return_to']}, ''
+
+    def job_page(request):
+        requested_id = request.url.split('/jobs/')[1].split('?')[0]
+        if requested_id == 'status':
+            body = {'code': 'harmony.RequestValidationError',
+                    'description': "Error: Invalid format for Job ID 'status'. Job ID must be a UUID."}
+            return 400, {'Content-Type': 'application/json'}, json.dumps(body)
+        body = {'jobID': requested_id, 'status': 'successful', 'progress': 100, 'message': '', 'links': []}
+        return 200, {'Content-Type': 'application/json'}, json.dumps(body)
+
+    batch_status = {'jobStatuses': [{'jobID': job_id, 'status': 'successful', 'progress': 100}],
+                    'notFoundJobIDs': []}
+    with responses.RequestsMock(assert_all_requests_are_fired=False) as rsps:
+        rsps.add(responses.GET, edl, status=302, headers={'Location': f'{harmony}/oauth2/redirect?code=x'})
+        rsps.add_callback(responses.GET, f'{harmony}/oauth2/redirect', callback=oauth_redirect)
+        rsps.add_callback(responses.POST, f'{harmony}/jobs/status', callback=require_login(
+            lambda _request: (200, {'Content-Type': 'application/json'}, json.dumps(batch_status))))
+        rsps.add_callback(responses.GET, re.compile(f'{harmony}/jobs/.*'), callback=require_login(job_page))
+
+        harmony_job = {'job': job_id, 'variable': 'analysed_sst', 'output_crs': 'EPSG:4326', 'status': 'successful'}
+        assert process_harmony_results(harmony_job, 'UAT') == []
+
+        assert not [c for c in rsps.calls if c.request.url.split('?')[0].endswith('/jobs/status')]
+    bignbit.utils.HARMONY_CLIENT = None
+
 
 @mock_aws
 def test_generate_metadata():

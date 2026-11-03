@@ -12,8 +12,6 @@ terraform {
 }
 
 provider "aws" {
-  region = "us-west-2"
-
   ignore_tags {
     key_prefixes = ["gsfc-ngap"]
   }
@@ -29,6 +27,8 @@ data "aws_region" "current" {}
 
 locals {
   environment = var.bignbit_stage
+
+  use_mock_gitc = var.gibs_queue_name == "mocked"
 
   # This is the convention we use to know what belongs to each other
   ec2_resources_name = terraform.workspace == "default" ? var.prefix : "${var.prefix}-${terraform.workspace}"

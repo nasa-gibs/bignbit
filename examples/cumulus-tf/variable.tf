@@ -29,6 +29,12 @@ variable "bignbit_cmr_environment" {
   description = "cmr environment used for bignbit"
 }
 
+variable "bignbit_staging_bucket_region" {
+  type        = string
+  description = "Region for the S3 staging bucket where generated images will be saved. Defaults to us-west-2 for Harmony compatibility. This configures the aws.staging aliased provider passed into the bignbit module. See: https://github.com/nasa/harmony/blob/0f82b4f405373fe8c07eaa41a3840b0554356504/services/harmony/app/markdown/cloud-access.md?plain=1#L3"
+  default     = "us-west-2"
+}
+
 variable "big_throttled_execution_limit" {
   type    = number
   default = 50
