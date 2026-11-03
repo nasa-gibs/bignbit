@@ -44,6 +44,15 @@
           "BackoffRate": 2,
           "IntervalSeconds": 2,
           "MaxAttempts": 2
+        },
+        {
+          "ErrorEquals": [
+            "Sandbox.Timedout"
+          ],
+          "IntervalSeconds": 10,
+          "MaxAttempts": 3,
+          "BackoffRate": 2,
+          "JitterStrategy": "FULL"
         }
       ],
       "Next":"Get Granule umm_json"
@@ -91,6 +100,15 @@
           "BackoffRate": 2,
           "IntervalSeconds": 2,
           "MaxAttempts": 2
+        },
+        {
+          "ErrorEquals": [
+            "Sandbox.Timedout"
+          ],
+          "IntervalSeconds": 10,
+          "MaxAttempts": 3,
+          "BackoffRate": 2,
+          "JitterStrategy": "FULL"
         }
       ],
       "Next":"Send to Harmony?"
@@ -155,7 +173,16 @@
           "BackoffRate": 2,
           "IntervalSeconds": 2,
           "MaxAttempts": 2
-       }
+        },
+        {
+          "ErrorEquals": [
+            "Sandbox.Timedout"
+          ],
+          "IntervalSeconds": 10,
+          "MaxAttempts": 3,
+          "BackoffRate": 2,
+          "JitterStrategy": "FULL"
+        }
       ],
       "Next":"Apply OPERA HLS Treatment?"
     },
@@ -220,6 +247,15 @@
           "BackoffRate": 2,
           "IntervalSeconds": 2,
           "MaxAttempts": 2
+        },
+        {
+          "ErrorEquals": [
+            "Sandbox.Timedout"
+          ],
+          "IntervalSeconds": 10,
+          "MaxAttempts": 3,
+          "BackoffRate": 2,
+          "JitterStrategy": "FULL"
         }
       ],
       "Next":"Handle BIG Result"
@@ -270,6 +306,15 @@
           "BackoffRate": 2,
           "IntervalSeconds": 2,
           "MaxAttempts": 2
+        },
+        {
+          "ErrorEquals": [
+            "Sandbox.Timedout"
+          ],
+          "IntervalSeconds": 10,
+          "MaxAttempts": 3,
+          "BackoffRate": 2,
+          "JitterStrategy": "FULL"
         }
       ],
       "Next":"Convert Variables To PNG"
@@ -350,7 +395,9 @@
                         "BackoffRate": 1
                       },
                       {
-                        "ErrorEquals": ["Lambda.Unknown"],
+                        "ErrorEquals": [
+                          "Lambda.Unknown"
+                        ],
                         "BackoffRate": 2,
                         "IntervalSeconds": 2,
                         "MaxAttempts": 2
@@ -413,6 +460,15 @@
                         "BackoffRate": 2,
                         "IntervalSeconds": 2,
                         "MaxAttempts": 2
+                      },
+                      {
+                        "ErrorEquals": [
+                          "Sandbox.Timedout"
+                        ],
+                        "IntervalSeconds": 10,
+                        "MaxAttempts": 3,
+                        "BackoffRate": 2,
+                        "JitterStrategy": "FULL"
                       }
                     ],
                     "Catch":[
@@ -488,6 +544,15 @@
           "BackoffRate": 2,
           "IntervalSeconds": 2,
           "MaxAttempts": 2
+        },
+        {
+          "ErrorEquals": [
+            "Sandbox.Timedout"
+          ],
+          "IntervalSeconds": 10,
+          "MaxAttempts": 3,
+          "BackoffRate": 2,
+          "JitterStrategy": "FULL"
         }
       ],
       "Catch": [
@@ -557,6 +622,15 @@
                 "BackoffRate": 2,
                 "IntervalSeconds": 2,
                 "MaxAttempts": 2
+              },
+              {
+                "ErrorEquals": [
+                  "Sandbox.Timedout"
+                ],
+                "IntervalSeconds": 10,
+                "MaxAttempts": 3,
+                "BackoffRate": 2,
+                "JitterStrategy": "FULL"
               }
             ],
             "End": true

@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - GITC-9361: Add SANDBOX as a deployable venue in the CI/CD pipeline and example deployment
 - GITC-9361: Add `create_gibs_mock_queue` and `bignbit_staging_bucket_region_override` module inputs
 ### Changed
+- [issue/218](https://github.com/nasa-gibs/bignbit/issues/218): Add configurable timeout and memory size variables for deployed lambda resources. Add lambda timeout error `Sandbox.Timedout` to BigNBit workflow retry logic.
 - GITC-9361: **Breaking:** the module now requires an `aws.staging` provider, used for the staging bucket (must be `us-west-2` for Harmony). Callers must add it to the module's `providers` block; see the README
 - GITC-9361: EDL credentials are read from SSM in the Lambda's own region instead of always `us-west-2`
 - GITC-9361: SonarCloud scanning is temporarily disabled in the CI/CD pipeline
