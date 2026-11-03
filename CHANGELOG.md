@@ -8,10 +8,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - GITC-9675: Validate dataset configurations against a bundled JSON schema in the `get_dataset_configuration` lambda
+- GITC-9361: Add SANDBOX as a deployable venue in the CI/CD pipeline and example deployment
+- GITC-9361: Add `create_gibs_mock_queue` and `bignbit_staging_bucket_region_override` module inputs
 ### Changed
+- GITC-9361: **Breaking:** the module now requires an `aws.staging` provider, used for the staging bucket (must be `us-west-2` for Harmony). Callers must add it to the module's `providers` block; see the README
+- GITC-9361: EDL credentials are read from SSM in the Lambda's own region instead of always `us-west-2`
+- GITC-9361: SonarCloud scanning is temporarily disabled in the CI/CD pipeline
 ### Deprecated
 ### Removed
 ### Fixed
+- GITC-9361: `handle_big_result` failed with "Invalid format for Job ID 'status'" on harmony-py 1.7+. Fetching results now skips harmony-py's job status poll (`allow_incomplete=True`), since the job is already known to be finished. Requires harmony-py >= 1.8.0
 ### Security
 
 ## [0.8.4]

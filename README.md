@@ -86,6 +86,13 @@ _Visual representation of the bignbit step function state machine:_
    ```
 2. Add a new terraform script to the `cumulus-deploy-tf` scripts used to deploy cumulus. This script
 should define the bignbit module and the bignbit step function state machine. See an example in [browse_image_workflow.tf](/examples/cumulus-tf/browse_image_workflow.tf).
+
+> [!NOTE]
+> bignbit requires its staging bucket to be placed in the `us-west-2` region for Harmony compatibility. You will need to
+> pass a separate provider to the bignbit Terraform module via `aws.staging` if your other resources are placed outside the
+> `us-west-2` region. If your installation is already being placed in the `us-west-2` region, you may pass the same AWS
+> provider for `aws.staging` as the rest of your installation.
+
 3. [Configure one or more collections](#configuring-a-collection)
 
 ## Module Inputs
@@ -103,10 +110,12 @@ This module uses the following input variables:
 | bignbit_audit_bucket                 | string       | S3 bucket where messages exchanged with GITC will be saved. Typically the cumulus internal bucket                                |                                                                     |
 | bignbit_audit_path                   | string       | Path relative to `bignbit_audit_bucket` where messages exchanged with GITC will be saved.                                        | "bignbit-cnm-output"                                                |
 | bignbit_staging_bucket               | string       | S3 bucket where generated images will be saved. Leave blank to use bucket managed by this module.                                | _create new bucket named svc-${var.app_name}-${var.prefix}-staging_ |
+| bignbit_staging_bucket_region_override | bool       | Skip the check that the `aws.staging` provider is in `us-west-2`. Overriding this will break Harmony compatibility.              | false                                                               |
 | harmony_staging_path                 | string       | Path relative to `bignbit_staging_bucket` where harmony results will be saved.                                                   | "bignbit-harmony-output"                                            |
 | gibs_region                          | string       | Region where GIBS resources are deployed                                                                                         |                                                                     |
 | gibs_queue_name                      | string       | Name of the GIBS SQS queue where outgoing CNM messages will be sent                                                              |                                                                     |
 | gibs_account_id                      | string       | AWS account ID for GIBS                                                                                                          |                                                                     |
+| create_gibs_mock_queue               | bool         | Create an internal SQS FIFO queue in place of the external GIBS queue (testing only; nothing consumes or responds to it).        | false                                                               |
 | edl_user_ssm                         | string       | Name of SSM parameter containing EDL username for querying CMR                                                                   |                                                                     |
 | edl_pass_ssm                         | string       | Name of SSM parameter containing EDL password for querying CMR                                                                   |                                                                     |
 | permissions_boundary_arn             | string       | Permissions boundary ARN to apply to the roles created by this module. If not provided, no permissions boundary will be applied. |                                                                     |

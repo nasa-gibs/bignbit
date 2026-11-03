@@ -12,10 +12,22 @@ provider "aws" {
   }
 }
 
+provider "aws" {
+  alias  = "bignbit-staging"
+  region = var.bignbit_staging_bucket_region
+  default_tags {
+    tags = merge(local.default_tags, {
+      application = local.bignbit_appname,
+      Version     = var.app_version,
+    })
+  }
+}
+
 module "bignbit_module" {
   source = "../../terraform"
   providers = {
-    aws = aws.bignbit-aws
+    aws         = aws.bignbit-aws
+    aws.staging = aws.bignbit-staging
   }
 
   count = 1
@@ -32,7 +44,8 @@ module "bignbit_module" {
   bignbit_audit_bucket = aws_s3_bucket.internal.bucket
   bignbit_audit_path   = "bignbit-cnm-output"
 
-  gibs_region     = var.gibs_region == "mocked" ? "us-west-2" : var.gibs_region
+  # The fake GITC queue (fake_gitc.tf) lives in the deployment's own region
+  gibs_region     = var.gibs_region == "mocked" ? data.aws_region.current.name : var.gibs_region
   gibs_queue_name = var.gibs_queue_name == "mocked" ? aws_sqs_queue.gitc_input_queue[0].name : var.gibs_queue_name
   gibs_account_id = var.gibs_account_id == "mocked" ? local.account_id : var.gibs_account_id
 
