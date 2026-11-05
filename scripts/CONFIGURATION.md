@@ -23,7 +23,11 @@ To configure a collection for bignbit, you need to have the following informatio
   --collectionId COLLECTIONID
                         CMR collection id, use if the collection name is ambiguous. WARNING: since
                         collection ids are venue-specific, the output config will need to be re-
-                        generated when deploying to a separate venue.
+                        generated when deploying to a separate venue. Alternatively, set --version and the
+                        script will set collectionId
+  --version VERSION     Collection version (e.g., 003). Narrows the CMR lookup to that version and prints the
+                        matching collection id for each venue. If the version matches in only one venue and
+                        --collectionId is not given, that collection id is written to the dataset config.
   --no-sendToHarmony    Specifies that the collection should not be processed by Harmony API.
                         Default is `sendToHarmony = True`.
   --operaHLSTreatment   Specifies whether the collection should receive the "OPERA HLS Treatment".
@@ -57,6 +61,9 @@ To configure a collection for bignbit, you need to have the following informatio
                         `outputCrs` parameter in Harmony API calls unconditionally. Warning: if
                         the Harmony service used to generate browse images does not support
                         reprojection, jobs will fail.
+  --requesterPays       Set to true if the source data bucket is configured as requester pays,
+                        meaning the requester is charged for access. Default is
+                        `requesterPays = False`.
 ```
 
 Additionally, you can provide the `--s3Destination` keyword if you wish to upload the dataset config directly to s3. You must have valid access credentials to your bucket in the environment you run the script if you wish to use this option.
@@ -71,7 +78,16 @@ Additionally, you can provide the `--s3Destination` keyword if you wish to uploa
 ## Setup
 
 1. Make sure you have set up the python environment by following the instructions from the Readme. While the instructions recommend `conda`, you can also install dependencies for bignbit using pip and a virtual environment. Once you have `conda activate bignbit` or your pip environment set up, you can run the script.
-2. Run the script by invoking it from the command line: `./create_dataset_config.py <short_name> <provider> ...` or `python create_dataset_config.py <short_name> <provider> ...`. If you are not saving the output config to S3, it will be saved in the directory you ran the script.
+2. Set the aws profile:
+`export AWS_PROFILE=<your aws profile>`
+3. Get the parameter names for the credentials:  
+`aws ssm describe-parameters --region us-west-2 --parameter-filters "Key=Name,Option=Contains,Values=bignbit-EDL" --query 'Parameters[].Name'`  
+4. `export EDL_USER_SSM=cnsld-cumulus-<maturity>-<?>-bignbit-EDL-username`  #username value returned from describe-parameters, ex: cnsld-cumulus-uat4-lpdaac-bignbit-EDL-username
+   `export EDL_PASS_SSM=cnsld-cumulus-<maturity>-<?>-bignbit-EDL-password`  #password value returned from describe-parameters
+5. Run the script by invoking it from the command line: 
+`cd scripts`
+`./create_dataset_config.py <provider> <short_name> ...` or `python create_dataset_config.py <provider> <short_name> ...`
+If you are not saving the output config to S3, it will be saved in the directory you ran the script.
 
 ## Examples
 

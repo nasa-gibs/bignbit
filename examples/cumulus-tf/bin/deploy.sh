@@ -28,9 +28,9 @@ case $key in
     -v|--tf-venue)
     tf_venue="$2"
     case $tf_venue in
-     sit|uat|ops) ;;
+     sandbox|sit|uat|ops) ;;
      *)
-        echo "tf_venue must be sit, uat, or ops"
+        echo "tf_venue must be sandbox, sit, uat, or ops"
         exit 1;;
     esac
     shift # past argument

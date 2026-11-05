@@ -1,0 +1,111 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:bignbit:dataset-config:v1",
+  "title": "bignbit Dataset Configuration",
+  "description": "Dataset configuration file for bignbit, as produced by scripts/create_dataset_config.py.",
+  "type": "object",
+  "properties": {
+    "sendToHarmony": {
+      "type": "boolean",
+      "description": "Whether the collection should be processed by the Harmony API."
+    },
+    "operaHLSTreatment": {
+      "type": "boolean",
+      "description": "Whether the collection should receive the OPERA HLS treatment."
+    },
+    "imgVariables": {
+      "type": "array",
+      "description": "Variables used to generate browse image(s). A single entry with id 'all' means use all variables.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Variable name (not a UMM-Var concept id), or 'all'."
+          }
+        },
+        "required": ["id"],
+        "additionalProperties": true
+      }
+    },
+    "height": {
+      "type": ["integer", "null"],
+      "description": "Browse image height override for Harmony. Null when no dimensions override is given."
+    },
+    "width": {
+      "type": ["integer", "null"],
+      "description": "Browse image width override for Harmony. Null when no dimensions override is given."
+    },
+    "subdaily": {
+      "type": "boolean",
+      "description": "True if granules contain subdaily data (sends DataDateTime to GIBS)."
+    },
+    "outputCrs": {
+      "type": "array",
+      "description": "Output projections / coordinate reference systems for browse images.",
+      "items": {
+        "type": "string",
+        "enum": ["EPSG:4326", "EPSG:3413", "EPSG:3031", "EPSG:3857"]
+      },
+      "minItems": 1
+    },
+    "reprojection": {
+      "type": "boolean",
+      "description": "Force reprojection for all granules (unconditionally send outputCrs in Harmony calls)."
+    },
+    "requesterPays": {
+      "type": "boolean",
+      "description": "True if the source data bucket is configured as requester-pays."
+    },
+    "collectionId": {
+      "type": "string",
+      "description": "CMR collection concept id. Venue-specific. Present only when supplied."
+    },
+    "imageFilenameRegex": {
+      "type": "string",
+      "description": "Regex identifying which file in a granule is the image file. Present only when supplied."
+    },
+    "nrtFilenameRegex": {
+      "type": "string",
+      "description": "Regex identifying whether a granule is NRT vs standard. Present only when supplied."
+    },
+    "scaleExtentPolar": {
+      "type": "array",
+      "description": "Geographic extent [minX, minY, maxX, maxY] for polar-projected outputs. Present only when supplied.",
+      "items": { "type": "integer" },
+      "minItems": 4,
+      "maxItems": 4
+    },
+    "singleDayNumber": {
+      "type": "string",
+      "description": "Day-of-year (e.g. '001') applied to all granules in the dataset. Present only when supplied.",
+      "pattern": "^[0-9]{1,3}$"
+    },
+    "dataDayStrategy": {
+      "type": "string",
+      "description": "Set to 'single_day_of_year' automatically when singleDayNumber is present.",
+      "enum": ["single_day_of_year"]
+    }
+  },
+  "dependentRequired": {
+    "singleDayNumber": ["dataDayStrategy"]
+  },
+  "if": {
+    "comment": "sendToHarmony present and true selects the Harmony branch of the state machine.",
+    "properties": {
+      "sendToHarmony": {
+        "const": true
+      }
+    },
+    "required": ["sendToHarmony"]
+  },
+  "then": {
+    "comment": "Harmony branch: imgVariables backs the Map ItemsPath in the state machine and fails at runtime if absent.",
+    "required": ["imgVariables"]
+  },
+  "else": {
+    "comment": "Non-Harmony branch (sendToHarmony absent or false): identify_image_file reads imageFilenameRegex with no default and raises KeyError if absent.",
+    "required": ["imageFilenameRegex"]
+  },
+  "additionalProperties": false
+}

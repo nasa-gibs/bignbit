@@ -29,6 +29,10 @@ resource aws_ecr_repository "lambda-image-repo" {
 resource null_resource ecr_login {
   triggers = {
     image_uri = var.lambda_container_image_uri
+    # Re-run whenever the target ECR repo changes. Without this, a recreated or
+    # emptied repo is not detected (triggers only saw image_uri), so the login
+    # and push below are skipped and Lambda ends up pointing at a missing image.
+    ecr_repo = aws_ecr_repository.lambda-image-repo.repository_url
   }
 
   provisioner "local-exec" {
@@ -44,6 +48,9 @@ resource null_resource upload_ecr_image {
   depends_on = [null_resource.ecr_login]
   triggers = {
     image_uri = var.lambda_container_image_uri
+    # Tie the push to the ECR repo identity so a recreated/empty repo forces a
+    # re-push instead of being skipped on an unchanged image_uri.
+    ecr_repo = aws_ecr_repository.lambda-image-repo.repository_url
   }
 
   provisioner "local-exec" {
@@ -84,8 +91,8 @@ resource "aws_lambda_function" "get_dataset_configuration" {
   }
   function_name = local.get_dataset_configuration_function_name
   role          = aws_iam_role.bignbit_lambda_role.arn
-  timeout       = 30
-  memory_size   = 256
+  timeout       = lookup(var.lambda_timeouts, "get_dataset_configuration", 30)
+  memory_size   = lookup(var.lambda_memory_sizes, "get_dataset_configuration", 256)
 
   environment {
     variables = {
@@ -115,8 +122,8 @@ resource "aws_lambda_function" "get_granule_umm_json" {
   }
   function_name = local.get_granule_umm_json_function_name
   role          = aws_iam_role.bignbit_lambda_role.arn
-  timeout       = 30
-  memory_size   = 256
+  timeout       = lookup(var.lambda_timeouts, "get_granule_umm_json", 30)
+  memory_size   = lookup(var.lambda_memory_sizes, "get_granule_umm_json", 256)
 
   environment {
     variables = {
@@ -148,8 +155,8 @@ resource "aws_lambda_function" "get_collection_concept_id" {
   }
   function_name = local.get_collection_concept_id_function_name
   role          = aws_iam_role.bignbit_lambda_role.arn
-  timeout       = 30
-  memory_size   = 256
+  timeout       = lookup(var.lambda_timeouts, "get_collection_concept_id", 30)
+  memory_size   = lookup(var.lambda_memory_sizes, "get_collection_concept_id", 256)
 
   environment {
     variables = {
@@ -181,8 +188,8 @@ resource "aws_lambda_function" "identify_image_file" {
   }
   function_name = local.identify_image_file_function_name
   role          = aws_iam_role.bignbit_lambda_role.arn
-  timeout       = 30
-  memory_size   = 256
+  timeout       = lookup(var.lambda_timeouts, "identify_image_file", 30)
+  memory_size   = lookup(var.lambda_memory_sizes, "identify_image_file", 256)
 
   environment {
     variables = {
@@ -212,8 +219,8 @@ resource "aws_lambda_function" "submit_harmony_job" {
   }
   function_name = local.submit_harmony_job_function_name
   role          = aws_iam_role.bignbit_lambda_role.arn
-  timeout       = 30
-  memory_size   = 256
+  timeout       = lookup(var.lambda_timeouts, "submit_harmony_job", 60)
+  memory_size   = lookup(var.lambda_memory_sizes, "submit_harmony_job", 256)
 
   environment {
     variables = {
@@ -245,8 +252,8 @@ resource "aws_lambda_function" "handle_big_result" {
   }
   function_name = local.handle_big_result_function_name
   role          = aws_iam_role.bignbit_lambda_role.arn
-  timeout       = 300
-  memory_size   = 1024
+  timeout       = lookup(var.lambda_timeouts, "handle_big_result", 300)
+  memory_size   = lookup(var.lambda_memory_sizes, "handle_big_result", 1024)
 
   environment {
     variables = {
@@ -278,8 +285,8 @@ resource "aws_lambda_function" "get_harmony_job_status" {
   }
   function_name = local.get_harmony_job_status_function_name
   role          = aws_iam_role.bignbit_lambda_role.arn
-  timeout       = 30
-  memory_size   = 256
+  timeout       = lookup(var.lambda_timeouts, "get_harmony_job_status", 60)
+  memory_size   = lookup(var.lambda_memory_sizes, "get_harmony_job_status", 256)
 
   environment {
     variables = {
@@ -311,8 +318,8 @@ resource "aws_lambda_function" "apply_opera_hls_treatment" {
   }
   function_name = local.apply_opera_hls_treatment_function_name
   role          = aws_iam_role.bignbit_lambda_role.arn
-  timeout       = 30
-  memory_size   = 512
+  timeout       = lookup(var.lambda_timeouts, "apply_opera_hls_treatment", 30)
+  memory_size   = lookup(var.lambda_memory_sizes, "apply_opera_hls_treatment", 512)
 
   environment {
     variables = {
@@ -344,16 +351,16 @@ resource "aws_lambda_function" "send_to_gitc" {
   }
   function_name = local.send_to_gitc_function_name
   role          = aws_iam_role.bignbit_lambda_role.arn
-  timeout       = 15
-  memory_size   = 128
+  timeout       = lookup(var.lambda_timeouts, "send_to_gitc", 15)
+  memory_size   = lookup(var.lambda_memory_sizes, "send_to_gitc", 256)
 
   environment {
     variables = {
       STACK_NAME                  = local.aws_resources_name
       CUMULUS_MESSAGE_ADAPTER_DIR = "/opt/"
       REGION                      = data.aws_region.current.name
-      GIBS_REGION                 = var.gibs_region
-      GIBS_SQS_URL                = "https://sqs.${var.gibs_region}.amazonaws.com/${var.gibs_account_id}/${var.gibs_queue_name}"
+      GIBS_REGION                 = local.gibs_sqs_region
+      GIBS_SQS_URL                = local.gibs_sqs_url
       GIBS_RESPONSE_TOPIC_ARN     = aws_sns_topic.gibs_response_topic.arn
     }
   }
@@ -378,8 +385,8 @@ resource "aws_lambda_function" "handle_gitc_response" {
   }
   function_name = local.handle_gitc_response_function_name
   role          = aws_iam_role.bignbit_lambda_role.arn
-  timeout       = 45
-  memory_size   = 128
+  timeout       = lookup(var.lambda_timeouts, "handle_gitc_response", 45)
+  memory_size   = lookup(var.lambda_memory_sizes, "handle_gitc_response", 256)
 
   environment {
     variables = {

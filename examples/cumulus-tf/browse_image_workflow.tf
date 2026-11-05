@@ -12,10 +12,22 @@ provider "aws" {
   }
 }
 
+provider "aws" {
+  alias  = "bignbit-staging"
+  region = var.bignbit_staging_bucket_region
+  default_tags {
+    tags = merge(local.default_tags, {
+      application = local.bignbit_appname,
+      Version     = var.app_version,
+    })
+  }
+}
+
 module "bignbit_module" {
   source = "../../terraform"
   providers = {
-    aws = aws.bignbit-aws
+    aws         = aws.bignbit-aws
+    aws.staging = aws.bignbit-staging
   }
 
   count = 1
@@ -32,7 +44,8 @@ module "bignbit_module" {
   bignbit_audit_bucket = aws_s3_bucket.internal.bucket
   bignbit_audit_path   = "bignbit-cnm-output"
 
-  gibs_region     = var.gibs_region == "mocked" ? "us-west-2" : var.gibs_region
+  # The fake GITC queue (fake_gitc.tf) lives in the deployment's own region
+  gibs_region     = var.gibs_region == "mocked" ? data.aws_region.current.name : var.gibs_region
   gibs_queue_name = var.gibs_queue_name == "mocked" ? aws_sqs_queue.gitc_input_queue[0].name : var.gibs_queue_name
   gibs_account_id = var.gibs_account_id == "mocked" ? local.account_id : var.gibs_account_id
 
@@ -49,6 +62,32 @@ module "bignbit_module" {
     Version     = var.app_version
   })
   lambda_container_image_uri = var.lambda_container_image_uri
+
+  lambda_timeouts = {
+    "get_dataset_configuration" = 30
+    "get_granule_umm_json" = 30
+    "get_collection_concept_id" = 30
+    "identify_image_file" = 30
+    "submit_harmony_job" = 60
+    "handle_big_result" = 300
+    "get_harmony_job_status" = 60
+    "apply_opera_hls_treatment" = 30
+    "send_to_gitc" = 15
+    "handle_gitc_response" = 45
+  }
+
+  lambda_memory_sizes = {
+    "get_dataset_configuration" = 256
+    "get_granule_umm_json" = 256
+    "get_collection_concept_id" = 256
+    "identify_image_file" = 256
+    "submit_harmony_job" = 256
+    "handle_big_result" = 1024
+    "get_harmony_job_status" = 256
+    "apply_opera_hls_treatment" = 512
+    "send_to_gitc" = 256
+    "handle_gitc_response" = 256
+  }
 }
 
 /*

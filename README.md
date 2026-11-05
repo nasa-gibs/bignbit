@@ -86,6 +86,13 @@ _Visual representation of the bignbit step function state machine:_
    ```
 2. Add a new terraform script to the `cumulus-deploy-tf` scripts used to deploy cumulus. This script
 should define the bignbit module and the bignbit step function state machine. See an example in [browse_image_workflow.tf](/examples/cumulus-tf/browse_image_workflow.tf).
+
+> [!NOTE]
+> bignbit requires its staging bucket to be placed in the `us-west-2` region for Harmony compatibility. You will need to
+> pass a separate provider to the bignbit Terraform module via `aws.staging` if your other resources are placed outside the
+> `us-west-2` region. If your installation is already being placed in the `us-west-2` region, you may pass the same AWS
+> provider for `aws.staging` as the rest of your installation.
+
 3. [Configure one or more collections](#configuring-a-collection)
 
 ## Module Inputs
@@ -103,10 +110,12 @@ This module uses the following input variables:
 | bignbit_audit_bucket                 | string       | S3 bucket where messages exchanged with GITC will be saved. Typically the cumulus internal bucket                                |                                                                     |
 | bignbit_audit_path                   | string       | Path relative to `bignbit_audit_bucket` where messages exchanged with GITC will be saved.                                        | "bignbit-cnm-output"                                                |
 | bignbit_staging_bucket               | string       | S3 bucket where generated images will be saved. Leave blank to use bucket managed by this module.                                | _create new bucket named svc-${var.app_name}-${var.prefix}-staging_ |
+| bignbit_staging_bucket_region_override | bool       | Skip the check that the `aws.staging` provider is in `us-west-2`. Overriding this will break Harmony compatibility.              | false                                                               |
 | harmony_staging_path                 | string       | Path relative to `bignbit_staging_bucket` where harmony results will be saved.                                                   | "bignbit-harmony-output"                                            |
 | gibs_region                          | string       | Region where GIBS resources are deployed                                                                                         |                                                                     |
 | gibs_queue_name                      | string       | Name of the GIBS SQS queue where outgoing CNM messages will be sent                                                              |                                                                     |
 | gibs_account_id                      | string       | AWS account ID for GIBS                                                                                                          |                                                                     |
+| create_gibs_mock_queue               | bool         | Create an internal SQS FIFO queue in place of the external GIBS queue (testing only; nothing consumes or responds to it).        | false                                                               |
 | edl_user_ssm                         | string       | Name of SSM parameter containing EDL username for querying CMR                                                                   |                                                                     |
 | edl_pass_ssm                         | string       | Name of SSM parameter containing EDL password for querying CMR                                                                   |                                                                     |
 | permissions_boundary_arn             | string       | Permissions boundary ARN to apply to the roles created by this module. If not provided, no permissions boundary will be applied. |                                                                     |
@@ -121,6 +130,42 @@ This module uses the following input variables:
 | harmony_job_status_max_attempts      | number       | Maximum number of attempts to check Harmony job status                                                                           | 15                                                                  |
 | harmony_job_status_backoff_rate      | number       | Backoff rate for Harmony job status checks                                                                                       | 1.0                                                                 |
 | harmony_job_status_max_delay_seconds | number       | Maximum delay in seconds for Harmony job status checks                                                                           | 20                                                                  |
+| lambda_timeouts                      | map(number)  | Configurable map of lambda timeouts whose keys are the unprefixed lambda name and the value is a number of seconds between 1 and 900 inclusive                                                                            | {}                                                                   |
+| lambda_memory_sizes                  | map(number)  | Configurable map of lambda memory whose keys are the unprefixed lambda name and the value is a number of megabytes of memory sizes between  128 and 10240 inclusive                                                                           | {}                                                                   |
+
+### Module Inputs Deep Dive
+
+- `lambda_timeouts` is a configurable map variable aimed at providing more flexibility in the deployed timeout settings made to various lambdas. An example of this map with the available lambdas and their default values is provided below:
+  ```
+  lambda_timeouts = {
+      "get_dataset_configuration" = 30
+      "get_granule_umm_json" = 30
+      "get_collection_concept_id" = 30
+      "identify_image_file" = 30
+      "submit_harmony_job" = 60
+      "handle_big_result" = 300
+      "get_harmony_job_status" = 60
+      "apply_opera_hls_treatment" = 30
+      "send_to_gitc" = 15
+      "handle_gitc_response" = 45
+  }
+  ```
+- `lambda_memory_sizes` is a configurable map variable aimed at providing more flexibility in the deployed memory size settings made to various lambdas. An example of this map with the available lambdas and their default values is provided below:
+  ```
+  lambda_memory_sizes = {
+      "get_dataset_configuration" = 256
+      "get_granule_umm_json" = 256
+      "get_collection_concept_id" = 256
+      "identify_image_file" = 256
+      "submit_harmony_job" = 256
+      "handle_big_result" = 1024
+      "get_harmony_job_status" = 256
+      "apply_opera_hls_treatment" = 512
+      "send_to_gitc" = 256
+      "handle_gitc_response" = 256
+  }
+  ```
+
 
 ## Module Outputs
 
@@ -309,6 +354,27 @@ An example CNM-S message produced by this module:
 4. Activate the bignbit conda environment `conda activate bignbit`
 5. Install python package and dependencies `poetry install`
 6. Verify tests pass `poetry run pytest tests/`
+
+## MacOS (pyenv)
+
+An alternative to the conda-based setup above. Conda normally provides GDAL, so with pyenv GDAL is installed
+separately via Homebrew.
+
+1. Install pyenv, poetry and GDAL: `brew install pyenv poetry gdal`
+2. Add pyenv to your shell, then close your terminal and re-open it. Run `echo $SHELL` to see which shell you use.
+   - zsh: `echo 'eval "$(pyenv init -)"' >> ~/.zshrc`
+   - bash: `echo 'eval "$(pyenv init -)"' >> ~/.bash_profile`
+3. Install Python 3.12 and pin it for this repo:
+   ```bash
+   pyenv install 3.12
+   pyenv local 3.12
+   ```
+4. Create the virtual environment with poetry, using the pyenv python: `poetry env use "$(pyenv which python)"`
+   Activate it: `eval $(poetry env activate)`
+5. Check the installed GDAL version with `gdal-config --version`. The `gdal` python package version in `pyproject.toml`
+   must match the installed `libgdal` version.
+6. Install python package and dependencies, including the optional GDAL bindings: `poetry install -E gdal`
+7. Verify tests pass `poetry run pytest tests/`
 
 > [!IMPORTANT]
 > If developing on a `darwin_arm64` based mac, running terraform locally may result

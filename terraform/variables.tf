@@ -54,6 +54,12 @@ variable "bignbit_staging_bucket" {
   default = ""
 }
 
+variable "bignbit_staging_bucket_region_override" {
+  type = bool
+  description = "Bypass the S3 bucket region check for us-west-2. Warning: This will break Harmony compatibility."
+  default = false
+}
+
 variable "harmony_staging_path" {
   type = string
   description = "Path relative to bignbit_staging_bucket where harmony results will be saved."
@@ -73,6 +79,12 @@ variable "gibs_queue_name" {
 variable "gibs_account_id" {
   type = string
   description = "AWS account ID for GIBS"
+}
+
+variable "create_gibs_mock_queue" {
+  type        = bool
+  default     = false
+  description = "When true, creates an internal SQS FIFO queue to stand in for the external GIBS queue. Use in sandbox/sit environments."
 }
 
 variable "edl_user_ssm" {
@@ -146,4 +158,24 @@ variable "harmony_job_status_max_delay_seconds" {
     type = number
     description = "Maximum delay in seconds for Harmony job status checks"
     default = 20
+}
+
+variable "lambda_timeouts" {
+  type        = map(number)
+  description = "Configurable map of lambda timeouts"
+  default     = {}
+  validation {
+    condition = alltrue([for k, v in var.lambda_timeouts : v >= 1 && v <= 900])
+    error_message = "All lambda timeouts must be between 1 and 900 inclusive."
+  }
+}
+
+variable "lambda_memory_sizes" {
+  type        = map(number)
+  description = "Configurable map of lambda memory sizes"
+  default     = {}
+  validation {
+    condition = alltrue([for k, v in var.lambda_memory_sizes : v >= 128 && v <= 10240])
+    error_message = "All lambda memory sizes must be between 128 and 10240 inclusive."
+  }
 }

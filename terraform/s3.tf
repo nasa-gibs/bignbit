@@ -5,6 +5,7 @@ locals {
 }
 
 resource "aws_s3_bucket" "bignbit_staging_bucket" {
+  provider      = aws.staging
   count         = local.create_bucket ? 1 : 0
   bucket        = "${local.aws_resources_name}-staging"
   force_destroy = var.force_destroy_staging_bucket
@@ -16,9 +17,21 @@ resource "aws_s3_bucket" "bignbit_staging_bucket" {
   }
 }
 
+check "bignbit_staging_bucket_in_us-west-2" {
+  assert {
+    condition = var.bignbit_staging_bucket_region_override || data.aws_region.staging.name == "us-west-2"
+    error_message = "The aws.staging provider on the bignbit module should be configured for the us-west-2 region for Harmony compatibility. See: https://github.com/nasa/harmony/blob/0f82b4f405373fe8c07eaa41a3840b0554356504/services/harmony/app/markdown/cloud-access.md?plain=1#L3. To override this check, enable `bignbit_staging_bucket_region_override`. Overriding this will break Harmony compatibility."
+  }
+
+  data "aws_region" "staging" {
+    provider = aws.staging
+  }
+}
+
 resource "aws_s3_bucket_ownership_controls" "disable_acls" {
-  count  = local.create_bucket ? 1 : 0
-  bucket = aws_s3_bucket.bignbit_staging_bucket[0].id
+  provider = aws.staging
+  count    = local.create_bucket ? 1 : 0
+  bucket   = aws_s3_bucket.bignbit_staging_bucket[0].id
 
   rule {
     object_ownership = "BucketOwnerEnforced"
@@ -26,8 +39,9 @@ resource "aws_s3_bucket_ownership_controls" "disable_acls" {
 }
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "enable_bucket_encryption" {
-  count  = local.create_bucket ? 1 : 0
-  bucket = aws_s3_bucket.bignbit_staging_bucket[0].id
+  provider = aws.staging
+  count    = local.create_bucket ? 1 : 0
+  bucket   = aws_s3_bucket.bignbit_staging_bucket[0].id
 
   rule {
     bucket_key_enabled = true
@@ -39,8 +53,9 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "enable_bucket_enc
 }
 
 resource "aws_s3_bucket_lifecycle_configuration" "expire_objects_30_days" {
-  count  = local.create_bucket ? 1 : 0
-  bucket = aws_s3_bucket.bignbit_staging_bucket[0].id
+  provider = aws.staging
+  count    = local.create_bucket ? 1 : 0
+  bucket   = aws_s3_bucket.bignbit_staging_bucket[0].id
 
   rule {
     id     = "ExpireHarmonyObjectsAfter30Days"
@@ -66,9 +81,10 @@ resource "aws_s3_bucket_lifecycle_configuration" "expire_objects_30_days" {
 }
 
 resource "aws_s3_bucket_policy" "bignbit_staging_bucket_policy" {
-  count  = local.create_bucket ? 1 : 0
-  bucket = aws_s3_bucket.bignbit_staging_bucket[0].id
-  policy = data.aws_iam_policy_document.bignbit_staging_bucket_policy[0].json
+  provider = aws.staging
+  count    = local.create_bucket ? 1 : 0
+  bucket   = aws_s3_bucket.bignbit_staging_bucket[0].id
+  policy   = data.aws_iam_policy_document.bignbit_staging_bucket_policy[0].json
 }
 
 data "aws_iam_policy_document" "allow_harmony_write" {
