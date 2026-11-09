@@ -13,6 +13,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 ### Security
 
+## [0.8.5]
+### Added
+### Changed
+### Deprecated
+### Removed
+### Fixed
+### Security
+- Minor dependency updates (certifi, etc.) and docker image rebuild to pull in latest version of brotli library.
+
 ## [0.8.4]
 ### Added
 - [issue/212](https://github.com/podaac/bignbit/issues/212): Add `requesterPays` dataset config option so source files can be downloaded from requester pays buckets
