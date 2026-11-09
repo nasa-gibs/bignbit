@@ -417,7 +417,7 @@ From the repository root, in the development environment described in [Local Dev
 with AWS credentials for the venue's account in the environment:
 
 ```bash
-python -m regression run --venue sandbox
+poetry run python -m regression run --venue sandbox
 ```
 
 Use `--only SHORT_NAME [SHORT_NAME ...]` to restrict the run to specific collections. The report is written to
@@ -436,9 +436,9 @@ The following are managed outside of the suite and must already exist in the ven
 
 1. Add a row to `regression/test_cases.csv` and make sure the [prerequisites](#prerequisites-in-the-target-venue)
    are in place for its collection.
-2. Run the new case with `python -m regression run --only SHORT_NAME`. It is reported as a mismatch because it has
+2. Run the new case with `poetry run python -m regression run --only SHORT_NAME`. It is reported as a mismatch because it has
    no reference yet.
 3. Copy the CNMs from that run into `regression/reference_data` with
-   `python -m regression update-reference SHORT_NAME`. Use the same two steps to refresh existing references after
+   `poetry run python -m regression update-reference SHORT_NAME`. Use the same two steps to refresh existing references after
    an intentional change in output (`--all` updates every collection in the workdir).
 4. Review the reference changes before committing them, since they become the expected output for future runs.

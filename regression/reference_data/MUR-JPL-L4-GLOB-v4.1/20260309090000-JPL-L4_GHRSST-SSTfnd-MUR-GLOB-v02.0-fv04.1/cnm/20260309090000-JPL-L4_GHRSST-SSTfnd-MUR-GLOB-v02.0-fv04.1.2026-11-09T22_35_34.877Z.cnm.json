@@ -1,0 +1,57 @@
+{
+    "version": "1.5.1",
+    "duplicationid": "20260309090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1_filtered_analysed_sst_reformatted.r00c00_2026068_EPSG:4326!G1281443657-POCLOUD",
+    "collection": "MUR-JPL-L4-GLOB-v4.1_analysed_sst_LL",
+    "submissionTime": "2026-11-09T22:35:34.877Z",
+    "identifier": "20260309090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1_filtered_analysed_sst_reformatted.r00c00_2026068_EPSG:4326!G1281443657-POCLOUD",
+    "product": {
+        "name": "20260309090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1_filtered_analysed_sst_reformatted.r00c00_2026068_EPSG:4326!G1281443657-POCLOUD",
+        "dataVersion": "1.5",
+        "files": [
+            {
+                "fileName": "20260309090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1_filtered_analysed_sst_reformatted.r00c00.png",
+                "bucket": "gitc-sandbox-bignbit-staging",
+                "key": "bignbit-harmony-output/mur-jpl-l4-glob-v4.1/20261109/fc71befc-5c36-43b6-9719-4d8d26995fe2/13180875/20260309090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1_filtered_analysed_sst_reformatted.r00c00.png",
+                "checksum": "4cccda6d8745ee05ad11ae90ec5c6490",
+                "checksumType": "MD5",
+                "variable": "analysed_sst",
+                "output_crs": "EPSG:4326",
+                "type": "browse",
+                "subtype": "png",
+                "dataday": "2026068",
+                "uri": "s3://gitc-sandbox-bignbit-staging/bignbit-harmony-output/mur-jpl-l4-glob-v4.1/20261109/fc71befc-5c36-43b6-9719-4d8d26995fe2/13180875/20260309090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1_filtered_analysed_sst_reformatted.r00c00.png",
+                "name": "20260309090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1_filtered_analysed_sst_reformatted.r00c00.png"
+            },
+            {
+                "fileName": "20260309090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1_filtered_analysed_sst_reformatted.r00c00.xml",
+                "bucket": "gitc-sandbox-bignbit-staging",
+                "key": "bignbit-harmony-output/mur-jpl-l4-glob-v4.1/20261109/fc71befc-5c36-43b6-9719-4d8d26995fe2/13180875/20260309090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1_filtered_analysed_sst_reformatted.r00c00.xml",
+                "checksum": "bb0862ea6b12676b298945a7e0e7730239df6fe6879e7c9901622c17cdf399b636670e4ce2eef63b55cce593e45777d5b820f524e2965420e9b745ac6fd0eba7",
+                "checksumType": "SHA512",
+                "variable": "analysed_sst",
+                "output_crs": "EPSG:4326",
+                "type": "metadata",
+                "subtype": "ImageMetadata-v1.2",
+                "dataday": "2026068",
+                "size": 335,
+                "uri": "s3://gitc-sandbox-bignbit-staging/bignbit-harmony-output/mur-jpl-l4-glob-v4.1/20261109/fc71befc-5c36-43b6-9719-4d8d26995fe2/13180875/20260309090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1_filtered_analysed_sst_reformatted.r00c00.xml",
+                "name": "20260309090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1_filtered_analysed_sst_reformatted.r00c00.xml"
+            },
+            {
+                "fileName": "20260309090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1_filtered_analysed_sst_reformatted.r00c00.pgw",
+                "bucket": "gitc-sandbox-bignbit-staging",
+                "key": "bignbit-harmony-output/mur-jpl-l4-glob-v4.1/20261109/fc71befc-5c36-43b6-9719-4d8d26995fe2/13180875/20260309090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1_filtered_analysed_sst_reformatted.r00c00.pgw",
+                "checksum": "13b74cfd6a4612d17f81d8f1f4d9fa35",
+                "checksumType": "MD5",
+                "variable": "analysed_sst",
+                "output_crs": "EPSG:4326",
+                "type": "metadata",
+                "subtype": "world file",
+                "dataday": "2026068",
+                "uri": "s3://gitc-sandbox-bignbit-staging/bignbit-harmony-output/mur-jpl-l4-glob-v4.1/20261109/fc71befc-5c36-43b6-9719-4d8d26995fe2/13180875/20260309090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1_filtered_analysed_sst_reformatted.r00c00.pgw",
+                "name": "20260309090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1_filtered_analysed_sst_reformatted.r00c00.pgw"
+            }
+        ]
+    },
+    "provider": "POCLOUD"
+}

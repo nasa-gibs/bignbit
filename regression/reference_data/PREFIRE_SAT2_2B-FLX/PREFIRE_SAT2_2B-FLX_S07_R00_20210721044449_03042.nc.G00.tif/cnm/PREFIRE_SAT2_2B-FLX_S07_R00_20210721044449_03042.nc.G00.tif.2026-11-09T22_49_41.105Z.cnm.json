@@ -1,0 +1,57 @@
+{
+    "version": "1.5.1",
+    "duplicationid": "PREFIRE_SAT2_2B-FLX_S07_R00_20210721044449_03042.nc.G00_2021202_EPSG:3413!G1263096196-EEDTEST",
+    "collection": "PREFIRE_SAT2_2B-FLX_flx_N",
+    "submissionTime": "2026-11-09T22:49:41.105Z",
+    "identifier": "PREFIRE_SAT2_2B-FLX_S07_R00_20210721044449_03042.nc.G00_2021202_EPSG:3413!G1263096196-EEDTEST",
+    "product": {
+        "name": "PREFIRE_SAT2_2B-FLX_S07_R00_20210721044449_03042.nc.G00_2021202_EPSG:3413!G1263096196-EEDTEST",
+        "dataVersion": "1.5",
+        "files": [
+            {
+                "fileName": "PREFIRE_SAT2_2B-FLX_S07_R00_20210721044449_03042.nc.G00.png",
+                "bucket": "gitc-sandbox-bignbit-staging",
+                "key": "bignbit-harmony-output/prefire_sat2_2b-flx/20261109/06f03529-beee-496c-9e28-efbc02f3d4b5/13180978/PREFIRE_SAT2_2B-FLX_S07_R00_20210721044449_03042.nc.G00.png",
+                "checksum": "0d9f1d98cf20853f8baced47b2def56c",
+                "checksumType": "MD5",
+                "variable": "flx",
+                "output_crs": "EPSG:3413",
+                "type": "browse",
+                "subtype": "png",
+                "dataday": "2021202",
+                "uri": "s3://gitc-sandbox-bignbit-staging/bignbit-harmony-output/prefire_sat2_2b-flx/20261109/06f03529-beee-496c-9e28-efbc02f3d4b5/13180978/PREFIRE_SAT2_2B-FLX_S07_R00_20210721044449_03042.nc.G00.png",
+                "name": "PREFIRE_SAT2_2B-FLX_S07_R00_20210721044449_03042.nc.G00.png"
+            },
+            {
+                "fileName": "PREFIRE_SAT2_2B-FLX_S07_R00_20210721044449_03042.nc.G00.xml",
+                "bucket": "gitc-sandbox-bignbit-staging",
+                "key": "bignbit-harmony-output/prefire_sat2_2b-flx/20261109/06f03529-beee-496c-9e28-efbc02f3d4b5/13180978/PREFIRE_SAT2_2B-FLX_S07_R00_20210721044449_03042.nc.G00.xml",
+                "checksum": "5306ad254033ef7be2170ec4116caea38fb3c57275f0e85125bad249b931e7b15154af47b64aacd11656ad4ffe6b56ed3ae7b5542542e344522d40d059dfd7a4",
+                "checksumType": "SHA512",
+                "variable": "flx",
+                "output_crs": "EPSG:3413",
+                "type": "metadata",
+                "subtype": "ImageMetadata-v1.2",
+                "dataday": "2021202",
+                "size": 335,
+                "uri": "s3://gitc-sandbox-bignbit-staging/bignbit-harmony-output/prefire_sat2_2b-flx/20261109/06f03529-beee-496c-9e28-efbc02f3d4b5/13180978/PREFIRE_SAT2_2B-FLX_S07_R00_20210721044449_03042.nc.G00.xml",
+                "name": "PREFIRE_SAT2_2B-FLX_S07_R00_20210721044449_03042.nc.G00.xml"
+            },
+            {
+                "fileName": "PREFIRE_SAT2_2B-FLX_S07_R00_20210721044449_03042.nc.G00.pgw",
+                "bucket": "gitc-sandbox-bignbit-staging",
+                "key": "bignbit-harmony-output/prefire_sat2_2b-flx/20261109/06f03529-beee-496c-9e28-efbc02f3d4b5/13180978/PREFIRE_SAT2_2B-FLX_S07_R00_20210721044449_03042.nc.G00.pgw",
+                "checksum": "3ec62b72c4f88b4f401085f5c2d24edc",
+                "checksumType": "MD5",
+                "variable": "flx",
+                "output_crs": "EPSG:3413",
+                "type": "metadata",
+                "subtype": "world file",
+                "dataday": "2021202",
+                "uri": "s3://gitc-sandbox-bignbit-staging/bignbit-harmony-output/prefire_sat2_2b-flx/20261109/06f03529-beee-496c-9e28-efbc02f3d4b5/13180978/PREFIRE_SAT2_2B-FLX_S07_R00_20210721044449_03042.nc.G00.pgw",
+                "name": "PREFIRE_SAT2_2B-FLX_S07_R00_20210721044449_03042.nc.G00.pgw"
+            }
+        ]
+    },
+    "provider": "EEDTEST"
+}
