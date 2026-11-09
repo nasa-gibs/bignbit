@@ -1,0 +1,57 @@
+{
+    "version": "1.5.1",
+    "duplicationid": "TERRA_MODIS.20230101_20231231.L3m.YR.NSST.sst.4km_filtered_sst_reformatted_2023182_EPSG:4326!G1264447606-POCLOUD",
+    "collection": "MODIS_TERRA_L3_SST_THERMAL_ANNUAL_4KM_NIGHTTIME_V2019.0_sst_LL",
+    "submissionTime": "2026-06-19T03:22:41.558Z",
+    "identifier": "TERRA_MODIS.20230101_20231231.L3m.YR.NSST.sst.4km_filtered_sst_reformatted_2023182_EPSG:4326!G1264447606-POCLOUD",
+    "product": {
+        "name": "TERRA_MODIS.20230101_20231231.L3m.YR.NSST.sst.4km_filtered_sst_reformatted_2023182_EPSG:4326!G1264447606-POCLOUD",
+        "dataVersion": "1.5",
+        "files": [
+            {
+                "fileName": "TERRA_MODIS.20230101_20231231.L3m.YR.NSST.sst.4km_filtered_sst_reformatted.png",
+                "bucket": "podaac-sit-svc-bignbit-staging",
+                "key": "bignbit-harmony-output/modis_terra_l3_sst_thermal_annual_4km_nighttime_v2019.0/20260619/ee38ead1-0e63-477a-8626-7a80166c7479/9632429/TERRA_MODIS.20230101_20231231.L3m.YR.NSST.sst.4km_filtered_sst_reformatted.png",
+                "checksum": "3c486b9d09a33eefb78e8816e44662cc",
+                "checksumType": "MD5",
+                "variable": "sst",
+                "output_crs": "EPSG:4326",
+                "type": "browse",
+                "subtype": "png",
+                "dataday": "2023182",
+                "uri": "s3://podaac-sit-svc-bignbit-staging/bignbit-harmony-output/modis_terra_l3_sst_thermal_annual_4km_nighttime_v2019.0/20260619/ee38ead1-0e63-477a-8626-7a80166c7479/9632429/TERRA_MODIS.20230101_20231231.L3m.YR.NSST.sst.4km_filtered_sst_reformatted.png",
+                "name": "TERRA_MODIS.20230101_20231231.L3m.YR.NSST.sst.4km_filtered_sst_reformatted.png"
+            },
+            {
+                "fileName": "TERRA_MODIS.20230101_20231231.L3m.YR.NSST.sst.4km_filtered_sst_reformatted.xml",
+                "bucket": "podaac-sit-svc-bignbit-staging",
+                "key": "bignbit-harmony-output/modis_terra_l3_sst_thermal_annual_4km_nighttime_v2019.0/20260619/ee38ead1-0e63-477a-8626-7a80166c7479/9632429/TERRA_MODIS.20230101_20231231.L3m.YR.NSST.sst.4km_filtered_sst_reformatted.xml",
+                "checksum": "b78c319663624ade63b8557b90bb78f1c425b6eacb2a26f6bbca8c92419e805d2251307ff6662ef224b15d2a3e278d78117f1fd1a56b72f3427d2cd0e178a685",
+                "checksumType": "SHA512",
+                "variable": "sst",
+                "output_crs": "EPSG:4326",
+                "type": "metadata",
+                "subtype": "ImageMetadata-v1.2",
+                "dataday": "2023182",
+                "size": 335,
+                "uri": "s3://podaac-sit-svc-bignbit-staging/bignbit-harmony-output/modis_terra_l3_sst_thermal_annual_4km_nighttime_v2019.0/20260619/ee38ead1-0e63-477a-8626-7a80166c7479/9632429/TERRA_MODIS.20230101_20231231.L3m.YR.NSST.sst.4km_filtered_sst_reformatted.xml",
+                "name": "TERRA_MODIS.20230101_20231231.L3m.YR.NSST.sst.4km_filtered_sst_reformatted.xml"
+            },
+            {
+                "fileName": "TERRA_MODIS.20230101_20231231.L3m.YR.NSST.sst.4km_filtered_sst_reformatted.pgw",
+                "bucket": "podaac-sit-svc-bignbit-staging",
+                "key": "bignbit-harmony-output/modis_terra_l3_sst_thermal_annual_4km_nighttime_v2019.0/20260619/ee38ead1-0e63-477a-8626-7a80166c7479/9632429/TERRA_MODIS.20230101_20231231.L3m.YR.NSST.sst.4km_filtered_sst_reformatted.pgw",
+                "checksum": "a181f5ecccbe8bbcd3fbccac2dfe3a98",
+                "checksumType": "MD5",
+                "variable": "sst",
+                "output_crs": "EPSG:4326",
+                "type": "metadata",
+                "subtype": "world file",
+                "dataday": "2023182",
+                "uri": "s3://podaac-sit-svc-bignbit-staging/bignbit-harmony-output/modis_terra_l3_sst_thermal_annual_4km_nighttime_v2019.0/20260619/ee38ead1-0e63-477a-8626-7a80166c7479/9632429/TERRA_MODIS.20230101_20231231.L3m.YR.NSST.sst.4km_filtered_sst_reformatted.pgw",
+                "name": "TERRA_MODIS.20230101_20231231.L3m.YR.NSST.sst.4km_filtered_sst_reformatted.pgw"
+            }
+        ]
+    },
+    "provider": "POCLOUD"
+}

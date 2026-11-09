@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- [issue/193](https://github.com/nasa-gibs/bignbit/issues/193): Add a regression test suite (`regression/`) and a `Regression Tests` GitHub Actions workflow that runs it weekly or on demand against SANDBOX,and publishes the report to the repository wiki
 ### Changed
 ### Deprecated
 ### Removed

@@ -1,0 +1,57 @@
+{
+    "version": "1.5.1",
+    "duplicationid": "AQUA_MODIS.20260604.L3m.DAY.SST.sst.4km.NRT_filtered_sst_reformatted_2026155_EPSG:4326!G1282006675-POCLOUD",
+    "collection": "MODIS_AQUA_L3_SST_THERMAL_DAILY_4KM_DAYTIME_V2019.0_sst_NRT_LL",
+    "submissionTime": "2026-06-19T03:05:43.907Z",
+    "identifier": "AQUA_MODIS.20260604.L3m.DAY.SST.sst.4km.NRT_filtered_sst_reformatted_2026155_EPSG:4326!G1282006675-POCLOUD",
+    "product": {
+        "name": "AQUA_MODIS.20260604.L3m.DAY.SST.sst.4km.NRT_filtered_sst_reformatted_2026155_EPSG:4326!G1282006675-POCLOUD",
+        "dataVersion": "1.5",
+        "files": [
+            {
+                "fileName": "AQUA_MODIS.20260604.L3m.DAY.SST.sst.4km.NRT_filtered_sst_reformatted.png",
+                "bucket": "podaac-sit-svc-bignbit-staging",
+                "key": "bignbit-harmony-output/modis_aqua_l3_sst_thermal_daily_4km_daytime_v2019.0/20260619/e97b9203-8ac3-497b-b56d-0c58f42208a2/9632339/AQUA_MODIS.20260604.L3m.DAY.SST.sst.4km.NRT_filtered_sst_reformatted.png",
+                "checksum": "38b2912f53b8ef786efd6aba315cc079",
+                "checksumType": "MD5",
+                "variable": "sst",
+                "output_crs": "EPSG:4326",
+                "type": "browse",
+                "subtype": "png",
+                "dataday": "2026155",
+                "uri": "s3://podaac-sit-svc-bignbit-staging/bignbit-harmony-output/modis_aqua_l3_sst_thermal_daily_4km_daytime_v2019.0/20260619/e97b9203-8ac3-497b-b56d-0c58f42208a2/9632339/AQUA_MODIS.20260604.L3m.DAY.SST.sst.4km.NRT_filtered_sst_reformatted.png",
+                "name": "AQUA_MODIS.20260604.L3m.DAY.SST.sst.4km.NRT_filtered_sst_reformatted.png"
+            },
+            {
+                "fileName": "AQUA_MODIS.20260604.L3m.DAY.SST.sst.4km.NRT_filtered_sst_reformatted.xml",
+                "bucket": "podaac-sit-svc-bignbit-staging",
+                "key": "bignbit-harmony-output/modis_aqua_l3_sst_thermal_daily_4km_daytime_v2019.0/20260619/e97b9203-8ac3-497b-b56d-0c58f42208a2/9632339/AQUA_MODIS.20260604.L3m.DAY.SST.sst.4km.NRT_filtered_sst_reformatted.xml",
+                "checksum": "c43fc69e97819f6c81d42162fea8d3ee82a72bc1ef4d533449cb728bfa6a16bb328388e15df4abb22395a65a42809dbfaad2a74d1b941f816c76290908ebe8f0",
+                "checksumType": "SHA512",
+                "variable": "sst",
+                "output_crs": "EPSG:4326",
+                "type": "metadata",
+                "subtype": "ImageMetadata-v1.2",
+                "dataday": "2026155",
+                "size": 335,
+                "uri": "s3://podaac-sit-svc-bignbit-staging/bignbit-harmony-output/modis_aqua_l3_sst_thermal_daily_4km_daytime_v2019.0/20260619/e97b9203-8ac3-497b-b56d-0c58f42208a2/9632339/AQUA_MODIS.20260604.L3m.DAY.SST.sst.4km.NRT_filtered_sst_reformatted.xml",
+                "name": "AQUA_MODIS.20260604.L3m.DAY.SST.sst.4km.NRT_filtered_sst_reformatted.xml"
+            },
+            {
+                "fileName": "AQUA_MODIS.20260604.L3m.DAY.SST.sst.4km.NRT_filtered_sst_reformatted.pgw",
+                "bucket": "podaac-sit-svc-bignbit-staging",
+                "key": "bignbit-harmony-output/modis_aqua_l3_sst_thermal_daily_4km_daytime_v2019.0/20260619/e97b9203-8ac3-497b-b56d-0c58f42208a2/9632339/AQUA_MODIS.20260604.L3m.DAY.SST.sst.4km.NRT_filtered_sst_reformatted.pgw",
+                "checksum": "a181f5ecccbe8bbcd3fbccac2dfe3a98",
+                "checksumType": "MD5",
+                "variable": "sst",
+                "output_crs": "EPSG:4326",
+                "type": "metadata",
+                "subtype": "world file",
+                "dataday": "2026155",
+                "uri": "s3://podaac-sit-svc-bignbit-staging/bignbit-harmony-output/modis_aqua_l3_sst_thermal_daily_4km_daytime_v2019.0/20260619/e97b9203-8ac3-497b-b56d-0c58f42208a2/9632339/AQUA_MODIS.20260604.L3m.DAY.SST.sst.4km.NRT_filtered_sst_reformatted.pgw",
+                "name": "AQUA_MODIS.20260604.L3m.DAY.SST.sst.4km.NRT_filtered_sst_reformatted.pgw"
+            }
+        ]
+    },
+    "provider": "POCLOUD"
+}

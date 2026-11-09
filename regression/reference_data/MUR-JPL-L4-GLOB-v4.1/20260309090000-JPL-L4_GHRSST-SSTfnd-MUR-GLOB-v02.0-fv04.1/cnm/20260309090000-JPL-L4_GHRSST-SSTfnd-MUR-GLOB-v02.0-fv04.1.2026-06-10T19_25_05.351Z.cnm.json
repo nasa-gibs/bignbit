@@ -1,0 +1,57 @@
+{
+    "version": "1.5.1",
+    "duplicationid": "20260309090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1_filtered_sst_anomaly_reformatted.r03c07_2026068_EPSG:4326!G1281443657-POCLOUD",
+    "collection": "MUR-JPL-L4-GLOB-v4.1_sst_anomaly_LL",
+    "submissionTime": "2026-06-10T19:25:05.351Z",
+    "identifier": "20260309090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1_filtered_sst_anomaly_reformatted.r03c07_2026068_EPSG:4326!G1281443657-POCLOUD",
+    "product": {
+        "name": "20260309090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1_filtered_sst_anomaly_reformatted.r03c07_2026068_EPSG:4326!G1281443657-POCLOUD",
+        "dataVersion": "1.5",
+        "files": [
+            {
+                "fileName": "20260309090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1_filtered_sst_anomaly_reformatted.r03c07.png",
+                "bucket": "podaac-sit-svc-bignbit-staging",
+                "key": "bignbit-harmony-output/mur-jpl-l4-glob-v4.1/20260610/a5df610c-c3f8-4990-bdcd-9839705937f7/9603881/20260309090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1_filtered_sst_anomaly_reformatted.r03c07.png",
+                "checksum": "fe59e22f63c5757090dcc43f36a01d59",
+                "checksumType": "MD5",
+                "variable": "sst_anomaly",
+                "output_crs": "EPSG:4326",
+                "type": "browse",
+                "subtype": "png",
+                "dataday": "2026068",
+                "uri": "s3://podaac-sit-svc-bignbit-staging/bignbit-harmony-output/mur-jpl-l4-glob-v4.1/20260610/a5df610c-c3f8-4990-bdcd-9839705937f7/9603881/20260309090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1_filtered_sst_anomaly_reformatted.r03c07.png",
+                "name": "20260309090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1_filtered_sst_anomaly_reformatted.r03c07.png"
+            },
+            {
+                "fileName": "20260309090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1_filtered_sst_anomaly_reformatted.r03c07.xml",
+                "bucket": "podaac-sit-svc-bignbit-staging",
+                "key": "bignbit-harmony-output/mur-jpl-l4-glob-v4.1/20260610/a5df610c-c3f8-4990-bdcd-9839705937f7/9603881/20260309090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1_filtered_sst_anomaly_reformatted.r03c07.xml",
+                "checksum": "8e0e7c99285b72b16f530b103d558cd6fc6397583f4f6be059731c2bf4dc823be57b9209b8cae8f57a9ed59c55aabead8989defae0ed726bf10813f7e8366082",
+                "checksumType": "SHA512",
+                "variable": "sst_anomaly",
+                "output_crs": "EPSG:4326",
+                "type": "metadata",
+                "subtype": "ImageMetadata-v1.2",
+                "dataday": "2026068",
+                "size": 335,
+                "uri": "s3://podaac-sit-svc-bignbit-staging/bignbit-harmony-output/mur-jpl-l4-glob-v4.1/20260610/a5df610c-c3f8-4990-bdcd-9839705937f7/9603881/20260309090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1_filtered_sst_anomaly_reformatted.r03c07.xml",
+                "name": "20260309090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1_filtered_sst_anomaly_reformatted.r03c07.xml"
+            },
+            {
+                "fileName": "20260309090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1_filtered_sst_anomaly_reformatted.r03c07.pgw",
+                "bucket": "podaac-sit-svc-bignbit-staging",
+                "key": "bignbit-harmony-output/mur-jpl-l4-glob-v4.1/20260610/a5df610c-c3f8-4990-bdcd-9839705937f7/9603881/20260309090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1_filtered_sst_anomaly_reformatted.r03c07.pgw",
+                "checksum": "eba09b6e6d599c3f3d7fd295a23cbbbf",
+                "checksumType": "MD5",
+                "variable": "sst_anomaly",
+                "output_crs": "EPSG:4326",
+                "type": "metadata",
+                "subtype": "world file",
+                "dataday": "2026068",
+                "uri": "s3://podaac-sit-svc-bignbit-staging/bignbit-harmony-output/mur-jpl-l4-glob-v4.1/20260610/a5df610c-c3f8-4990-bdcd-9839705937f7/9603881/20260309090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1_filtered_sst_anomaly_reformatted.r03c07.pgw",
+                "name": "20260309090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1_filtered_sst_anomaly_reformatted.r03c07.pgw"
+            }
+        ]
+    },
+    "provider": "POCLOUD"
+}

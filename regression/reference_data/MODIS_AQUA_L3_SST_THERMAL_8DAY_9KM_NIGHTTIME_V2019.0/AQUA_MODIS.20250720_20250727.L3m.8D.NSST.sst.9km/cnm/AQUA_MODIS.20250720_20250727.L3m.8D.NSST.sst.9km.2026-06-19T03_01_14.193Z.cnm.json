@@ -1,0 +1,57 @@
+{
+    "version": "1.5.1",
+    "duplicationid": "AQUA_MODIS.20250720_20250727.L3m.8D.NSST.sst.9km_filtered_sst_reformatted_2025204_EPSG:4326!G1281998942-POCLOUD",
+    "collection": "MODIS_AQUA_L3_SST_THERMAL_8DAY_9KM_NIGHTTIME_V2019.0_sst_LL",
+    "submissionTime": "2026-06-19T03:01:14.193Z",
+    "identifier": "AQUA_MODIS.20250720_20250727.L3m.8D.NSST.sst.9km_filtered_sst_reformatted_2025204_EPSG:4326!G1281998942-POCLOUD",
+    "product": {
+        "name": "AQUA_MODIS.20250720_20250727.L3m.8D.NSST.sst.9km_filtered_sst_reformatted_2025204_EPSG:4326!G1281998942-POCLOUD",
+        "dataVersion": "1.5",
+        "files": [
+            {
+                "fileName": "AQUA_MODIS.20250720_20250727.L3m.8D.NSST.sst.9km_filtered_sst_reformatted.png",
+                "bucket": "podaac-sit-svc-bignbit-staging",
+                "key": "bignbit-harmony-output/modis_aqua_l3_sst_thermal_8day_9km_nighttime_v2019.0/20260619/6a82e147-dc1e-40c2-a37a-502a22a35448/9632317/AQUA_MODIS.20250720_20250727.L3m.8D.NSST.sst.9km_filtered_sst_reformatted.png",
+                "checksum": "03f95b77663b02ff37b95aef7678962a",
+                "checksumType": "MD5",
+                "variable": "sst",
+                "output_crs": "EPSG:4326",
+                "type": "browse",
+                "subtype": "png",
+                "dataday": "2025204",
+                "uri": "s3://podaac-sit-svc-bignbit-staging/bignbit-harmony-output/modis_aqua_l3_sst_thermal_8day_9km_nighttime_v2019.0/20260619/6a82e147-dc1e-40c2-a37a-502a22a35448/9632317/AQUA_MODIS.20250720_20250727.L3m.8D.NSST.sst.9km_filtered_sst_reformatted.png",
+                "name": "AQUA_MODIS.20250720_20250727.L3m.8D.NSST.sst.9km_filtered_sst_reformatted.png"
+            },
+            {
+                "fileName": "AQUA_MODIS.20250720_20250727.L3m.8D.NSST.sst.9km_filtered_sst_reformatted.xml",
+                "bucket": "podaac-sit-svc-bignbit-staging",
+                "key": "bignbit-harmony-output/modis_aqua_l3_sst_thermal_8day_9km_nighttime_v2019.0/20260619/6a82e147-dc1e-40c2-a37a-502a22a35448/9632317/AQUA_MODIS.20250720_20250727.L3m.8D.NSST.sst.9km_filtered_sst_reformatted.xml",
+                "checksum": "acb8369a34dd209af6237bd86d5dbd91b66a997309ac038d3c0ab1e3870194bc6d667a58d17c324dd0c0f794330d39f8c084af391476c5eb9892187ecff38366",
+                "checksumType": "SHA512",
+                "variable": "sst",
+                "output_crs": "EPSG:4326",
+                "type": "metadata",
+                "subtype": "ImageMetadata-v1.2",
+                "dataday": "2025204",
+                "size": 335,
+                "uri": "s3://podaac-sit-svc-bignbit-staging/bignbit-harmony-output/modis_aqua_l3_sst_thermal_8day_9km_nighttime_v2019.0/20260619/6a82e147-dc1e-40c2-a37a-502a22a35448/9632317/AQUA_MODIS.20250720_20250727.L3m.8D.NSST.sst.9km_filtered_sst_reformatted.xml",
+                "name": "AQUA_MODIS.20250720_20250727.L3m.8D.NSST.sst.9km_filtered_sst_reformatted.xml"
+            },
+            {
+                "fileName": "AQUA_MODIS.20250720_20250727.L3m.8D.NSST.sst.9km_filtered_sst_reformatted.pgw",
+                "bucket": "podaac-sit-svc-bignbit-staging",
+                "key": "bignbit-harmony-output/modis_aqua_l3_sst_thermal_8day_9km_nighttime_v2019.0/20260619/6a82e147-dc1e-40c2-a37a-502a22a35448/9632317/AQUA_MODIS.20250720_20250727.L3m.8D.NSST.sst.9km_filtered_sst_reformatted.pgw",
+                "checksum": "3f1767df836d12b861aec9c3551b992e",
+                "checksumType": "MD5",
+                "variable": "sst",
+                "output_crs": "EPSG:4326",
+                "type": "metadata",
+                "subtype": "world file",
+                "dataday": "2025204",
+                "uri": "s3://podaac-sit-svc-bignbit-staging/bignbit-harmony-output/modis_aqua_l3_sst_thermal_8day_9km_nighttime_v2019.0/20260619/6a82e147-dc1e-40c2-a37a-502a22a35448/9632317/AQUA_MODIS.20250720_20250727.L3m.8D.NSST.sst.9km_filtered_sst_reformatted.pgw",
+                "name": "AQUA_MODIS.20250720_20250727.L3m.8D.NSST.sst.9km_filtered_sst_reformatted.pgw"
+            }
+        ]
+    },
+    "provider": "POCLOUD"
+}

@@ -1,0 +1,57 @@
+{
+    "version": "1.5.1",
+    "duplicationid": "PREFIRE_SAT2_2B-FLX_R01_P00_20260407203733_10344.nc.G00.r00c04_2026097_EPSG:4326!G1281492552-LARC_CLOUD",
+    "collection": "PREFIRE_SAT2_2B-FLX_COG_flx_LL",
+    "submissionTime": "2026-06-11T01:24:35.443Z",
+    "identifier": "PREFIRE_SAT2_2B-FLX_R01_P00_20260407203733_10344.nc.G00.r00c04_2026097_EPSG:4326!G1281492552-LARC_CLOUD",
+    "product": {
+        "name": "PREFIRE_SAT2_2B-FLX_R01_P00_20260407203733_10344.nc.G00.r00c04_2026097_EPSG:4326!G1281492552-LARC_CLOUD",
+        "dataVersion": "1.5",
+        "files": [
+            {
+                "fileName": "PREFIRE_SAT2_2B-FLX_R01_P00_20260407203733_10344.nc.G00.r00c04.png",
+                "bucket": "podaac-sit-svc-bignbit-staging",
+                "key": "bignbit-harmony-output/prefire_sat2_2b-flx_cog/20260611/c090dc42-206b-47de-bcfe-255a0de269e0/9604188/PREFIRE_SAT2_2B-FLX_R01_P00_20260407203733_10344.nc.G00.r00c04.png",
+                "checksum": "a6157cf26429a3b9cdb5d1e5fd266fcc",
+                "checksumType": "MD5",
+                "variable": "flx",
+                "output_crs": "EPSG:4326",
+                "type": "browse",
+                "subtype": "png",
+                "dataday": "2026097",
+                "uri": "s3://podaac-sit-svc-bignbit-staging/bignbit-harmony-output/prefire_sat2_2b-flx_cog/20260611/c090dc42-206b-47de-bcfe-255a0de269e0/9604188/PREFIRE_SAT2_2B-FLX_R01_P00_20260407203733_10344.nc.G00.r00c04.png",
+                "name": "PREFIRE_SAT2_2B-FLX_R01_P00_20260407203733_10344.nc.G00.r00c04.png"
+            },
+            {
+                "fileName": "PREFIRE_SAT2_2B-FLX_R01_P00_20260407203733_10344.nc.G00.r00c04.xml",
+                "bucket": "podaac-sit-svc-bignbit-staging",
+                "key": "bignbit-harmony-output/prefire_sat2_2b-flx_cog/20260611/c090dc42-206b-47de-bcfe-255a0de269e0/9604188/PREFIRE_SAT2_2B-FLX_R01_P00_20260407203733_10344.nc.G00.r00c04.xml",
+                "checksum": "22ed54cc61a237c185e5c6959357fff113844297641615e6b9913f64b2578c755864f39b5c84c92b00d11287b592e34af4533a57825799eb7d3a0521fee9c164",
+                "checksumType": "SHA512",
+                "variable": "flx",
+                "output_crs": "EPSG:4326",
+                "type": "metadata",
+                "subtype": "ImageMetadata-v1.2",
+                "dataday": "2026097",
+                "size": 335,
+                "uri": "s3://podaac-sit-svc-bignbit-staging/bignbit-harmony-output/prefire_sat2_2b-flx_cog/20260611/c090dc42-206b-47de-bcfe-255a0de269e0/9604188/PREFIRE_SAT2_2B-FLX_R01_P00_20260407203733_10344.nc.G00.r00c04.xml",
+                "name": "PREFIRE_SAT2_2B-FLX_R01_P00_20260407203733_10344.nc.G00.r00c04.xml"
+            },
+            {
+                "fileName": "PREFIRE_SAT2_2B-FLX_R01_P00_20260407203733_10344.nc.G00.r00c04.pgw",
+                "bucket": "podaac-sit-svc-bignbit-staging",
+                "key": "bignbit-harmony-output/prefire_sat2_2b-flx_cog/20260611/c090dc42-206b-47de-bcfe-255a0de269e0/9604188/PREFIRE_SAT2_2B-FLX_R01_P00_20260407203733_10344.nc.G00.r00c04.pgw",
+                "checksum": "f4f7e4e968f096cabdf96a5dbdc5054a",
+                "checksumType": "MD5",
+                "variable": "flx",
+                "output_crs": "EPSG:4326",
+                "type": "metadata",
+                "subtype": "world file",
+                "dataday": "2026097",
+                "uri": "s3://podaac-sit-svc-bignbit-staging/bignbit-harmony-output/prefire_sat2_2b-flx_cog/20260611/c090dc42-206b-47de-bcfe-255a0de269e0/9604188/PREFIRE_SAT2_2B-FLX_R01_P00_20260407203733_10344.nc.G00.r00c04.pgw",
+                "name": "PREFIRE_SAT2_2B-FLX_R01_P00_20260407203733_10344.nc.G00.r00c04.pgw"
+            }
+        ]
+    },
+    "provider": "LARC_CLOUD"
+}

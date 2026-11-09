@@ -385,3 +385,60 @@ separately via Homebrew.
 >
 > This is only necessary as long as cumulus core requires `~>2.1` version of hashicorp/null because
 > v3.x of the provider does have support for `darwin_arm64` platforms
+
+# Regression Testing
+
+The regression suite in [regression/](regression) runs the deployed bignbit step function state machine in a venue
+for each test case listed in `regression/test_cases.csv` and compares the CNM messages it produces against stored
+reference CNMs. It exercises a real deployment, including the Harmony requests, so it complements the unit tests in
+`tests/` rather than replacing them.
+
+## Running from GitHub Actions
+
+The [Regression Tests](.github/workflows/regression-tests.yml) workflow runs every Monday at 10:00 UTC against
+SANDBOX. It can also be run manually from the Actions tab with the following inputs:
+
+| Name            | Description                                                                                                  | Default Value |
+|-----------------|--------------------------------------------------------------------------------------------------------------|---------------|
+| venue           | Venue to test: `SANDBOX`, `SIT` or `UAT`                                                                     | `SANDBOX`     |
+| collections     | Space or comma separated collection short names to restrict the run to. Leave empty to run every test case. | _empty_       |
+| publish_to_wiki | Publish the report to the repository wiki                                                                    | `true`        |
+
+The run fails if any test case fails or does not match its reference. The report is available in three places:
+
+- The summary of the workflow run
+- The `regression-report-<VENUE>` artifact of the workflow run (`report.md` and `results.json`)
+- The wiki page for the venue, for example https://github.com/nasa-gibs/bignbit/wiki/Regression-Test-Report-SANDBOX.
+  Each run overwrites the page; previous reports are available from the page's history.
+
+## Running locally
+
+From the repository root, in the development environment described in [Local Development](#local-development) and
+with AWS credentials for the venue's account in the environment:
+
+```bash
+python -m regression run --venue sandbox
+```
+
+Use `--only SHORT_NAME [SHORT_NAME ...]` to restrict the run to specific collections. The report is written to
+`build/regression/report` unless `--report-dir` is given, and each case's input, output and CNM messages are written
+to `build/regression/workdir`.
+
+## Prerequisites in the target venue
+
+The following are managed outside of the suite and must already exist in the venue being tested:
+
+- The dataset configuration for each collection in `regression/test_cases.csv`, in the deployment's config bucket
+  under `big-config/` (see [Configuring a collection](#configuring-a-collection))
+- For the OPERA test case, its source browse file in the `<prefix>-private` bucket
+
+## Adding or updating a test case
+
+1. Add a row to `regression/test_cases.csv` and make sure the [prerequisites](#prerequisites-in-the-target-venue)
+   are in place for its collection.
+2. Run the new case with `python -m regression run --only SHORT_NAME`. It is reported as a mismatch because it has
+   no reference yet.
+3. Copy the CNMs from that run into `regression/reference_data` with
+   `python -m regression update-reference SHORT_NAME`. Use the same two steps to refresh existing references after
+   an intentional change in output (`--all` updates every collection in the workdir).
+4. Review the reference changes before committing them, since they become the expected output for future runs.

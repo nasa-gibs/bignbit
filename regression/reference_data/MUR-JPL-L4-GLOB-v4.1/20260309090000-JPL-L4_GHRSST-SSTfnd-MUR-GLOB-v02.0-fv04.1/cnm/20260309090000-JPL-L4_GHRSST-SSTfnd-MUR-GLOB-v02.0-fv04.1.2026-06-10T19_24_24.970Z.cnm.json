@@ -1,0 +1,57 @@
+{
+    "version": "1.5.1",
+    "duplicationid": "20260309090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1_filtered_analysed_sst_reformatted.r00c04_2026068_EPSG:4326!G1281443657-POCLOUD",
+    "collection": "MUR-JPL-L4-GLOB-v4.1_analysed_sst_LL",
+    "submissionTime": "2026-06-10T19:24:24.970Z",
+    "identifier": "20260309090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1_filtered_analysed_sst_reformatted.r00c04_2026068_EPSG:4326!G1281443657-POCLOUD",
+    "product": {
+        "name": "20260309090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1_filtered_analysed_sst_reformatted.r00c04_2026068_EPSG:4326!G1281443657-POCLOUD",
+        "dataVersion": "1.5",
+        "files": [
+            {
+                "fileName": "20260309090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1_filtered_analysed_sst_reformatted.r00c04.png",
+                "bucket": "podaac-sit-svc-bignbit-staging",
+                "key": "bignbit-harmony-output/mur-jpl-l4-glob-v4.1/20260610/fab5ad81-e6fa-49ba-956d-2ea7a40b2d4a/9603880/20260309090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1_filtered_analysed_sst_reformatted.r00c04.png",
+                "checksum": "09b30148510bab070219de3576b15204",
+                "checksumType": "MD5",
+                "variable": "analysed_sst",
+                "output_crs": "EPSG:4326",
+                "type": "browse",
+                "subtype": "png",
+                "dataday": "2026068",
+                "uri": "s3://podaac-sit-svc-bignbit-staging/bignbit-harmony-output/mur-jpl-l4-glob-v4.1/20260610/fab5ad81-e6fa-49ba-956d-2ea7a40b2d4a/9603880/20260309090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1_filtered_analysed_sst_reformatted.r00c04.png",
+                "name": "20260309090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1_filtered_analysed_sst_reformatted.r00c04.png"
+            },
+            {
+                "fileName": "20260309090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1_filtered_analysed_sst_reformatted.r00c04.xml",
+                "bucket": "podaac-sit-svc-bignbit-staging",
+                "key": "bignbit-harmony-output/mur-jpl-l4-glob-v4.1/20260610/fab5ad81-e6fa-49ba-956d-2ea7a40b2d4a/9603880/20260309090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1_filtered_analysed_sst_reformatted.r00c04.xml",
+                "checksum": "3f0b88ab73d81b6740e693b154dd939be6c10495643a517a4be8383428ad43bb8ff235b196a43952162b920c1df3fb7c6cbba3b8875b6430cab30b6e0e4caba7",
+                "checksumType": "SHA512",
+                "variable": "analysed_sst",
+                "output_crs": "EPSG:4326",
+                "type": "metadata",
+                "subtype": "ImageMetadata-v1.2",
+                "dataday": "2026068",
+                "size": 335,
+                "uri": "s3://podaac-sit-svc-bignbit-staging/bignbit-harmony-output/mur-jpl-l4-glob-v4.1/20260610/fab5ad81-e6fa-49ba-956d-2ea7a40b2d4a/9603880/20260309090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1_filtered_analysed_sst_reformatted.r00c04.xml",
+                "name": "20260309090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1_filtered_analysed_sst_reformatted.r00c04.xml"
+            },
+            {
+                "fileName": "20260309090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1_filtered_analysed_sst_reformatted.r00c04.pgw",
+                "bucket": "podaac-sit-svc-bignbit-staging",
+                "key": "bignbit-harmony-output/mur-jpl-l4-glob-v4.1/20260610/fab5ad81-e6fa-49ba-956d-2ea7a40b2d4a/9603880/20260309090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1_filtered_analysed_sst_reformatted.r00c04.pgw",
+                "checksum": "025031bf379fbe41b723e4ccecc51d95",
+                "checksumType": "MD5",
+                "variable": "analysed_sst",
+                "output_crs": "EPSG:4326",
+                "type": "metadata",
+                "subtype": "world file",
+                "dataday": "2026068",
+                "uri": "s3://podaac-sit-svc-bignbit-staging/bignbit-harmony-output/mur-jpl-l4-glob-v4.1/20260610/fab5ad81-e6fa-49ba-956d-2ea7a40b2d4a/9603880/20260309090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1_filtered_analysed_sst_reformatted.r00c04.pgw",
+                "name": "20260309090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1_filtered_analysed_sst_reformatted.r00c04.pgw"
+            }
+        ]
+    },
+    "provider": "POCLOUD"
+}

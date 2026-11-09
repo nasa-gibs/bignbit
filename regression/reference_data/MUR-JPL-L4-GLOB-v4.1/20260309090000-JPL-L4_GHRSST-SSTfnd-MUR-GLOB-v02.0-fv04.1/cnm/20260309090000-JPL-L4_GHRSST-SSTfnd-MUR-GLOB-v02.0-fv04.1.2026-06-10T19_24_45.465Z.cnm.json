@@ -1,0 +1,57 @@
+{
+    "version": "1.5.1",
+    "duplicationid": "20260309090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1_filtered_sea_ice_fraction_reformatted.r03c00_2026068_EPSG:4326!G1281443657-POCLOUD",
+    "collection": "MUR-JPL-L4-GLOB-v4.1_sea_ice_fraction_LL",
+    "submissionTime": "2026-06-10T19:24:45.465Z",
+    "identifier": "20260309090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1_filtered_sea_ice_fraction_reformatted.r03c00_2026068_EPSG:4326!G1281443657-POCLOUD",
+    "product": {
+        "name": "20260309090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1_filtered_sea_ice_fraction_reformatted.r03c00_2026068_EPSG:4326!G1281443657-POCLOUD",
+        "dataVersion": "1.5",
+        "files": [
+            {
+                "fileName": "20260309090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1_filtered_sea_ice_fraction_reformatted.r03c00.png",
+                "bucket": "podaac-sit-svc-bignbit-staging",
+                "key": "bignbit-harmony-output/mur-jpl-l4-glob-v4.1/20260610/ea658193-2919-49c8-8c24-7812ce22947e/9603873/20260309090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1_filtered_sea_ice_fraction_reformatted.r03c00.png",
+                "checksum": "5f2a29fd065df763343002077e9d0736",
+                "checksumType": "MD5",
+                "variable": "sea_ice_fraction",
+                "output_crs": "EPSG:4326",
+                "type": "browse",
+                "subtype": "png",
+                "dataday": "2026068",
+                "uri": "s3://podaac-sit-svc-bignbit-staging/bignbit-harmony-output/mur-jpl-l4-glob-v4.1/20260610/ea658193-2919-49c8-8c24-7812ce22947e/9603873/20260309090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1_filtered_sea_ice_fraction_reformatted.r03c00.png",
+                "name": "20260309090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1_filtered_sea_ice_fraction_reformatted.r03c00.png"
+            },
+            {
+                "fileName": "20260309090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1_filtered_sea_ice_fraction_reformatted.r03c00.xml",
+                "bucket": "podaac-sit-svc-bignbit-staging",
+                "key": "bignbit-harmony-output/mur-jpl-l4-glob-v4.1/20260610/ea658193-2919-49c8-8c24-7812ce22947e/9603873/20260309090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1_filtered_sea_ice_fraction_reformatted.r03c00.xml",
+                "checksum": "01a0dc01ce17683315c381e333e323e0cf7e22b917dcfe381dec9a72141791342680dcf4010c100a271abb8c54b729d5c5befbbfe142579cf610b58c5d7ee9bb",
+                "checksumType": "SHA512",
+                "variable": "sea_ice_fraction",
+                "output_crs": "EPSG:4326",
+                "type": "metadata",
+                "subtype": "ImageMetadata-v1.2",
+                "dataday": "2026068",
+                "size": 335,
+                "uri": "s3://podaac-sit-svc-bignbit-staging/bignbit-harmony-output/mur-jpl-l4-glob-v4.1/20260610/ea658193-2919-49c8-8c24-7812ce22947e/9603873/20260309090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1_filtered_sea_ice_fraction_reformatted.r03c00.xml",
+                "name": "20260309090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1_filtered_sea_ice_fraction_reformatted.r03c00.xml"
+            },
+            {
+                "fileName": "20260309090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1_filtered_sea_ice_fraction_reformatted.r03c00.pgw",
+                "bucket": "podaac-sit-svc-bignbit-staging",
+                "key": "bignbit-harmony-output/mur-jpl-l4-glob-v4.1/20260610/ea658193-2919-49c8-8c24-7812ce22947e/9603873/20260309090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1_filtered_sea_ice_fraction_reformatted.r03c00.pgw",
+                "checksum": "d910f240fd38a016385f16ae7b6b72d0",
+                "checksumType": "MD5",
+                "variable": "sea_ice_fraction",
+                "output_crs": "EPSG:4326",
+                "type": "metadata",
+                "subtype": "world file",
+                "dataday": "2026068",
+                "uri": "s3://podaac-sit-svc-bignbit-staging/bignbit-harmony-output/mur-jpl-l4-glob-v4.1/20260610/ea658193-2919-49c8-8c24-7812ce22947e/9603873/20260309090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1_filtered_sea_ice_fraction_reformatted.r03c00.pgw",
+                "name": "20260309090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1_filtered_sea_ice_fraction_reformatted.r03c00.pgw"
+            }
+        ]
+    },
+    "provider": "POCLOUD"
+}
