@@ -47,6 +47,7 @@ class RunInfo:
     source: dict = field(default_factory=dict)
     notes: list[str] = field(default_factory=list)
     interrupted: bool = False
+    max_parallel: int = None
 
     def to_dict(self) -> dict:
         """Return the run metadata as a JSON-serializable dictionary."""
@@ -58,6 +59,7 @@ class RunInfo:
             'state_machine': self.state_machine_name,
             'cmr_environment': deployment.cmr_environment if deployment else UNKNOWN,
             'deployed_version': self.deployed_version,
+            'max_parallel': self.max_parallel,
             'started_at': self.started_at.isoformat(timespec='seconds'),
             'duration_seconds': round(self.duration_seconds, 1),
             'commit': self.source.get('commit', UNKNOWN),
@@ -152,6 +154,7 @@ def _details_table(run_info: RunInfo) -> list[str]:
     rows = [
         ('Started', run_info.started_at.strftime('%Y-%m-%d %H:%M:%S UTC')),
         ('Duration', format_duration(run_info.duration_seconds)),
+        ('Maximum parallel cases', info['max_parallel'] or NOT_APPLICABLE),
         ('Venue', info['venue']),
         ('Region', info['region']),
         ('Resource prefix', _code_cell(info['resource_prefix'])),

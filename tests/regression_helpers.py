@@ -1,5 +1,6 @@
 """Shared helpers for the unit tests of the regression suite (regression/)"""
 import json
+import threading
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -94,6 +95,21 @@ def upload_cnms(case, cnms, bucket=AUDIT_BUCKET, region=REGION):
     }
 
 
+# moto's backends are plain objects, so cases running in parallel threads take turns completing executions
+_BACKEND_LOCK = threading.Lock()
+
+
+def workflow_pause(outcome_for):
+    """
+    Return a stand-in for ``aws._pause`` that completes the running executions instead of waiting, as
+    ``finish_running_executions`` does, then reports whether the stop event is set like the real one.
+    """
+    def pause(_seconds, stop_event=None):
+        finish_running_executions(outcome_for)
+        return stop_event is not None and stop_event.is_set()
+    return pause
+
+
 def finish_running_executions(outcome_for, regions=(REGION, OTHER_REGION)):
     """
     Complete every execution that is still running in moto, which never finishes executions by itself.
@@ -101,20 +117,21 @@ def finish_running_executions(outcome_for, regions=(REGION, OTHER_REGION)):
     ``outcome_for`` is called with the execution's parsed input and returns a dict with ``status`` and optionally
     ``output``, ``error`` and ``cause``. A status of RUNNING leaves the execution running.
     """
-    executions = [execution
-                  for region in regions
-                  for state_machine in stepfunctions_backends[ACCOUNT_ID][region].state_machines
-                  for execution in state_machine.executions
-                  if execution.status == 'RUNNING']
-    for execution in executions:
-        outcome = outcome_for(json.loads(execution.execution_input))
-        if outcome['status'] == 'RUNNING':
-            continue
-        execution.status = outcome['status']
-        execution.stop_date = datetime.now(timezone.utc)
-        execution.output = json.dumps(outcome['output']) if 'output' in outcome else None
-        execution.error = outcome.get('error')
-        execution.cause = outcome.get('cause')
+    with _BACKEND_LOCK:
+        executions = [execution
+                      for region in regions
+                      for state_machine in list(stepfunctions_backends[ACCOUNT_ID][region].state_machines)
+                      for execution in list(state_machine.executions)
+                      if execution.status == 'RUNNING']
+        for execution in executions:
+            outcome = outcome_for(json.loads(execution.execution_input))
+            if outcome['status'] == 'RUNNING':
+                continue
+            execution.status = outcome['status']
+            execution.stop_date = datetime.now(timezone.utc)
+            execution.output = json.dumps(outcome['output']) if 'output' in outcome else None
+            execution.error = outcome.get('error')
+            execution.cause = outcome.get('cause')
 
 
 def list_executions(state_machine_arn, region=REGION):

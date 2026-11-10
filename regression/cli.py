@@ -55,6 +55,17 @@ def _positive_number(value: str) -> float:
     return number
 
 
+def _positive_integer(value: str) -> int:
+    """Argparse type for a whole number greater than zero."""
+    try:
+        number = int(value)
+    except ValueError as ex:
+        raise argparse.ArgumentTypeError(f'{value!r} is not a whole number') from ex
+    if number <= 0:
+        raise argparse.ArgumentTypeError(f'{value!r} is not greater than zero')
+    return number
+
+
 def build_parser() -> argparse.ArgumentParser:
     """Build the command line parser."""
     parser = _ArgumentParser(prog='python -m regression',
@@ -86,6 +97,8 @@ def build_parser() -> argparse.ArgumentParser:
                      help='seconds between execution status checks (default: %(default)s)')
     run.add_argument('--execution-timeout', type=_positive_number, default=1800, metavar='SECONDS',
                      help='seconds to wait for an execution before reporting the case as TIMEOUT (default: %(default)s)')
+    run.add_argument('--max-parallel', type=_positive_integer, default=runner.DEFAULT_MAX_PARALLEL, metavar='N',
+                     help='number of test cases to run at the same time; 1 runs them one at a time (default: %(default)s)')
     run.add_argument('--download-browse', action='store_true',
                      help='also download the browse images to the workdir; they are not used by the comparison')
 
@@ -183,8 +196,9 @@ def _prepare_run(args: argparse.Namespace, run_info: report.RunInfo, redactor: R
     if args.only:
         run_info.notes.append('Limited to collection(s): ' + ', '.join(f'`{name}`' for name in sorted(set(args.only))) + '.')
 
-    LOGGER.info('Target: venue %s, region %s, resource prefix %s, state machine %s, CMR %s; %d test case(s)', deployment.venue,
-                deployment.region, deployment.resource_prefix, run_info.state_machine_name, deployment.cmr_environment, len(cases))
+    LOGGER.info('Target: venue %s, region %s, resource prefix %s, state machine %s, CMR %s; %d test case(s), up to %d at a time', deployment.venue,
+                deployment.region, deployment.resource_prefix, run_info.state_machine_name, deployment.cmr_environment, len(cases),
+                args.max_parallel)
 
     session = aws.create_session(args.aws_profile, deployment.region)
     redactor.add_account_id(aws.get_account_id(session))
@@ -203,7 +217,8 @@ def _prepare_run(args: argparse.Namespace, run_info: report.RunInfo, redactor: R
                                 reference_dir=args.reference_dir,
                                 poll_interval=args.poll_interval,
                                 execution_timeout=args.execution_timeout,
-                                download_browse=args.download_browse)
+                                download_browse=args.download_browse,
+                                max_parallel=args.max_parallel)
     return cases, context
 
 
@@ -216,7 +231,8 @@ def run_command(args: argparse.Namespace, redactor: Redactor) -> int:
     int
         0 when every case that was not skipped passed, 1 when at least one did not, 2 when the run could not start
     """
-    run_info = report.RunInfo(venue=args.venue, started_at=datetime.now(timezone.utc), source=report.source_info())
+    run_info = report.RunInfo(venue=args.venue, started_at=datetime.now(timezone.utc), source=report.source_info(),
+                              max_parallel=args.max_parallel)
     started = time.monotonic()
 
     try:

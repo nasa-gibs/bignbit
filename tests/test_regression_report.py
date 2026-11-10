@@ -70,6 +70,7 @@ def run_info():
         state_machine_name='gitc-sandbox-BrowseImageWorkflow',
         deployed_version='0.10.1a0',
         duration_seconds=3725,
+        max_parallel=8,
         source=report.source_info(GITHUB_ENVIRONMENT))
 
 
@@ -126,6 +127,7 @@ def test_render_markdown_passing_run(run_info):
     assert '| 3 | 2 | 0 | 0 | 1 |' in lines
     assert '| Started | 2026-11-09 12:00:00 UTC |' in lines
     assert '| Duration | 1h 02m 05s |' in lines
+    assert '| Maximum parallel cases | 8 |' in lines
     assert '| Venue | sandbox |' in lines
     assert '| Region | us-east-1 |' in lines
     assert '| Resource prefix | `gitc-sandbox` |' in lines
@@ -236,6 +238,7 @@ def test_write_report_redacts_both_files(run_info, tmp_path):
         'state_machine': 'gitc-sandbox-BrowseImageWorkflow',
         'cmr_environment': 'UAT',
         'deployed_version': '0.10.1a0',
+        'max_parallel': 8,
         'started_at': '2026-11-09T12:00:00+00:00',
         'duration_seconds': 3725,
         'commit': GITHUB_ENVIRONMENT['GITHUB_SHA'],

@@ -1,7 +1,11 @@
 """Unit tests for the regression suite's run loop, run against moto"""
 # pylint: disable=redefined-outer-name
+import _thread
 import json
+import threading
+import time
 from dataclasses import replace
+from pathlib import Path
 from types import SimpleNamespace
 from unittest import mock
 
@@ -9,12 +13,14 @@ import boto3
 import pytest
 from moto import mock_aws
 
-from regression_helpers import (ACCOUNT_ID, MUR_CASE, OPERA_CASE, PREFIX, REGION, create_state_machine, finish_running_executions,
-                                granule_cmr, list_executions, make_cnm, set_fake_aws_credentials, upload_cnms, write_cnm)
+from regression_helpers import (ACCOUNT_ID, MUR_CASE, OPERA_CASE, PREFIX, REGION, create_state_machine,
+                                granule_cmr, list_executions, make_cnm, set_fake_aws_credentials, upload_cnms, workflow_pause,
+                                write_cnm)
 from regression import aws, cmr, runner
 from regression.config import Deployment
 from regression.manifest import RegressionCase
 from regression.redact import PLACEHOLDER, Redactor
+from regression.results import CaseResult
 
 MODIS_CASE = RegressionCase('MODIS_AQUA_L3_SST_THERMAL_DAILY_4KM_DAYTIME_V2019.0', 'POCLOUD',
                             'AQUA_MODIS.20260125.L3m.DAY.SST.sst.4km', 'UAT')
@@ -30,13 +36,11 @@ def stack(monkeypatch, tmp_path):
     with mock_aws():
         outcomes = {}
 
-        def workflow_finishes(_seconds):
-            def outcome_for(execution_input):
-                granule_id = execution_input['payload']['granules'][0]['granuleId']
-                return outcomes.get(granule_id) or {'status': 'RUNNING'}
-            finish_running_executions(outcome_for)
+        def outcome_for(execution_input):
+            granule_id = execution_input['payload']['granules'][0]['granuleId']
+            return outcomes.get(granule_id) or {'status': 'RUNNING'}
 
-        monkeypatch.setattr(aws.time, 'sleep', workflow_finishes)
+        monkeypatch.setattr(aws, '_pause', workflow_pause(outcome_for))
 
         def get_granule(short_name, provider, granule_ur, cmr_env):
             return granule_cmr(RegressionCase(short_name, provider, granule_ur, cmr_env))
@@ -259,25 +263,248 @@ def test_run_cases_continues_after_failures(stack):
     assert len(list_executions(stack.state_machine_arn)) == 3
 
 
-def test_run_cases_interrupted(stack):
-    """An interrupt stops the run but keeps the results gathered so far"""
-    add_reference(stack, MUR_CASE, {'r00c00': 'abc'})
-    succeed(stack, MUR_CASE, {'r00c00': 'abc'})
-    lookups = []
+def test_run_case_lets_an_interruption_propagate(stack):
+    """A case stopped by the stop event is not recorded as a failure"""
+    stack.context.stop_event = threading.Event()
+    known_granule = stack.cmr_lookup.side_effect
 
     def get_granule(short_name, provider, granule_ur, cmr_env):
-        lookups.append(short_name)
-        if len(lookups) == 2:
-            raise KeyboardInterrupt()
-        return granule_cmr(RegressionCase(short_name, provider, granule_ur, cmr_env))
+        stack.context.stop_event.set()
+        return known_granule(short_name, provider, granule_ur, cmr_env)
 
     stack.cmr_lookup.side_effect = get_granule
 
-    results, interrupted = runner.run_cases([MUR_CASE, MODIS_CASE, OPERA_CASE], stack.context)
+    with pytest.raises(aws.ExecutionInterrupted):
+        runner.run_case(MUR_CASE, stack.context)
 
+    assert list_executions(stack.state_machine_arn) == []
+    assert not (runner.case_workdir(stack.context.workdir, MUR_CASE) / 'error.json').exists()
+
+
+def test_run_case_does_not_start_once_stopped(stack):
+    """A case that has not begun when the stop event is already set does nothing"""
+    stack.context.stop_event = threading.Event()
+    stack.context.stop_event.set()
+
+    with pytest.raises(aws.ExecutionInterrupted):
+        runner.run_case(MUR_CASE, stack.context)
+
+    stack.cmr_lookup.assert_not_called()
+
+
+def test_run_cases_with_real_cases_in_parallel(stack):
+    """Several cases run through moto at once, each keeping its own outcome, workdir and execution"""
+    cases = [MUR_CASE, MODIS_CASE, OPERA_CASE]
+    for case in (MUR_CASE, OPERA_CASE):
+        add_reference(stack, case, {'r00c00': 'abc'})
+        succeed(stack, case, {'r00c00': 'abc'})
+    add_reference(stack, MODIS_CASE, {'r00c00': 'abc'})
+    succeed(stack, MODIS_CASE, {'r00c00': 'DIFFERENT'})
+
+    results, interrupted = runner.run_cases(cases, replace(stack.context, max_parallel=3))
+
+    assert interrupted is False
+    assert [(result.case, result.outcome) for result in results] == [(MUR_CASE, 'PASSED'), (MODIS_CASE, 'MISMATCHED'), (OPERA_CASE, 'PASSED')]
+    assert len({result.execution_name for result in results}) == 3
+    assert len(list_executions(stack.state_machine_arn)) == 3
+    for case in cases:
+        assert (runner.case_workdir(stack.context.workdir, case) / 'input.json').is_file()
+
+
+def test_run_cases_continues_after_failures_in_parallel(stack):
+    """A case that errors, one that fails and a skipped one never stop the others, even when they all run at once"""
+    broken = RegressionCase('BROKEN_COLLECTION', 'POCLOUD', 'broken-granule', 'UAT')
+    known_granule = stack.cmr_lookup.side_effect
+
+    def get_granule(short_name, provider, granule_ur, cmr_env):
+        if short_name == broken.short_name:
+            raise ConnectionError('CMR is unreachable')
+        return known_granule(short_name, provider, granule_ur, cmr_env)
+
+    stack.cmr_lookup.side_effect = get_granule
+    stack.outcomes[MUR_CASE.granule_ur] = {'status': 'FAILED', 'error': 'HarmonyError', 'cause': 'job failed'}
+    add_reference(stack, OPERA_CASE, {'r00c00': 'abc'})
+    succeed(stack, OPERA_CASE, {'r00c00': 'abc'})
+
+    results, _ = runner.run_cases([broken, MUR_CASE, replace(MODIS_CASE, skip='X'), OPERA_CASE], replace(stack.context, max_parallel=4))
+
+    assert [result.outcome for result in results] == ['FAILED', 'FAILED', 'SKIPPED', 'PASSED']
+    assert results[0].error == 'ConnectionError: CMR is unreachable'
+
+
+def numbered_cases(count):
+    """Cases that share nothing but the collection prefix"""
+    return [RegressionCase(f'COLLECTION_{number}', 'POCLOUD', f'granule-{number}', 'UAT') for number in range(count)]
+
+
+def fake_result(case):
+    """A passing result for a fake run_case"""
+    return CaseResult(case=case, outcome='PASSED', workflow_status='SUCCEEDED', comparison='MATCH')
+
+
+@pytest.fixture
+def fake_run_case(monkeypatch):
+    """Replace run_case with a function recording when cases start, so that scheduling can be tested without AWS"""
+    state = SimpleNamespace(lock=threading.Lock(), in_flight=0, max_in_flight=0, started=[], behaviour=lambda case, context: None)
+
+    def run_case(case, context):
+        if case.skipped:
+            return CaseResult(case=case, outcome='SKIPPED', workflow_status='SKIPPED')
+        with state.lock:
+            state.started.append(case)
+            state.in_flight += 1
+            state.max_in_flight = max(state.max_in_flight, state.in_flight)
+        try:
+            state.behaviour(case, context)
+        finally:
+            with state.lock:
+                state.in_flight -= 1
+        return fake_result(case)
+
+    monkeypatch.setattr(runner, 'run_case', run_case)
+    return state
+
+
+def parallel_context(tmp_path, max_parallel):
+    """A context for tests that never reach AWS"""
+    return runner.RunContext(deployment=None, state_machine_arn='', sfn_client=None, s3_client=None, redactor=Redactor(),
+                             workdir=tmp_path, reference_dir=tmp_path, max_parallel=max_parallel)
+
+
+def test_default_parallelism():
+    """The default is one named constant, used by the context"""
+    assert runner.DEFAULT_MAX_PARALLEL == 8
+    assert parallel_context(Path('.'), runner.DEFAULT_MAX_PARALLEL).max_parallel == 8
+
+
+def test_run_cases_overlap(fake_run_case, tmp_path):
+    """With a parallelism of N, N cases are in flight at the same time (the barrier only opens when all N have started)"""
+    barrier = threading.Barrier(4, timeout=5)
+    fake_run_case.behaviour = lambda case, context: barrier.wait()
+
+    results, interrupted = runner.run_cases(numbered_cases(4), parallel_context(tmp_path, 4))
+
+    assert interrupted is False
+    assert [result.outcome for result in results] == ['PASSED'] * 4
+    assert fake_run_case.max_in_flight == 4
+
+
+def test_run_cases_never_exceed_the_limit(fake_run_case, tmp_path):
+    """No more than max_parallel cases are in flight, however many there are"""
+    fake_run_case.behaviour = lambda case, context: time.sleep(0.01)
+
+    results, _ = runner.run_cases(numbered_cases(12), parallel_context(tmp_path, 3))
+
+    assert len(results) == 12
+    assert 1 < fake_run_case.max_in_flight <= 3
+
+
+def test_run_cases_one_at_a_time(fake_run_case, tmp_path):
+    """--max-parallel 1 runs cases one at a time, in manifest order"""
+    cases = numbered_cases(5)
+    fake_run_case.behaviour = lambda case, context: time.sleep(0.005)
+
+    results, _ = runner.run_cases(cases, parallel_context(tmp_path, 1))
+
+    assert fake_run_case.max_in_flight == 1
+    assert fake_run_case.started == cases
+    assert [result.case for result in results] == cases
+
+
+def test_run_cases_return_manifest_order_whatever_the_finishing_order(fake_run_case, tmp_path):
+    """Each case waits for the one after it, so cases finish in reverse order"""
+    cases = numbered_cases(5)
+    done = {case.short_name: threading.Event() for case in cases}
+
+    def behaviour(case, context):
+        index = cases.index(case)
+        if index + 1 < len(cases):
+            assert done[cases[index + 1].short_name].wait(5)
+        done[case.short_name].set()
+
+    fake_run_case.behaviour = behaviour
+    skipped = replace(numbered_cases(6)[5], skip='X')
+    all_cases = cases[:2] + [skipped] + cases[2:]
+
+    results, _ = runner.run_cases(all_cases, parallel_context(tmp_path, 5))
+
+    assert [result.case for result in results] == all_cases
+    assert [result.outcome for result in results] == ['PASSED', 'PASSED', 'SKIPPED', 'PASSED', 'PASSED', 'PASSED']
+
+
+def test_skipped_cases_do_not_occupy_workers(fake_run_case, tmp_path):
+    """Skipped cases are reported without being started on a worker, so a parallelism of 1 is not held up by them"""
+    cases = [replace(case, skip='X') for case in numbered_cases(3)] + numbered_cases(5)[3:]
+
+    results, _ = runner.run_cases(cases, parallel_context(tmp_path, 1))
+
+    assert [result.outcome for result in results] == ['SKIPPED'] * 3 + ['PASSED'] * 2
+    assert fake_run_case.started == cases[3:]
+
+
+def test_run_cases_records_an_unexpected_error_and_keeps_going(fake_run_case, tmp_path):
+    """Should a worker raise something run_case did not capture, that case fails and the rest still run"""
+    cases = numbered_cases(3)
+
+    def behaviour(case, context):
+        if case is cases[1]:
+            raise RuntimeError('unexpected')
+
+    fake_run_case.behaviour = behaviour
+
+    results, interrupted = runner.run_cases(cases, parallel_context(tmp_path, 3))
+
+    assert interrupted is False
+    assert [result.outcome for result in results] == ['PASSED', 'FAILED', 'PASSED']
+    assert results[1].error == 'RuntimeError: unexpected'
+
+
+def test_progress_lines_name_their_case(fake_run_case, tmp_path, caplog):
+    """Start and completion lines each carry the case, and completion lines count the cases finished so far"""
+    caplog.set_level('INFO', logger='regression.runner')
+    cases = numbered_cases(3)
+
+    runner.run_cases(cases, parallel_context(tmp_path, 1))
+
+    messages = [record.getMessage() for record in caplog.records]
+    for number, case in enumerate(cases, start=1):
+        assert any(message.startswith('Starting regression for ' + case.short_name) for message in messages)
+        assert any(message.startswith(f'[{number}/3 finished] {case.short_name} ') for message in messages)
+
+
+def test_run_cases_interrupted(fake_run_case, tmp_path):
+    """
+    An interrupt of the main thread releases the cases in flight through the stop event, cancels those not started
+    and returns promptly with the cases that completed, in order
+    """
+    cases = numbered_cases(6)
+    in_flight_started = threading.Barrier(3, timeout=5)
+
+    def behaviour(case, context):
+        if case is cases[0]:
+            return
+        # Cases 1 to 3 are in flight; case 4 waits for a free worker. One of the three interrupts the main thread
+        # once all three are in flight, as Ctrl-C would.
+        if in_flight_started.wait() == 0:
+            _thread.interrupt_main()
+        assert context.stop_event.wait(5), 'the stop event was never set'
+        raise aws.ExecutionInterrupted('stopped')
+
+    fake_run_case.behaviour = behaviour
+    skipped = replace(cases[5], skip='X')
+    all_cases = cases[:5] + [skipped]
+    context = parallel_context(tmp_path, 3)
+    context.stop_event = threading.Event()
+    started = time.monotonic()
+
+    results, interrupted = runner.run_cases(all_cases, context)
+
+    assert time.monotonic() - started < 3
     assert interrupted is True
-    assert [(result.case, result.outcome) for result in results] == [(MUR_CASE, 'PASSED')]
-    assert lookups == [MUR_CASE.short_name, MODIS_CASE.short_name]
+    assert context.stop_event.is_set()
+    assert [(result.case, result.outcome) for result in results] == [(cases[0], 'PASSED'), (skipped, 'SKIPPED')]
+    assert fake_run_case.started == cases[:4]
+    assert fake_run_case.in_flight == 0
 
 
 @pytest.mark.parametrize('error, cause, expected', [

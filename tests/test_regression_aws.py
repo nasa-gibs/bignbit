@@ -2,6 +2,8 @@
 # pylint: disable=redefined-outer-name,unused-argument
 import json
 import re
+import threading
+import time
 from datetime import datetime, timezone
 from unittest import mock
 
@@ -193,6 +195,64 @@ def test_run_execution_timeout_when_stopping_fails(monkeypatch):
 
     assert aws.run_execution(client, 'arn:machine', 'reg-test-1', {}, poll_interval=0.001, timeout=0.01).status == 'TIMEOUT'
     client.stop_execution.assert_called_once()
+
+
+def test_run_execution_raises_when_the_stop_event_is_set(monkeypatch):
+    """A set stop event wakes the wait at once and abandons the execution without stopping it"""
+    client = mock.Mock()
+    client.start_execution.return_value = {'executionArn': 'arn:execution'}
+    client.describe_execution.return_value = {'status': 'RUNNING'}
+    stop_event = threading.Event()
+    threading.Timer(0.05, stop_event.set).start()
+    monkeypatch.setattr(aws.time, 'sleep', mock.Mock(side_effect=AssertionError('must wait on the event instead')))
+    started = time.monotonic()
+
+    with pytest.raises(aws.ExecutionInterrupted):
+        aws.run_execution(client, 'arn:machine', 'reg-test-1', {}, poll_interval=30, timeout=60, stop_event=stop_event)
+
+    assert time.monotonic() - started < 3
+    client.stop_execution.assert_not_called()
+
+
+def test_run_execution_does_not_start_when_already_stopped():
+    """Nothing is started once the run has been interrupted"""
+    client = mock.Mock()
+    stop_event = threading.Event()
+    stop_event.set()
+
+    with pytest.raises(aws.ExecutionInterrupted):
+        aws.run_execution(client, 'arn:machine', 'reg-test-1', {}, stop_event=stop_event)
+
+    client.start_execution.assert_not_called()
+
+
+def test_run_execution_with_an_unset_stop_event_waits_on_it(sfn_client, monkeypatch):
+    """With a stop event that is never set, the execution is polled and finishes as it does without one"""
+    state_machine_arn = create_state_machine()
+    polls = []
+
+    def pause(seconds, stop_event):
+        polls.append(seconds)
+        finish_running_executions(lambda _: {'status': 'SUCCEEDED', 'output': {}})
+        return stop_event.is_set()
+
+    monkeypatch.setattr(aws, '_pause', pause)
+
+    result = aws.run_execution(sfn_client, state_machine_arn, 'reg-test-1', {}, poll_interval=7, timeout=60, stop_event=threading.Event())
+
+    assert result.status == 'SUCCEEDED'
+    assert polls == [7]
+
+
+def test_run_execution_with_an_unset_stop_event_still_times_out(sfn_client):
+    """The timeout path stops the execution, with or without a stop event"""
+    state_machine_arn = create_state_machine()
+
+    result = aws.run_execution(sfn_client, state_machine_arn, 'reg-test-1', {}, poll_interval=0.001, timeout=0.05,
+                               stop_event=threading.Event())
+
+    assert result.status == 'TIMEOUT'
+    assert [execution['status'] for execution in list_executions(state_machine_arn)] == ['ABORTED']
 
 
 def test_run_execution_failed_looks_up_the_failed_step():

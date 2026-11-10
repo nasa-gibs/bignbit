@@ -402,6 +402,7 @@ SANDBOX. It can also be run manually from the Actions tab with the following inp
 |-----------------|--------------------------------------------------------------------------------------------------------------|---------------|
 | venue           | Venue to test: `SANDBOX`, `SIT` or `UAT`                                                                     | `SANDBOX`     |
 | collections     | Space or comma separated collection short names to restrict the run to. Leave empty to run every test case. | _empty_       |
+| max_parallel    | Number of test cases to run at the same time                                                                 | `8`           |
 | publish_to_wiki | Publish the report to the repository wiki                                                                    | `true`        |
 
 The run fails if any test case fails or does not match its reference. The report is available in three places:
@@ -420,7 +421,8 @@ with AWS credentials for the venue's account in the environment:
 poetry run python -m regression run --venue sandbox
 ```
 
-Use `--only SHORT_NAME [SHORT_NAME ...]` to restrict the run to specific collections. The report is written to
+Use `--only SHORT_NAME [SHORT_NAME ...]` to restrict the run to specific collections. Test cases run 8 at a time; use
+`--max-parallel N` to change that, or `--max-parallel 1` to run them one at a time. The report is written to
 `build/regression/report` unless `--report-dir` is given, and each case's input, output and CNM messages are written
 to `build/regression/workdir`.
 

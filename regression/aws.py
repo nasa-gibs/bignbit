@@ -6,6 +6,7 @@ import json
 import logging
 import re
 import secrets
+import threading
 import time
 from dataclasses import dataclass
 from datetime import datetime, timezone
@@ -43,6 +44,13 @@ class StateMachineNotFound(Exception):
 class DownloadError(Exception):
     """
     Exception for a workflow result that could not be downloaded from S3
+    """
+
+
+class ExecutionInterrupted(Exception):
+    """
+    Exception for a wait on an execution that was abandoned because the run was interrupted. The execution itself
+    is left running.
     """
 
 
@@ -159,7 +167,7 @@ def find_failure_details(sfn_client, execution_arn: str) -> tuple[str, str]:
     try:
         history = sfn_client.get_execution_history(executionArn=execution_arn, reverseOrder=True, maxResults=HISTORY_MAX_EVENTS)
     except (BotoCoreError, ClientError) as ex:
-        LOGGER.warning('Unable to read the execution history for failure details: %s', ex)
+        LOGGER.warning('Unable to read the history of execution %s for failure details: %s', execution_arn, ex)
         return None
 
     for event in history.get('events', []):
@@ -172,16 +180,24 @@ def find_failure_details(sfn_client, execution_arn: str) -> tuple[str, str]:
 
 
 def _stop_execution(sfn_client, execution_arn: str, timeout: float) -> None:
-    """Stop an execution that outlived the suite's time limit so it does not overlap with the next case; best effort."""
+    """Stop an execution that outlived the suite's time limit so that it does not keep running unattended; best effort."""
     try:
         sfn_client.stop_execution(executionArn=execution_arn, error='RegressionTimeout',
                                   cause=f'Stopped by the regression suite after {timeout:g} seconds')
     except (BotoCoreError, ClientError) as ex:
-        LOGGER.warning('Unable to stop the timed out execution: %s', ex)
+        LOGGER.warning('Unable to stop the timed out execution %s: %s', execution_arn, ex)
+
+
+def _pause(seconds: float, stop_event: threading.Event = None) -> bool:
+    """Wait between status checks. Returns True if the stop event was set, which ends the wait immediately."""
+    if stop_event is None:
+        time.sleep(seconds)
+        return False
+    return stop_event.wait(seconds)
 
 
 def run_execution(sfn_client, state_machine_arn: str, name: str, input_message: dict,
-                  poll_interval: float = 10, timeout: float = 1800) -> ExecutionResult:
+                  poll_interval: float = 10, timeout: float = 1800, stop_event: threading.Event = None) -> ExecutionResult:
     """
     Start a state machine execution and wait for it to finish.
 
@@ -199,13 +215,23 @@ def run_execution(sfn_client, state_machine_arn: str, name: str, input_message: 
         Seconds between status checks
     timeout : float
         Seconds to wait for the execution to finish before stopping it and giving up
+    stop_event : threading.Event
+        Optional. When it is set, waiting ends at once with ExecutionInterrupted, and an execution that has not been
+        started yet is not started. The execution is left running.
 
     Returns
     -------
     ExecutionResult
         The final status with the execution's output, or its error and cause. A failed execution whose own error
         is empty is given the error and cause of its most recent failed step, when the history can be read.
+
+    Raises
+    ------
+    ExecutionInterrupted
+        If the stop event is set before the execution finishes
     """
+    if stop_event is not None and stop_event.is_set():
+        raise ExecutionInterrupted(f'Not starting execution {name}: the run was interrupted')
     execution_arn = sfn_client.start_execution(stateMachineArn=state_machine_arn, name=name,
                                                input=json.dumps(input_message))['executionArn']
     LOGGER.info('Started execution %s; checking every %g seconds', name, poll_interval)
@@ -222,7 +248,9 @@ def run_execution(sfn_client, state_machine_arn: str, name: str, input_message: 
             LOGGER.warning('Execution %s is still %s after %g seconds; stopping it', name, status, timeout)
             _stop_execution(sfn_client, execution_arn, timeout)
             return ExecutionResult(status=STATUS_TIMEOUT)
-        time.sleep(min(poll_interval, remaining))
+        if _pause(min(poll_interval, remaining), stop_event):
+            LOGGER.warning('Stopped waiting for execution %s (still %s) because the run was interrupted', name, status)
+            raise ExecutionInterrupted(f'Stopped waiting for execution {name}: the run was interrupted')
 
     LOGGER.info('Execution %s finished with status %s', name, status)
     result = ExecutionResult(status=status, output=description.get('output'),
@@ -246,7 +274,7 @@ def _local_path(directory: Path, name: str) -> Path:
     return path
 
 
-def download_cnm_files(s3_client, output: dict, cnm_dir, redactor: Redactor) -> list[Path]:
+def download_cnm_files(s3_client, output: dict, cnm_dir, redactor: Redactor, label: str = '') -> list[Path]:
     """
     Download the CNM messages a succeeded execution archived to S3.
 
@@ -260,6 +288,8 @@ def download_cnm_files(s3_client, output: dict, cnm_dir, redactor: Redactor) -> 
         Directory to write the CNM JSON files to
     redactor : Redactor
         Applied to each CNM before it is written, since CNMs may later be checked in as reference data
+    label : str
+        Identifies the test case in log messages, which interleave when cases run in parallel
 
     Returns
     -------
@@ -280,7 +310,7 @@ def download_cnm_files(s3_client, output: dict, cnm_dir, redactor: Redactor) -> 
         if not bucket or not key:
             continue
 
-        LOGGER.debug('Downloading CNM s3://%s/%s', bucket, key)
+        LOGGER.debug('%s: Downloading CNM s3://%s/%s', label, bucket, key)
         try:
             body = s3_client.get_object(Bucket=bucket, Key=key)['Body'].read().decode('utf-8')
         except (BotoCoreError, ClientError) as ex:
@@ -289,11 +319,11 @@ def download_cnm_files(s3_client, output: dict, cnm_dir, redactor: Redactor) -> 
         local_path.write_text(redactor.redact(json.dumps(json.loads(body), indent=4)), encoding='utf-8')
         downloaded.append(local_path)
 
-    LOGGER.info('Downloaded %d CNM file(s)', len(downloaded))
+    LOGGER.info('%s: Downloaded %d CNM file(s)', label, len(downloaded))
     return downloaded
 
 
-def download_browse_files(s3_client, cnm_files: list[Path], files_dir) -> list[Path]:
+def download_browse_files(s3_client, cnm_files: list[Path], files_dir, label: str = '') -> list[Path]:
     """
     Download the browse images listed in CNM messages, for manual inspection. The comparison does not use them,
     so a file that cannot be downloaded is logged and left out rather than failing the case.
@@ -306,6 +336,8 @@ def download_browse_files(s3_client, cnm_files: list[Path], files_dir) -> list[P
         CNM JSON files to read browse image locations from
     files_dir : str or Path
         Directory to write the browse images to
+    label : str
+        Identifies the test case in log messages, which interleave when cases run in parallel
 
     Returns
     -------
@@ -327,9 +359,9 @@ def download_browse_files(s3_client, cnm_files: list[Path], files_dir) -> list[P
                 local_path = _local_path(files_dir, key.rsplit('/', 1)[-1])
                 s3_client.download_file(bucket, key, str(local_path))
             except (BotoCoreError, ClientError, ValueError) as ex:
-                LOGGER.warning('Failed to download browse image s3://%s/%s: %s', bucket, key, ex)
+                LOGGER.warning('%s: Failed to download browse image s3://%s/%s: %s', label, bucket, key, ex)
                 continue
             downloaded.append(local_path)
 
-    LOGGER.info('Downloaded %d browse image(s)', len(downloaded))
+    LOGGER.info('%s: Downloaded %d browse image(s)', label, len(downloaded))
     return downloaded

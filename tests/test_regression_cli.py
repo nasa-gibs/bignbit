@@ -1,5 +1,6 @@
 """Unit tests for the regression suite's command line interface and exit codes, run against moto"""
 # pylint: disable=redefined-outer-name
+import _thread
 import json
 import subprocess
 import sys
@@ -12,11 +13,12 @@ from botocore.exceptions import NoCredentialsError
 from moto import mock_aws
 
 from regression_helpers import (ACCOUNT_ID, MUR_CASE, OPERA_CASE, OTHER_REGION, PREFIX, REGION, STATE_MACHINE_NAME,
-                                create_state_machine, finish_running_executions, granule_cmr, list_executions, make_cnm,
-                                set_fake_aws_credentials, upload_cnms, write_cnm)
-from regression import aws, cli, cmr, config
+                                create_state_machine, granule_cmr, list_executions, make_cnm,
+                                set_fake_aws_credentials, upload_cnms, workflow_pause, write_cnm)
+from regression import aws, cli, cmr, config, runner
 from regression.manifest import RegressionCase
 from regression.redact import PLACEHOLDER
+from regression.results import CaseResult
 
 SKIPPED_CASE = RegressionCase('SKIPPED_COLLECTION', 'POCLOUD', 'skipped-granule', 'UAT', 'X')
 OPS_CASE = RegressionCase('OPS_ONLY_COLLECTION', 'POCLOUD', 'ops-granule', 'OPS')
@@ -35,11 +37,8 @@ def env(monkeypatch, tmp_path):
     with mock_aws():
         outcomes = {}
 
-        def workflow_finishes(_seconds):
-            finish_running_executions(
-                lambda execution_input: outcomes.get(execution_input['payload']['granules'][0]['granuleId']) or {'status': 'RUNNING'})
-
-        monkeypatch.setattr(aws.time, 'sleep', workflow_finishes)
+        monkeypatch.setattr(aws, '_pause', workflow_pause(
+            lambda execution_input: outcomes.get(execution_input['payload']['granules'][0]['granuleId']) or {'status': 'RUNNING'}))
 
         def get_granule(short_name, provider, granule_ur, cmr_env):
             return granule_cmr(RegressionCase(short_name, provider, granule_ur, cmr_env))
@@ -139,27 +138,54 @@ def test_run_exits_1_on_timeout(env):
     assert [(entry['short_name'], entry['workflow_status']) for entry in results['cases']] == [(MUR_CASE.short_name, 'TIMEOUT')]
 
 
-def test_run_exits_1_when_interrupted(env):
-    """An interrupted run still writes a report of what was done, and never exits 0"""
+def test_run_exits_1_when_interrupted(env, monkeypatch):
+    """An interrupted run still writes a report of the cases that completed, and never exits 0"""
     create_state_machine()
-    passing(env, MUR_CASE)
-    passing(env, OPERA_CASE)
-    known_granule = cmr.get_granule.side_effect
+    skipped = runner.run_case(SKIPPED_CASE, None)
 
-    def get_granule(short_name, provider, granule_ur, cmr_env):
-        if short_name == OPERA_CASE.short_name:
-            raise KeyboardInterrupt()
-        return known_granule(short_name, provider, granule_ur, cmr_env)
+    def run_case(case, context):
+        if case.skipped:
+            return skipped
+        if case.short_name == OPERA_CASE.short_name:
+            _thread.interrupt_main()
+            assert context.stop_event.wait(5), 'the stop event was never set'
+            raise aws.ExecutionInterrupted('stopped')
+        return CaseResult(case=case, outcome='PASSED', workflow_status='SUCCEEDED', comparison='MATCH')
 
-    cmr.get_granule.side_effect = get_granule
+    monkeypatch.setattr(runner, 'run_case', run_case)
 
-    assert cli.main(env.arguments) == 1
+    assert cli.main(env.arguments + ['--max-parallel', '1']) == 1
 
     markdown, results = read_report(env)
     assert '**Verdict: INTERRUPTED.**' in markdown
-    assert '- The run was interrupted after 1 of 3 case(s).' in markdown
+    assert '- The run was interrupted after 2 of 3 case(s).' in markdown
     assert results['run']['exit_code'] == 1
-    assert [entry['outcome'] for entry in results['cases']] == ['PASSED']
+    assert [(entry['short_name'], entry['outcome']) for entry in results['cases']] == [
+        (MUR_CASE.short_name, 'PASSED'), (SKIPPED_CASE.short_name, 'SKIPPED')]
+
+
+def test_run_reports_the_parallelism(env):
+    """The report and results.json say how many cases were allowed to run at once"""
+    create_state_machine()
+    passing(env, MUR_CASE)
+    passing(env, OPERA_CASE)
+
+    assert cli.main(env.arguments + ['--max-parallel', '2']) == 0
+
+    markdown, results = read_report(env)
+    assert '| Maximum parallel cases | 2 |' in markdown
+    assert results['run']['max_parallel'] == 2
+    assert [entry['outcome'] for entry in results['cases']] == ['PASSED', 'PASSED', 'SKIPPED']
+
+
+def test_run_defaults_to_the_default_parallelism(env):
+    """Without --max-parallel the suite default is used and reported"""
+    create_state_machine()
+    passing(env, MUR_CASE)
+
+    assert cli.main(env.arguments + ['--only', MUR_CASE.short_name]) == 0
+
+    assert read_report(env)[1]['run']['max_parallel'] == runner.DEFAULT_MAX_PARALLEL
 
 
 def test_run_uses_venue_region_and_workspace(env):
@@ -273,6 +299,10 @@ def test_run_exits_2_on_unusable_selection(env, extra_arguments, message):
 
 @pytest.mark.parametrize('extra_arguments, message', [
     (['--venue', 'ops'], "argument --venue: invalid choice: 'ops'"),
+    (['--max-parallel', '0'], "argument --max-parallel: '0' is not greater than zero"),
+    (['--max-parallel', '-2'], "argument --max-parallel: '-2' is not greater than zero"),
+    (['--max-parallel', 'many'], "argument --max-parallel: 'many' is not a whole number"),
+    (['--max-parallel', '2.5'], "argument --max-parallel: '2.5' is not a whole number"),
     (['--poll-interval', '0'], "argument --poll-interval: '0' is not greater than zero"),
     (['--execution-timeout', 'soon'], "argument --execution-timeout: 'soon' is not a number"),
     (['--no-such-option'], 'unrecognized arguments: --no-such-option'),
@@ -321,6 +351,8 @@ def test_run_defaults():
     assert args.workdir == config.REPO_ROOT / 'build' / 'regression' / 'workdir'
     assert args.report_dir == config.REPO_ROOT / 'build' / 'regression' / 'report'
     assert (args.poll_interval, args.execution_timeout, args.download_browse) == (10, 1800, False)
+    assert args.max_parallel == runner.DEFAULT_MAX_PARALLEL == 8
+    assert cli.parse_args(['run', '--max-parallel', '3']).max_parallel == 3
     assert (args.region, args.prefix, args.workspace, args.state_machine_arn, args.aws_profile, args.only) == (None,) * 6
 
 
