@@ -125,9 +125,9 @@ def test_checked_in_manifest():
 
 
 def test_checked_in_manifest_matches_reference_data():
-    """Every test case has reference CNMs, and the reference tree holds nothing but those cases' cnm directories"""
+    """Every test case has reference CNMs, and the reference tree holds nothing but those cases' per-environment cnm directories"""
     cases = manifest.load_test_cases(config.DEFAULT_TEST_CASES)
-    expected_dirs = {config.DEFAULT_REFERENCE_DIR / case.short_name / case.granule_ur / 'cnm' for case in cases}
+    expected_dirs = {config.DEFAULT_REFERENCE_DIR / case.short_name / case.granule_ur / case.cmr_env / 'cnm' for case in cases}
 
     for cnm_dir in expected_dirs:
         assert any(cnm_dir.glob('*.cnm.json')), f'no reference CNMs in {cnm_dir}'

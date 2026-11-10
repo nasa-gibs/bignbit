@@ -31,7 +31,7 @@ def env(monkeypatch, tmp_path):
     finishes with whatever ``env.outcomes`` holds for a granule and CMR knows every granule.
     """
     set_fake_aws_credentials(monkeypatch)
-    for name in ('GITHUB_SERVER_URL', 'GITHUB_REPOSITORY', 'GITHUB_RUN_ID', 'GITHUB_SHA', 'EDL_TOKEN'):
+    for name in ('GITHUB_SERVER_URL', 'GITHUB_REPOSITORY', 'GITHUB_RUN_ID', 'GITHUB_SHA', 'EDL_USER', 'EDL_PASS'):
         monkeypatch.delenv(name, raising=False)
 
     with mock_aws():
@@ -40,7 +40,7 @@ def env(monkeypatch, tmp_path):
         monkeypatch.setattr(aws, '_pause', workflow_pause(
             lambda execution_input: outcomes.get(execution_input['payload']['granules'][0]['granuleId']) or {'status': 'RUNNING'}))
 
-        def get_granule(short_name, provider, granule_ur, cmr_env):
+        def get_granule(short_name, provider, granule_ur, cmr_env, token=None):  # pylint: disable=unused-argument
             return granule_cmr(RegressionCase(short_name, provider, granule_ur, cmr_env))
 
         test_cases = tmp_path / 'test_cases.csv'
@@ -53,14 +53,18 @@ def env(monkeypatch, tmp_path):
         arguments = ['run', '--test-cases', str(test_cases), '--reference-dir', str(paths.reference), '--workdir', str(paths.workdir),
                      '--report-dir', str(paths.report), '--poll-interval', '0.001']
 
-        with mock.patch.object(cmr, 'get_granule', side_effect=get_granule):
-            yield SimpleNamespace(paths=paths, arguments=arguments, outcomes=outcomes)
+        # No ~/.netrc, so CMR is searched anonymously unless a test provides credentials
+        monkeypatch.setenv('HOME', str(tmp_path))
+        with mock.patch.object(cmr, 'get_granule', side_effect=get_granule) as cmr_lookup, \
+                mock.patch.object(cmr, 'get_user_token', return_value='cmr-token') as token_lookup:
+            yield SimpleNamespace(paths=paths, arguments=arguments, outcomes=outcomes, cmr_lookup=cmr_lookup,
+                                  token_lookup=token_lookup)
 
 
 def passing(env, case, checksum='abc'):
     """Make a case pass: reference CNMs exist and the workflow succeeds with the same checksum"""
     cnm = make_cnm('SST_LL', f'{case.granule_ur}.r00c00.png', 'abc')
-    write_cnm(env.paths.reference / case.short_name / case.granule_ur / 'cnm', 'reference', cnm)
+    write_cnm(env.paths.reference / case.short_name / case.granule_ur / case.cmr_env / 'cnm', 'reference', cnm)
     env.outcomes[case.granule_ur] = {'status': 'SUCCEEDED', 'output': upload_cnms(case, [dict(cnm, product={
         'files': [dict(cnm['product']['files'][0], checksum=checksum)]})])}
 
@@ -268,6 +272,51 @@ def test_run_exits_2_without_credentials(env):
     assert results['run']['exit_code'] == 2
 
 
+def test_run_searches_cmr_anonymously_without_credentials(env):
+    """Without Earthdata Login credentials no token is requested and the cases still run"""
+    create_state_machine()
+    passing(env, MUR_CASE)
+    passing(env, OPERA_CASE)
+
+    assert cli.main(env.arguments) == 0
+
+    env.token_lookup.assert_not_called()
+    assert {call.kwargs['token'] for call in env.cmr_lookup.call_args_list} == {None}
+
+
+def test_run_gets_one_cmr_token_for_all_cases(env, monkeypatch):
+    """With credentials one token is fetched at the start of the run and used for every CMR search"""
+    monkeypatch.setenv('EDL_USER', 'edl-user')
+    monkeypatch.setenv('EDL_PASS', 'edl-pass')
+    create_state_machine()
+    passing(env, MUR_CASE)
+    passing(env, OPERA_CASE)
+
+    assert cli.main(env.arguments) == 0
+
+    env.token_lookup.assert_called_once_with('edl-user', 'edl-pass', 'UAT')
+    assert [call.kwargs['token'] for call in env.cmr_lookup.call_args_list] == ['cmr-token', 'cmr-token']
+
+
+def test_run_exits_2_when_no_cmr_token_can_be_obtained(env, monkeypatch, capsys):
+    """Credentials that do not work stop the run, and neither the password nor the token reaches the report or log"""
+    monkeypatch.setenv('EDL_USER', 'edl-user')
+    monkeypatch.setenv('EDL_PASS', 'edl-pass')
+    create_state_machine()
+    env.token_lookup.side_effect = cmr.CmrError('Unable to get an Earthdata Login token for CMR UAT as user edl-user: '
+                                                'request failed with HTTP 401 (HTTPError), password edl-pass')
+
+    assert cli.main(env.arguments) == 2
+
+    markdown, results = read_report(env)
+    assert 'Unable to get an Earthdata Login token for CMR UAT as user edl-user' in markdown
+    stderr = capsys.readouterr().err
+    assert 'password ***' in stderr
+    assert 'edl-pass' not in markdown and 'edl-pass' not in stderr
+    assert results['run']['exit_code'] == 2
+    env.cmr_lookup.assert_not_called()
+
+
 def test_run_exits_2_when_tfvars_are_missing(env, monkeypatch, tmp_path):
     """A venue whose tfvars file is missing cannot be resolved"""
     monkeypatch.setattr(config, 'TFVARS_DIR', tmp_path / 'no-tfvars-here')
@@ -366,7 +415,7 @@ def test_update_reference_command(env):
                             MUR_CASE.short_name])
 
     assert exit_status == 0
-    reference_dir = env.paths.reference / MUR_CASE.short_name / MUR_CASE.granule_ur
+    reference_dir = env.paths.reference / MUR_CASE.short_name / MUR_CASE.granule_ur / MUR_CASE.cmr_env
     assert [path.name for path in reference_dir.iterdir()] == ['cnm']
     assert '"NEW"' in next((reference_dir / 'cnm').iterdir()).read_text(encoding='utf-8')
     # The promoted results are now the baseline, so the same workflow results pass

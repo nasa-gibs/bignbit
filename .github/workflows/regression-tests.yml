@@ -86,6 +86,10 @@ jobs:
         # Exits 0 if every case passed, 1 if any case failed or mismatched, 2 if the run could not
         # start. A non-zero exit fails this job; the report steps below still run.
         env:
+          # Earthdata Login account the suite uses to get a CMR token, so that access controlled
+          # collections and granules are found
+          EDL_USER: ${{ secrets.EDL_USER }}
+          EDL_PASS: ${{ secrets.EDL_PASS }}
           COLLECTIONS: ${{ inputs.collections }}
           # Empty for scheduled runs, which use the suite's default
           MAX_PARALLEL: ${{ inputs.max_parallel }}

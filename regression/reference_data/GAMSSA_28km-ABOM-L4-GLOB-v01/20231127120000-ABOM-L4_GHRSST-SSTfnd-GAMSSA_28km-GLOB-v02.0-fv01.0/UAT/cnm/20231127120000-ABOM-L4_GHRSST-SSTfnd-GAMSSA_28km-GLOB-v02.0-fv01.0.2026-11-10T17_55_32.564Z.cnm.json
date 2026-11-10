@@ -1,0 +1,57 @@
+{
+    "version": "1.5.1",
+    "duplicationid": "20231127120000-ABOM-L4_GHRSST-SSTfnd-GAMSSA_28km-GLOB-v02.0-fv01.0_filtered_analysed_sst_reformatted_2023331_EPSG:4326!G1261391450-POCLOUD",
+    "collection": "GAMSSA_28km-ABOM-L4-GLOB-v01_analysed_sst_LL",
+    "submissionTime": "2026-11-10T17:55:32.564Z",
+    "identifier": "20231127120000-ABOM-L4_GHRSST-SSTfnd-GAMSSA_28km-GLOB-v02.0-fv01.0_filtered_analysed_sst_reformatted_2023331_EPSG:4326!G1261391450-POCLOUD",
+    "product": {
+        "name": "20231127120000-ABOM-L4_GHRSST-SSTfnd-GAMSSA_28km-GLOB-v02.0-fv01.0_filtered_analysed_sst_reformatted_2023331_EPSG:4326!G1261391450-POCLOUD",
+        "dataVersion": "1.5",
+        "files": [
+            {
+                "fileName": "20231127120000-ABOM-L4_GHRSST-SSTfnd-GAMSSA_28km-GLOB-v02.0-fv01.0_filtered_analysed_sst_reformatted.png",
+                "bucket": "gitc-sandbox-bignbit-staging",
+                "key": "bignbit-harmony-output/gamssa_28km-abom-l4-glob-v01/20261110/b4475c6b-c8d9-440a-a51b-e0263d0bc663/13196438/20231127120000-ABOM-L4_GHRSST-SSTfnd-GAMSSA_28km-GLOB-v02.0-fv01.0_filtered_analysed_sst_reformatted.png",
+                "checksum": "e3e50187b390d3bb1c90875de9577d64",
+                "checksumType": "MD5",
+                "variable": "analysed_sst",
+                "output_crs": "EPSG:4326",
+                "type": "browse",
+                "subtype": "png",
+                "dataday": "2023331",
+                "uri": "s3://gitc-sandbox-bignbit-staging/bignbit-harmony-output/gamssa_28km-abom-l4-glob-v01/20261110/b4475c6b-c8d9-440a-a51b-e0263d0bc663/13196438/20231127120000-ABOM-L4_GHRSST-SSTfnd-GAMSSA_28km-GLOB-v02.0-fv01.0_filtered_analysed_sst_reformatted.png",
+                "name": "20231127120000-ABOM-L4_GHRSST-SSTfnd-GAMSSA_28km-GLOB-v02.0-fv01.0_filtered_analysed_sst_reformatted.png"
+            },
+            {
+                "fileName": "20231127120000-ABOM-L4_GHRSST-SSTfnd-GAMSSA_28km-GLOB-v02.0-fv01.0_filtered_analysed_sst_reformatted.xml",
+                "bucket": "gitc-sandbox-bignbit-staging",
+                "key": "bignbit-harmony-output/gamssa_28km-abom-l4-glob-v01/20261110/b4475c6b-c8d9-440a-a51b-e0263d0bc663/13196438/20231127120000-ABOM-L4_GHRSST-SSTfnd-GAMSSA_28km-GLOB-v02.0-fv01.0_filtered_analysed_sst_reformatted.xml",
+                "checksum": "af8514faf6dffac99e79d13dd495d27ead38b6343ac7d600b80eeae93c515c536838711b6db40ddbdcf89bc6f31f7aaa1bbbbbe262e0732891131f09c30106d1",
+                "checksumType": "SHA512",
+                "variable": "analysed_sst",
+                "output_crs": "EPSG:4326",
+                "type": "metadata",
+                "subtype": "ImageMetadata-v1.2",
+                "dataday": "2023331",
+                "size": 335,
+                "uri": "s3://gitc-sandbox-bignbit-staging/bignbit-harmony-output/gamssa_28km-abom-l4-glob-v01/20261110/b4475c6b-c8d9-440a-a51b-e0263d0bc663/13196438/20231127120000-ABOM-L4_GHRSST-SSTfnd-GAMSSA_28km-GLOB-v02.0-fv01.0_filtered_analysed_sst_reformatted.xml",
+                "name": "20231127120000-ABOM-L4_GHRSST-SSTfnd-GAMSSA_28km-GLOB-v02.0-fv01.0_filtered_analysed_sst_reformatted.xml"
+            },
+            {
+                "fileName": "20231127120000-ABOM-L4_GHRSST-SSTfnd-GAMSSA_28km-GLOB-v02.0-fv01.0_filtered_analysed_sst_reformatted.pgw",
+                "bucket": "gitc-sandbox-bignbit-staging",
+                "key": "bignbit-harmony-output/gamssa_28km-abom-l4-glob-v01/20261110/b4475c6b-c8d9-440a-a51b-e0263d0bc663/13196438/20231127120000-ABOM-L4_GHRSST-SSTfnd-GAMSSA_28km-GLOB-v02.0-fv01.0_filtered_analysed_sst_reformatted.pgw",
+                "checksum": "a97d0a5c7d463443b30b12a96d26ea3a",
+                "checksumType": "MD5",
+                "variable": "analysed_sst",
+                "output_crs": "EPSG:4326",
+                "type": "metadata",
+                "subtype": "world file",
+                "dataday": "2023331",
+                "uri": "s3://gitc-sandbox-bignbit-staging/bignbit-harmony-output/gamssa_28km-abom-l4-glob-v01/20261110/b4475c6b-c8d9-440a-a51b-e0263d0bc663/13196438/20231127120000-ABOM-L4_GHRSST-SSTfnd-GAMSSA_28km-GLOB-v02.0-fv01.0_filtered_analysed_sst_reformatted.pgw",
+                "name": "20231127120000-ABOM-L4_GHRSST-SSTfnd-GAMSSA_28km-GLOB-v02.0-fv01.0_filtered_analysed_sst_reformatted.pgw"
+            }
+        ]
+    },
+    "provider": "POCLOUD"
+}

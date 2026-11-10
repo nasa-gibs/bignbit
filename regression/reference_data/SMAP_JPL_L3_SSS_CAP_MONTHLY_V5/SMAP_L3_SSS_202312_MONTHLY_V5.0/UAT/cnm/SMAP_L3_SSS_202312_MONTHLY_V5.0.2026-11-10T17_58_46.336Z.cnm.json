@@ -1,0 +1,57 @@
+{
+    "version": "1.5.1",
+    "duplicationid": "SMAP_L3_SSS_202312_MONTHLY_V5.0_smap_sss_reformatted_2023350_EPSG:4326!G1261586428-POCLOUD",
+    "collection": "SMAP_JPL_L3_SSS_CAP_MONTHLY_V5_smap_sss_LL",
+    "submissionTime": "2026-11-10T17:58:46.336Z",
+    "identifier": "SMAP_L3_SSS_202312_MONTHLY_V5.0_smap_sss_reformatted_2023350_EPSG:4326!G1261586428-POCLOUD",
+    "product": {
+        "name": "SMAP_L3_SSS_202312_MONTHLY_V5.0_smap_sss_reformatted_2023350_EPSG:4326!G1261586428-POCLOUD",
+        "dataVersion": "1.5",
+        "files": [
+            {
+                "fileName": "SMAP_L3_SSS_202312_MONTHLY_V5.0_smap_sss_reformatted.png",
+                "bucket": "gitc-sandbox-bignbit-staging",
+                "key": "bignbit-harmony-output/smap_jpl_l3_sss_cap_monthly_v5/20261110/4b66af42-abc5-4212-a26d-652b6af7c812/13196490/SMAP_L3_SSS_202312_MONTHLY_V5.0_smap_sss_reformatted.png",
+                "checksum": "48d69a5d7cea8b24a0800520eba963d1",
+                "checksumType": "MD5",
+                "variable": "smap_sss",
+                "output_crs": "EPSG:4326",
+                "type": "browse",
+                "subtype": "png",
+                "dataday": "2023350",
+                "uri": "s3://gitc-sandbox-bignbit-staging/bignbit-harmony-output/smap_jpl_l3_sss_cap_monthly_v5/20261110/4b66af42-abc5-4212-a26d-652b6af7c812/13196490/SMAP_L3_SSS_202312_MONTHLY_V5.0_smap_sss_reformatted.png",
+                "name": "SMAP_L3_SSS_202312_MONTHLY_V5.0_smap_sss_reformatted.png"
+            },
+            {
+                "fileName": "SMAP_L3_SSS_202312_MONTHLY_V5.0_smap_sss_reformatted.xml",
+                "bucket": "gitc-sandbox-bignbit-staging",
+                "key": "bignbit-harmony-output/smap_jpl_l3_sss_cap_monthly_v5/20261110/4b66af42-abc5-4212-a26d-652b6af7c812/13196490/SMAP_L3_SSS_202312_MONTHLY_V5.0_smap_sss_reformatted.xml",
+                "checksum": "2137c80b36f83b2c24c3d7959f0f1fcf6d8f2f61cf88fa11a1868dee5646f4236dbcfacf8584d3cdb2b435200f08cb085c74e659b584f020e2c5fc457ca83493",
+                "checksumType": "SHA512",
+                "variable": "smap_sss",
+                "output_crs": "EPSG:4326",
+                "type": "metadata",
+                "subtype": "ImageMetadata-v1.2",
+                "dataday": "2023350",
+                "size": 335,
+                "uri": "s3://gitc-sandbox-bignbit-staging/bignbit-harmony-output/smap_jpl_l3_sss_cap_monthly_v5/20261110/4b66af42-abc5-4212-a26d-652b6af7c812/13196490/SMAP_L3_SSS_202312_MONTHLY_V5.0_smap_sss_reformatted.xml",
+                "name": "SMAP_L3_SSS_202312_MONTHLY_V5.0_smap_sss_reformatted.xml"
+            },
+            {
+                "fileName": "SMAP_L3_SSS_202312_MONTHLY_V5.0_smap_sss_reformatted.pgw",
+                "bucket": "gitc-sandbox-bignbit-staging",
+                "key": "bignbit-harmony-output/smap_jpl_l3_sss_cap_monthly_v5/20261110/4b66af42-abc5-4212-a26d-652b6af7c812/13196490/SMAP_L3_SSS_202312_MONTHLY_V5.0_smap_sss_reformatted.pgw",
+                "checksum": "a97d0a5c7d463443b30b12a96d26ea3a",
+                "checksumType": "MD5",
+                "variable": "smap_sss",
+                "output_crs": "EPSG:4326",
+                "type": "metadata",
+                "subtype": "world file",
+                "dataday": "2023350",
+                "uri": "s3://gitc-sandbox-bignbit-staging/bignbit-harmony-output/smap_jpl_l3_sss_cap_monthly_v5/20261110/4b66af42-abc5-4212-a26d-652b6af7c812/13196490/SMAP_L3_SSS_202312_MONTHLY_V5.0_smap_sss_reformatted.pgw",
+                "name": "SMAP_L3_SSS_202312_MONTHLY_V5.0_smap_sss_reformatted.pgw"
+            }
+        ]
+    },
+    "provider": "POCLOUD"
+}

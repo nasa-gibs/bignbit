@@ -11,7 +11,7 @@ from pathlib import Path
 
 from botocore.exceptions import BotoCoreError, ClientError
 
-from regression import aws, config, manifest, reference, report, runner
+from regression import aws, cmr, config, manifest, reference, report, runner
 from regression.redact import RedactingFormatter, Redactor
 from regression.results import EXIT_FAILURES, EXIT_NOT_STARTED, EXIT_OK, exit_code, summarize
 
@@ -24,7 +24,8 @@ _LOG_HANDLER_NAME = 'regression-cli'
 _REPORT_DIR_OPTION = '--report-dir'
 
 # Problems that mean the run cannot start at all, as opposed to a single case failing
-_STARTUP_ERRORS = (config.ConfigError, manifest.ManifestError, aws.StateMachineNotFound, BotoCoreError, ClientError, OSError)
+_STARTUP_ERRORS = (config.ConfigError, manifest.ManifestError, cmr.CmrError, aws.StateMachineNotFound, BotoCoreError, ClientError,
+                   OSError)
 
 
 class UsageError(Exception):
@@ -165,11 +166,12 @@ def _write_error_report(report_dir: Path, run_info: report.RunInfo, message: str
 
 def _prepare_run(args: argparse.Namespace, run_info: report.RunInfo, redactor: Redactor) -> tuple[list, runner.RunContext]:
     """
-    Resolve the deployment, select the test cases and connect to AWS, filling in the run metadata along the way.
+    Resolve the deployment, select the test cases, get a CMR token and connect to AWS, filling in the run metadata
+    along the way.
 
     Raises
     ------
-    ConfigError, ManifestError, StateMachineNotFound, BotoCoreError, ClientError
+    ConfigError, ManifestError, CmrError, StateMachineNotFound, BotoCoreError, ClientError
         If the run cannot start
     """
     arn_region = arn_name = None
@@ -200,6 +202,13 @@ def _prepare_run(args: argparse.Namespace, run_info: report.RunInfo, redactor: R
                 deployment.region, deployment.resource_prefix, run_info.state_machine_name, deployment.cmr_environment, len(cases),
                 args.max_parallel)
 
+    # Fetched once for the whole run, so that bad credentials stop the run instead of failing every case
+    edl_credentials = cmr.get_edl_credentials(deployment.cmr_environment)
+    if edl_credentials:
+        redactor.add_secret(edl_credentials[1])
+    cmr_token = cmr.get_token(deployment.cmr_environment, edl_credentials)
+    redactor.add_secret(cmr_token)
+
     session = aws.create_session(args.aws_profile, deployment.region)
     redactor.add_account_id(aws.get_account_id(session))
 
@@ -218,7 +227,8 @@ def _prepare_run(args: argparse.Namespace, run_info: report.RunInfo, redactor: R
                                 poll_interval=args.poll_interval,
                                 execution_timeout=args.execution_timeout,
                                 download_browse=args.download_browse,
-                                max_parallel=args.max_parallel)
+                                max_parallel=args.max_parallel,
+                                cmr_token=cmr_token)
     return cases, context
 
 
@@ -238,7 +248,7 @@ def run_command(args: argparse.Namespace, redactor: Redactor) -> int:
     try:
         cases, context = _prepare_run(args, run_info, redactor)
     except _STARTUP_ERRORS as ex:
-        message = str(ex) if isinstance(ex, (config.ConfigError, manifest.ManifestError)) else f'{type(ex).__name__}: {ex}'
+        message = str(ex) if isinstance(ex, (config.ConfigError, manifest.ManifestError, cmr.CmrError)) else f'{type(ex).__name__}: {ex}'
         LOGGER.error('The regression run could not start: %s', message)
         run_info.duration_seconds = time.monotonic() - started
         _write_error_report(args.report_dir, run_info, message, redactor)

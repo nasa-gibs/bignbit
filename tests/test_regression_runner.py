@@ -42,7 +42,7 @@ def stack(monkeypatch, tmp_path):
 
         monkeypatch.setattr(aws, '_pause', workflow_pause(outcome_for))
 
-        def get_granule(short_name, provider, granule_ur, cmr_env):
+        def get_granule(short_name, provider, granule_ur, cmr_env, token=None):  # pylint: disable=unused-argument
             return granule_cmr(RegressionCase(short_name, provider, granule_ur, cmr_env))
 
         with mock.patch.object(cmr, 'get_granule', side_effect=get_granule) as cmr_lookup:
@@ -62,7 +62,7 @@ def stack(monkeypatch, tmp_path):
 
 def add_reference(stack, case, checksums):
     """Write reference CNMs for a case, one per tile"""
-    reference_cnm_dir = stack.context.reference_dir / case.short_name / case.granule_ur / 'cnm'
+    reference_cnm_dir = runner.case_workdir(stack.context.reference_dir, case) / 'cnm'
     for tile_id, checksum in checksums.items():
         write_cnm(reference_cnm_dir, f'{case.granule_ur}.{tile_id}', make_cnm('SST_LL', f'{case.granule_ur}.{tile_id}.png', checksum))
 
@@ -84,7 +84,7 @@ def test_run_case_passes(stack):
     assert result.issues == []
     assert result.error == ''
     assert result.duration_seconds > 0
-    stack.cmr_lookup.assert_called_once_with(MUR_CASE.short_name, 'POCLOUD', MUR_CASE.granule_ur, 'UAT')
+    stack.cmr_lookup.assert_called_once_with(MUR_CASE.short_name, 'POCLOUD', MUR_CASE.granule_ur, 'UAT', token=None)
 
     executions = list_executions(stack.state_machine_arn)
     assert [execution['name'] for execution in executions] == [result.execution_name]
@@ -140,6 +140,17 @@ def test_run_case_mismatch(stack):
 
     assert (result.outcome, result.workflow_status, result.comparison) == ('MISMATCHED', 'SUCCEEDED', 'MISMATCH')
     assert result.issues == [f'Checksum mismatch: SST_LL [{MUR_CASE.granule_ur}.r00c01.png]']
+
+
+def test_run_case_uses_the_reference_of_its_own_cmr_env(stack):
+    """A UAT case is compared with the UAT reference, whatever the OPS reference of the same granule holds"""
+    add_reference(stack, MUR_CASE, {'r00c00': 'abc'})
+    add_reference(stack, replace(MUR_CASE, cmr_env='OPS'), {'r00c00': 'different'})
+    succeed(stack, MUR_CASE, {'r00c00': 'abc'})
+
+    result = runner.run_case(MUR_CASE, stack.context)
+
+    assert (result.outcome, result.comparison, result.issues) == ('PASSED', 'MATCH', [])
 
 
 def test_run_case_without_reference_data(stack):
@@ -240,7 +251,7 @@ def test_run_cases_continues_after_failures(stack):
     cases = [broken, MUR_CASE, skipped, MODIS_CASE, OPERA_CASE]
     known_granule = stack.cmr_lookup.side_effect
 
-    def get_granule(short_name, provider, granule_ur, cmr_env):
+    def get_granule(short_name, provider, granule_ur, cmr_env, token=None):  # pylint: disable=unused-argument
         if short_name == broken.short_name:
             raise ConnectionError('CMR is unreachable')
         return known_granule(short_name, provider, granule_ur, cmr_env)
@@ -268,7 +279,7 @@ def test_run_case_lets_an_interruption_propagate(stack):
     stack.context.stop_event = threading.Event()
     known_granule = stack.cmr_lookup.side_effect
 
-    def get_granule(short_name, provider, granule_ur, cmr_env):
+    def get_granule(short_name, provider, granule_ur, cmr_env, token=None):  # pylint: disable=unused-argument
         stack.context.stop_event.set()
         return known_granule(short_name, provider, granule_ur, cmr_env)
 
@@ -316,7 +327,7 @@ def test_run_cases_continues_after_failures_in_parallel(stack):
     broken = RegressionCase('BROKEN_COLLECTION', 'POCLOUD', 'broken-granule', 'UAT')
     known_granule = stack.cmr_lookup.side_effect
 
-    def get_granule(short_name, provider, granule_ur, cmr_env):
+    def get_granule(short_name, provider, granule_ur, cmr_env, token=None):  # pylint: disable=unused-argument
         if short_name == broken.short_name:
             raise ConnectionError('CMR is unreachable')
         return known_granule(short_name, provider, granule_ur, cmr_env)

@@ -1,0 +1,57 @@
+{
+    "version": "1.5.1",
+    "duplicationid": "OPERA_L3_DSWx-S1_T30UXE_20251013T061500Z_20251120T104002Z_S1A_30_v1.0_B01_WTR_2025286_EPSG:4326!G1276861898-POCLOUD",
+    "collection": "OPERA_L3_DSWX-S1_V1_none_LL",
+    "submissionTime": "2026-11-10T16:51:56.222Z",
+    "identifier": "OPERA_L3_DSWx-S1_T30UXE_20251013T061500Z_20251120T104002Z_S1A_30_v1.0_B01_WTR_2025286_EPSG:4326!G1276861898-POCLOUD",
+    "product": {
+        "name": "OPERA_L3_DSWx-S1_T30UXE_20251013T061500Z_20251120T104002Z_S1A_30_v1.0_B01_WTR_2025286_EPSG:4326!G1276861898-POCLOUD",
+        "dataVersion": "1.5",
+        "files": [
+            {
+                "fileName": "OPERA_L3_DSWx-S1_T30UXE_20251013T061500Z_20251120T104002Z_S1A_30_v1.0_B01_WTR.png",
+                "bucket": "gitc-sandbox-bignbit-staging",
+                "key": "bignbit-harmony-output/opera_l3_dswx-s1_v1/20261110/8d684589-ee93-4871-9eda-a7126dd2ef9e/13195790/OPERA_L3_DSWx-S1_T30UXE_20251013T061500Z_20251120T104002Z_S1A_30_v1.0_B01_WTR.png",
+                "checksum": "baf87afa8520bb8acd26e738013a7efa",
+                "checksumType": "MD5",
+                "output_crs": "EPSG:4326",
+                "type": "browse",
+                "subtype": "png",
+                "variable": "none",
+                "dataday": "2025286",
+                "uri": "s3://gitc-sandbox-bignbit-staging/bignbit-harmony-output/opera_l3_dswx-s1_v1/20261110/8d684589-ee93-4871-9eda-a7126dd2ef9e/13195790/OPERA_L3_DSWx-S1_T30UXE_20251013T061500Z_20251120T104002Z_S1A_30_v1.0_B01_WTR.png",
+                "name": "OPERA_L3_DSWx-S1_T30UXE_20251013T061500Z_20251120T104002Z_S1A_30_v1.0_B01_WTR.png"
+            },
+            {
+                "fileName": "OPERA_L3_DSWx-S1_T30UXE_20251013T061500Z_20251120T104002Z_S1A_30_v1.0_B01_WTR.xml",
+                "bucket": "gitc-sandbox-bignbit-staging",
+                "key": "bignbit-harmony-output/opera_l3_dswx-s1_v1/20261110/8d684589-ee93-4871-9eda-a7126dd2ef9e/13195790/OPERA_L3_DSWx-S1_T30UXE_20251013T061500Z_20251120T104002Z_S1A_30_v1.0_B01_WTR.xml",
+                "checksum": "93a973e0e249244b2d6ab7c4f1dccd9287f64aaea6ee3294207a36e9540e441ca5b9b81dfb00a06e97fce42e20bf069296b76e248908b0fda8f4d729316fad31",
+                "checksumType": "SHA512",
+                "output_crs": "EPSG:4326",
+                "type": "metadata",
+                "subtype": "ImageMetadata-v1.2",
+                "variable": "none",
+                "dataday": "2025286",
+                "size": 364,
+                "uri": "s3://gitc-sandbox-bignbit-staging/bignbit-harmony-output/opera_l3_dswx-s1_v1/20261110/8d684589-ee93-4871-9eda-a7126dd2ef9e/13195790/OPERA_L3_DSWx-S1_T30UXE_20251013T061500Z_20251120T104002Z_S1A_30_v1.0_B01_WTR.xml",
+                "name": "OPERA_L3_DSWx-S1_T30UXE_20251013T061500Z_20251120T104002Z_S1A_30_v1.0_B01_WTR.xml"
+            },
+            {
+                "fileName": "OPERA_L3_DSWx-S1_T30UXE_20251013T061500Z_20251120T104002Z_S1A_30_v1.0_B01_WTR.pgw",
+                "bucket": "gitc-sandbox-bignbit-staging",
+                "key": "bignbit-harmony-output/opera_l3_dswx-s1_v1/20261110/8d684589-ee93-4871-9eda-a7126dd2ef9e/13195790/OPERA_L3_DSWx-S1_T30UXE_20251013T061500Z_20251120T104002Z_S1A_30_v1.0_B01_WTR.pgw",
+                "checksum": "d8b3f9588d8ba4b0df512cdff1b73a14",
+                "checksumType": "MD5",
+                "output_crs": "EPSG:4326",
+                "type": "metadata",
+                "subtype": "world file",
+                "variable": "none",
+                "dataday": "2025286",
+                "uri": "s3://gitc-sandbox-bignbit-staging/bignbit-harmony-output/opera_l3_dswx-s1_v1/20261110/8d684589-ee93-4871-9eda-a7126dd2ef9e/13195790/OPERA_L3_DSWx-S1_T30UXE_20251013T061500Z_20251120T104002Z_S1A_30_v1.0_B01_WTR.pgw",
+                "name": "OPERA_L3_DSWx-S1_T30UXE_20251013T061500Z_20251120T104002Z_S1A_30_v1.0_B01_WTR.pgw"
+            }
+        ]
+    },
+    "provider": "POCLOUD"
+}

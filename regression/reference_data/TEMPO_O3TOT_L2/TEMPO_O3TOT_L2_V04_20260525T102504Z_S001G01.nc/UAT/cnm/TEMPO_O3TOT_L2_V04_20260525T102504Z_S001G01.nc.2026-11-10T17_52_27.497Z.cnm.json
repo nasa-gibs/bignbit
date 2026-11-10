@@ -1,0 +1,57 @@
+{
+    "version": "1.5.1",
+    "duplicationid": "TEMPO_O3TOT_L2_V04_20260525T102504Z_S001G01_regridded_filtered_product_column_amount_o3_reformatted_2026145_EPSG:4326!G1281975564-LARC_CLOUD",
+    "collection": "TEMPO_O3TOT_L2_product_column_amount_o3_LL",
+    "submissionTime": "2026-11-10T17:52:27.497Z",
+    "identifier": "TEMPO_O3TOT_L2_V04_20260525T102504Z_S001G01_regridded_filtered_product_column_amount_o3_reformatted_2026145_EPSG:4326!G1281975564-LARC_CLOUD",
+    "product": {
+        "name": "TEMPO_O3TOT_L2_V04_20260525T102504Z_S001G01_regridded_filtered_product_column_amount_o3_reformatted_2026145_EPSG:4326!G1281975564-LARC_CLOUD",
+        "dataVersion": "1.5",
+        "files": [
+            {
+                "fileName": "TEMPO_O3TOT_L2_V04_20260525T102504Z_S001G01_regridded_filtered_product_column_amount_o3_reformatted.png",
+                "bucket": "gitc-sandbox-bignbit-staging",
+                "key": "bignbit-harmony-output/tempo_o3tot_l2/20261110/cdb42feb-e8fb-429c-aabd-dc035472da37/13196424/TEMPO_O3TOT_L2_V04_20260525T102504Z_S001G01_regridded_filtered_product_column_amount_o3_reformatted.png",
+                "checksum": "fd1f07c4ef39b6f21515a165f264f647",
+                "checksumType": "MD5",
+                "variable": "product/column_amount_o3",
+                "output_crs": "EPSG:4326",
+                "type": "browse",
+                "subtype": "png",
+                "dataday": "2026145",
+                "uri": "s3://gitc-sandbox-bignbit-staging/bignbit-harmony-output/tempo_o3tot_l2/20261110/cdb42feb-e8fb-429c-aabd-dc035472da37/13196424/TEMPO_O3TOT_L2_V04_20260525T102504Z_S001G01_regridded_filtered_product_column_amount_o3_reformatted.png",
+                "name": "TEMPO_O3TOT_L2_V04_20260525T102504Z_S001G01_regridded_filtered_product_column_amount_o3_reformatted.png"
+            },
+            {
+                "fileName": "TEMPO_O3TOT_L2_V04_20260525T102504Z_S001G01_regridded_filtered_product_column_amount_o3_reformatted.xml",
+                "bucket": "gitc-sandbox-bignbit-staging",
+                "key": "bignbit-harmony-output/tempo_o3tot_l2/20261110/cdb42feb-e8fb-429c-aabd-dc035472da37/13196424/TEMPO_O3TOT_L2_V04_20260525T102504Z_S001G01_regridded_filtered_product_column_amount_o3_reformatted.xml",
+                "checksum": "b0fde14b4e4201b700daafd61904faf1191eda9e8a372877177b3f0cbf7e45447cf52331f9c3da6876d2f6c11385d2c2d3635e5d9198290e321f06968ef293ed",
+                "checksumType": "SHA512",
+                "variable": "product/column_amount_o3",
+                "output_crs": "EPSG:4326",
+                "type": "metadata",
+                "subtype": "ImageMetadata-v1.2",
+                "dataday": "2026145",
+                "size": 365,
+                "uri": "s3://gitc-sandbox-bignbit-staging/bignbit-harmony-output/tempo_o3tot_l2/20261110/cdb42feb-e8fb-429c-aabd-dc035472da37/13196424/TEMPO_O3TOT_L2_V04_20260525T102504Z_S001G01_regridded_filtered_product_column_amount_o3_reformatted.xml",
+                "name": "TEMPO_O3TOT_L2_V04_20260525T102504Z_S001G01_regridded_filtered_product_column_amount_o3_reformatted.xml"
+            },
+            {
+                "fileName": "TEMPO_O3TOT_L2_V04_20260525T102504Z_S001G01_regridded_filtered_product_column_amount_o3_reformatted.pgw",
+                "bucket": "gitc-sandbox-bignbit-staging",
+                "key": "bignbit-harmony-output/tempo_o3tot_l2/20261110/cdb42feb-e8fb-429c-aabd-dc035472da37/13196424/TEMPO_O3TOT_L2_V04_20260525T102504Z_S001G01_regridded_filtered_product_column_amount_o3_reformatted.pgw",
+                "checksum": "0e8e6527a742931241d710c225820dab",
+                "checksumType": "MD5",
+                "variable": "product/column_amount_o3",
+                "output_crs": "EPSG:4326",
+                "type": "metadata",
+                "subtype": "world file",
+                "dataday": "2026145",
+                "uri": "s3://gitc-sandbox-bignbit-staging/bignbit-harmony-output/tempo_o3tot_l2/20261110/cdb42feb-e8fb-429c-aabd-dc035472da37/13196424/TEMPO_O3TOT_L2_V04_20260525T102504Z_S001G01_regridded_filtered_product_column_amount_o3_reformatted.pgw",
+                "name": "TEMPO_O3TOT_L2_V04_20260525T102504Z_S001G01_regridded_filtered_product_column_amount_o3_reformatted.pgw"
+            }
+        ]
+    },
+    "provider": "LARC_CLOUD"
+}

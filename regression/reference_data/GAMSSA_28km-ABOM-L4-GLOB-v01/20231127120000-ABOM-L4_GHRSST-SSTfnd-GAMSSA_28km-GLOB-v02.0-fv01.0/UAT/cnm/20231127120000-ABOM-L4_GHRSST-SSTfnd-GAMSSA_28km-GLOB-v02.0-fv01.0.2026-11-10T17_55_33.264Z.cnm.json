@@ -1,0 +1,57 @@
+{
+    "version": "1.5.1",
+    "duplicationid": "20231127120000-ABOM-L4_GHRSST-SSTfnd-GAMSSA_28km-GLOB-v02.0-fv01.0_filtered_sea_ice_fraction_reformatted_2023331_EPSG:4326!G1261391450-POCLOUD",
+    "collection": "GAMSSA_28km-ABOM-L4-GLOB-v01_sea_ice_fraction_LL",
+    "submissionTime": "2026-11-10T17:55:33.264Z",
+    "identifier": "20231127120000-ABOM-L4_GHRSST-SSTfnd-GAMSSA_28km-GLOB-v02.0-fv01.0_filtered_sea_ice_fraction_reformatted_2023331_EPSG:4326!G1261391450-POCLOUD",
+    "product": {
+        "name": "20231127120000-ABOM-L4_GHRSST-SSTfnd-GAMSSA_28km-GLOB-v02.0-fv01.0_filtered_sea_ice_fraction_reformatted_2023331_EPSG:4326!G1261391450-POCLOUD",
+        "dataVersion": "1.5",
+        "files": [
+            {
+                "fileName": "20231127120000-ABOM-L4_GHRSST-SSTfnd-GAMSSA_28km-GLOB-v02.0-fv01.0_filtered_sea_ice_fraction_reformatted.png",
+                "bucket": "gitc-sandbox-bignbit-staging",
+                "key": "bignbit-harmony-output/gamssa_28km-abom-l4-glob-v01/20261110/34fef134-4753-4426-a246-53d4c1494bae/13196439/20231127120000-ABOM-L4_GHRSST-SSTfnd-GAMSSA_28km-GLOB-v02.0-fv01.0_filtered_sea_ice_fraction_reformatted.png",
+                "checksum": "b076e4a83084a5b4a2476f3728d75ec2",
+                "checksumType": "MD5",
+                "variable": "sea_ice_fraction",
+                "output_crs": "EPSG:4326",
+                "type": "browse",
+                "subtype": "png",
+                "dataday": "2023331",
+                "uri": "s3://gitc-sandbox-bignbit-staging/bignbit-harmony-output/gamssa_28km-abom-l4-glob-v01/20261110/34fef134-4753-4426-a246-53d4c1494bae/13196439/20231127120000-ABOM-L4_GHRSST-SSTfnd-GAMSSA_28km-GLOB-v02.0-fv01.0_filtered_sea_ice_fraction_reformatted.png",
+                "name": "20231127120000-ABOM-L4_GHRSST-SSTfnd-GAMSSA_28km-GLOB-v02.0-fv01.0_filtered_sea_ice_fraction_reformatted.png"
+            },
+            {
+                "fileName": "20231127120000-ABOM-L4_GHRSST-SSTfnd-GAMSSA_28km-GLOB-v02.0-fv01.0_filtered_sea_ice_fraction_reformatted.xml",
+                "bucket": "gitc-sandbox-bignbit-staging",
+                "key": "bignbit-harmony-output/gamssa_28km-abom-l4-glob-v01/20261110/34fef134-4753-4426-a246-53d4c1494bae/13196439/20231127120000-ABOM-L4_GHRSST-SSTfnd-GAMSSA_28km-GLOB-v02.0-fv01.0_filtered_sea_ice_fraction_reformatted.xml",
+                "checksum": "df58ee3c0f1ff9e79d52256adb2845e6efae2857cb2c172a7f512032aa66cef939ab3bb0451c8ce2361556933b84f61f7e4bf9b4d98a6a783f665ccd66c6a842",
+                "checksumType": "SHA512",
+                "variable": "sea_ice_fraction",
+                "output_crs": "EPSG:4326",
+                "type": "metadata",
+                "subtype": "ImageMetadata-v1.2",
+                "dataday": "2023331",
+                "size": 335,
+                "uri": "s3://gitc-sandbox-bignbit-staging/bignbit-harmony-output/gamssa_28km-abom-l4-glob-v01/20261110/34fef134-4753-4426-a246-53d4c1494bae/13196439/20231127120000-ABOM-L4_GHRSST-SSTfnd-GAMSSA_28km-GLOB-v02.0-fv01.0_filtered_sea_ice_fraction_reformatted.xml",
+                "name": "20231127120000-ABOM-L4_GHRSST-SSTfnd-GAMSSA_28km-GLOB-v02.0-fv01.0_filtered_sea_ice_fraction_reformatted.xml"
+            },
+            {
+                "fileName": "20231127120000-ABOM-L4_GHRSST-SSTfnd-GAMSSA_28km-GLOB-v02.0-fv01.0_filtered_sea_ice_fraction_reformatted.pgw",
+                "bucket": "gitc-sandbox-bignbit-staging",
+                "key": "bignbit-harmony-output/gamssa_28km-abom-l4-glob-v01/20261110/34fef134-4753-4426-a246-53d4c1494bae/13196439/20231127120000-ABOM-L4_GHRSST-SSTfnd-GAMSSA_28km-GLOB-v02.0-fv01.0_filtered_sea_ice_fraction_reformatted.pgw",
+                "checksum": "a97d0a5c7d463443b30b12a96d26ea3a",
+                "checksumType": "MD5",
+                "variable": "sea_ice_fraction",
+                "output_crs": "EPSG:4326",
+                "type": "metadata",
+                "subtype": "world file",
+                "dataday": "2023331",
+                "uri": "s3://gitc-sandbox-bignbit-staging/bignbit-harmony-output/gamssa_28km-abom-l4-glob-v01/20261110/34fef134-4753-4426-a246-53d4c1494bae/13196439/20231127120000-ABOM-L4_GHRSST-SSTfnd-GAMSSA_28km-GLOB-v02.0-fv01.0_filtered_sea_ice_fraction_reformatted.pgw",
+                "name": "20231127120000-ABOM-L4_GHRSST-SSTfnd-GAMSSA_28km-GLOB-v02.0-fv01.0_filtered_sea_ice_fraction_reformatted.pgw"
+            }
+        ]
+    },
+    "provider": "POCLOUD"
+}

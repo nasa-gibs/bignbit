@@ -31,34 +31,59 @@ def test_update_copies_only_the_cnm_directory(tmp_path):
 
     assert reference.update_reference(workdir, reference_dir, [SHORT_NAME]) == []
 
-    assert reference_files(reference_dir) == [os.path.join(SHORT_NAME, GRANULE_UR, 'cnm', 'a.cnm.json')]
+    assert reference_files(reference_dir) == [os.path.join(SHORT_NAME, GRANULE_UR, 'UAT', 'cnm', 'a.cnm.json')]
 
 
 def test_update_replaces_existing_reference_cnms(tmp_path):
     """Old reference CNMs of the granule are removed; other granules of the collection are left alone"""
     workdir, reference_dir = tmp_path / 'workdir', tmp_path / 'reference'
     populate_workdir(workdir)
-    write_cnm(reference_dir / SHORT_NAME / GRANULE_UR / 'cnm', 'stale', make_cnm('MUR_sst_LL', 'g.r00c00.png', 'old'))
-    write_cnm(reference_dir / SHORT_NAME / 'granule-2' / 'cnm', 'kept', make_cnm('MUR_sst_LL', 'g.r00c00.png', 'old'))
+    write_cnm(reference_dir / SHORT_NAME / GRANULE_UR / 'UAT' / 'cnm', 'stale', make_cnm('MUR_sst_LL', 'g.r00c00.png', 'old'))
+    write_cnm(reference_dir / SHORT_NAME / 'granule-2' / 'UAT' / 'cnm', 'kept', make_cnm('MUR_sst_LL', 'g.r00c00.png', 'old'))
 
     reference.update_reference(workdir, reference_dir, [SHORT_NAME])
 
-    assert reference_files(reference_dir) == [os.path.join(SHORT_NAME, GRANULE_UR, 'cnm', 'a.cnm.json'),
-                                              os.path.join(SHORT_NAME, 'granule-2', 'cnm', 'kept.cnm.json')]
-    assert '"new"' in (reference_dir / SHORT_NAME / GRANULE_UR / 'cnm' / 'a.cnm.json').read_text(encoding='utf-8')
+    assert reference_files(reference_dir) == [os.path.join(SHORT_NAME, GRANULE_UR, 'UAT', 'cnm', 'a.cnm.json'),
+                                              os.path.join(SHORT_NAME, 'granule-2', 'UAT', 'cnm', 'kept.cnm.json')]
+    assert '"new"' in (reference_dir / SHORT_NAME / GRANULE_UR / 'UAT' / 'cnm' / 'a.cnm.json').read_text(encoding='utf-8')
 
 
-def test_update_uses_the_latest_results(tmp_path):
-    """When a granule has results for more than one CMR environment, the most recently written ones win"""
+def test_update_copies_each_cmr_environment_to_its_own_reference(tmp_path):
+    """UAT and OPS results of the same granule are promoted to separate reference directories"""
     workdir, reference_dir = tmp_path / 'workdir', tmp_path / 'reference'
-    older = populate_workdir(workdir, cmr_env='UAT', checksum='older')
-    newer = populate_workdir(workdir, cmr_env='OPS', checksum='newer')
-    os.utime(older / 'cnm', (1_000_000, 1_000_000))
-    os.utime(newer / 'cnm', (2_000_000, 2_000_000))
+    populate_workdir(workdir, cmr_env='UAT', checksum='uat')
+    populate_workdir(workdir, cmr_env='OPS', checksum='ops')
+
+    assert reference.update_reference(workdir, reference_dir, [SHORT_NAME]) == []
+
+    assert reference_files(reference_dir) == [os.path.join(SHORT_NAME, GRANULE_UR, 'OPS', 'cnm', 'a.cnm.json'),
+                                              os.path.join(SHORT_NAME, GRANULE_UR, 'UAT', 'cnm', 'a.cnm.json')]
+    assert '"uat"' in (reference_dir / SHORT_NAME / GRANULE_UR / 'UAT' / 'cnm' / 'a.cnm.json').read_text(encoding='utf-8')
+    assert '"ops"' in (reference_dir / SHORT_NAME / GRANULE_UR / 'OPS' / 'cnm' / 'a.cnm.json').read_text(encoding='utf-8')
+
+
+def test_update_leaves_other_cmr_environments_untouched(tmp_path):
+    """Updating from UAT results does not change an existing OPS reference of the same granule"""
+    workdir, reference_dir = tmp_path / 'workdir', tmp_path / 'reference'
+    populate_workdir(workdir, cmr_env='UAT')
+    ops_cnm = write_cnm(reference_dir / SHORT_NAME / GRANULE_UR / 'OPS' / 'cnm', 'ops', make_cnm('MUR_sst_LL', 'g.r00c00.png', 'ops'))
+    ops_text = ops_cnm.read_text(encoding='utf-8')
 
     reference.update_reference(workdir, reference_dir, [SHORT_NAME])
 
-    assert '"newer"' in (reference_dir / SHORT_NAME / GRANULE_UR / 'cnm' / 'a.cnm.json').read_text(encoding='utf-8')
+    assert reference_files(reference_dir) == [os.path.join(SHORT_NAME, GRANULE_UR, 'OPS', 'cnm', 'ops.cnm.json'),
+                                              os.path.join(SHORT_NAME, GRANULE_UR, 'UAT', 'cnm', 'a.cnm.json')]
+    assert ops_cnm.read_text(encoding='utf-8') == ops_text
+
+
+def test_update_ignores_directories_that_are_not_cmr_environments(tmp_path):
+    """Only UAT and OPS directories of a granule are results; anything else is skipped"""
+    workdir, reference_dir = tmp_path / 'workdir', tmp_path / 'reference'
+    populate_workdir(workdir, cmr_env='SIT')
+
+    assert reference.update_reference(workdir, reference_dir, [SHORT_NAME]) == [SHORT_NAME]
+
+    assert not reference_dir.exists()
 
 
 def test_update_keeps_reference_when_the_run_produced_no_cnms(tmp_path):
@@ -66,11 +91,11 @@ def test_update_keeps_reference_when_the_run_produced_no_cnms(tmp_path):
     workdir, reference_dir = tmp_path / 'workdir', tmp_path / 'reference'
     (workdir / SHORT_NAME / GRANULE_UR / 'UAT').mkdir(parents=True)
     (workdir / SHORT_NAME / GRANULE_UR / 'UAT' / 'error.json').write_text('{}', encoding='utf-8')
-    write_cnm(reference_dir / SHORT_NAME / GRANULE_UR / 'cnm', 'existing', make_cnm('MUR_sst_LL', 'g.r00c00.png', 'old'))
+    write_cnm(reference_dir / SHORT_NAME / GRANULE_UR / 'UAT' / 'cnm', 'existing', make_cnm('MUR_sst_LL', 'g.r00c00.png', 'old'))
 
     assert reference.update_reference(workdir, reference_dir, [SHORT_NAME]) == [SHORT_NAME]
 
-    assert reference_files(reference_dir) == [os.path.join(SHORT_NAME, GRANULE_UR, 'cnm', 'existing.cnm.json')]
+    assert reference_files(reference_dir) == [os.path.join(SHORT_NAME, GRANULE_UR, 'UAT', 'cnm', 'existing.cnm.json')]
 
 
 def test_update_rejects_path_traversal(tmp_path):
@@ -83,7 +108,7 @@ def test_update_rejects_path_traversal(tmp_path):
     not_updated = reference.update_reference(workdir, reference_dir, names)
 
     assert not_updated == names[:-1]
-    assert reference_files(reference_dir) == [os.path.join(SHORT_NAME, GRANULE_UR, 'cnm', 'a.cnm.json')]
+    assert reference_files(reference_dir) == [os.path.join(SHORT_NAME, GRANULE_UR, 'UAT', 'cnm', 'a.cnm.json')]
     assert sorted(path.name for path in (tmp_path / 'root').iterdir()) == ['outside', 'reference', 'workdir']
 
 

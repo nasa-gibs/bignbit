@@ -426,6 +426,34 @@ Use `--only SHORT_NAME [SHORT_NAME ...]` to restrict the run to specific collect
 `build/regression/report` unless `--report-dir` is given, and each case's input, output and CNM messages are written
 to `build/regression/workdir`.
 
+### Earthdata Login credentials
+
+Some collections and granules in CMR are restricted by an access control list and are only returned to an
+authenticated search. At the start of a run the suite gets a CMR token for the deployment's CMR environment (UAT or
+OPS) and sends it with each granule search. The Earthdata Login account must exist in that environment and have
+access to every collection in the test cases. Credentials are taken from, in order:
+
+1. The `EDL_USER` and `EDL_PASS` environment variables, if set:
+
+   ```bash
+   export EDL_USER=<username>
+   export EDL_PASS=<password>
+   poetry run python -m regression run --venue sandbox
+   ```
+
+2. Otherwise, the `~/.netrc` entry for the environment's Earthdata Login host: `uat.urs.earthdata.nasa.gov` for UAT
+   or `urs.earthdata.nasa.gov` for OPS:
+
+   ```
+   machine uat.urs.earthdata.nasa.gov login <username> password <password>
+   ```
+
+If neither is available, CMR is searched anonymously and a warning is logged; test cases for access controlled
+collections then fail because their granule is not found. If credentials are found but a token cannot be obtained
+with them, the run does not start. The suite reuses one of the account's existing tokens if it is valid for at least
+another day; otherwise it creates one, revoking the token that expires first if the account already has the maximum
+of two. The GitHub Actions workflow supplies the credentials from the `EDL_USER` and `EDL_PASS` repository secrets.
+
 ## Prerequisites in the target venue
 
 The following are managed outside of the suite and must already exist in the venue being tested:
@@ -443,4 +471,6 @@ The following are managed outside of the suite and must already exist in the ven
 3. Copy the CNMs from that run into `regression/reference_data` with
    `poetry run python -m regression update-reference SHORT_NAME`. Use the same two steps to refresh existing references after
    an intentional change in output (`--all` updates every collection in the workdir).
+   Reference data is kept per CMR environment, in `regression/reference_data/<short_name>/<granule_ur>/<cmr_env>/cnm`,
+   because the same collection may use different granules, or produce different results, in UAT and OPS.
 4. Review the reference changes before committing them, since they become the expected output for future runs.

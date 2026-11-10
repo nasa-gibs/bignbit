@@ -31,7 +31,8 @@ class RunContext:  # pylint: disable=too-many-instance-attributes
     """
     Everything needed to run test cases against one deployment. The clients, the redactor and the stop event are
     shared by the threads that run cases in parallel. ``stop_event`` is set when the run is interrupted; ``run_cases``
-    creates it unless one is given.
+    creates it unless one is given. ``cmr_token`` is the Earthdata Login token for CMR searches, or None to search
+    anonymously.
     """
     deployment: Deployment
     state_machine_arn: str
@@ -45,10 +46,14 @@ class RunContext:  # pylint: disable=too-many-instance-attributes
     download_browse: bool = False
     max_parallel: int = DEFAULT_MAX_PARALLEL
     stop_event: threading.Event = None
+    cmr_token: str | None = None
 
 
 def case_workdir(workdir, case: RegressionCase) -> Path:
-    """Return the directory a case's inputs and results are written to: ``<workdir>/<short_name>/<granule_ur>/<cmr_env>``."""
+    """
+    Return the directory a case's inputs and results are written to: ``<workdir>/<short_name>/<granule_ur>/<cmr_env>``.
+    The reference data uses the same layout, rooted at the reference directory.
+    """
     return Path(workdir) / case.short_name / case.granule_ur / case.cmr_env
 
 
@@ -89,7 +94,7 @@ def _execute_case(case: RegressionCase, context: RunContext, result: CaseResult)
         shutil.rmtree(workdir)
     workdir.mkdir(parents=True)
 
-    granule_cmr = cmr.get_granule(case.short_name, case.provider, case.granule_ur, case.cmr_env)
+    granule_cmr = cmr.get_granule(case.short_name, case.provider, case.granule_ur, case.cmr_env, token=context.cmr_token)
     input_message = messages.build_input_message(case, granule_cmr, context.deployment)
     _write_json(workdir / 'input.json', input_message, context.redactor)
 
@@ -114,7 +119,7 @@ def _execute_case(case: RegressionCase, context: RunContext, result: CaseResult)
         aws.download_browse_files(context.s3_client, cnm_files, workdir / 'files', label=result.execution_name)
 
     reference = compare.load_cnm_files(case.short_name, case.granule_ur, case.cmr_env,
-                                       Path(context.reference_dir) / case.short_name / case.granule_ur / 'cnm')
+                                       case_workdir(context.reference_dir, case) / 'cnm')
     current = compare.load_cnm_files(case.short_name, case.granule_ur, case.cmr_env, workdir / 'cnm')
     comparison = compare.compare(reference, current)
 

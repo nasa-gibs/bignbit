@@ -1,0 +1,57 @@
+{
+    "version": "1.5.1",
+    "duplicationid": "SMAP_L3_SSS_20250528_8DAYS_V5.0_smap_sss_reformatted_2025148_EPSG:4326!G1273839637-POCLOUD",
+    "collection": "SMAP_JPL_L3_SSS_CAP_8DAY-RUNNINGMEAN_V5_smap_sss_LL",
+    "submissionTime": "2026-11-10T17:33:50.890Z",
+    "identifier": "SMAP_L3_SSS_20250528_8DAYS_V5.0_smap_sss_reformatted_2025148_EPSG:4326!G1273839637-POCLOUD",
+    "product": {
+        "name": "SMAP_L3_SSS_20250528_8DAYS_V5.0_smap_sss_reformatted_2025148_EPSG:4326!G1273839637-POCLOUD",
+        "dataVersion": "1.5",
+        "files": [
+            {
+                "fileName": "SMAP_L3_SSS_20250528_8DAYS_V5.0_smap_sss_reformatted.png",
+                "bucket": "gitc-sandbox-bignbit-staging",
+                "key": "bignbit-harmony-output/smap_jpl_l3_sss_cap_8day-runningmean_v5/20261110/525a283c-b513-419f-84c0-ba5d9dd091c8/13196177/SMAP_L3_SSS_20250528_8DAYS_V5.0_smap_sss_reformatted.png",
+                "checksum": "7f17d7f5d3d5fda8aa8dca980ae97d47",
+                "checksumType": "MD5",
+                "variable": "smap_sss",
+                "output_crs": "EPSG:4326",
+                "type": "browse",
+                "subtype": "png",
+                "dataday": "2025148",
+                "uri": "s3://gitc-sandbox-bignbit-staging/bignbit-harmony-output/smap_jpl_l3_sss_cap_8day-runningmean_v5/20261110/525a283c-b513-419f-84c0-ba5d9dd091c8/13196177/SMAP_L3_SSS_20250528_8DAYS_V5.0_smap_sss_reformatted.png",
+                "name": "SMAP_L3_SSS_20250528_8DAYS_V5.0_smap_sss_reformatted.png"
+            },
+            {
+                "fileName": "SMAP_L3_SSS_20250528_8DAYS_V5.0_smap_sss_reformatted.xml",
+                "bucket": "gitc-sandbox-bignbit-staging",
+                "key": "bignbit-harmony-output/smap_jpl_l3_sss_cap_8day-runningmean_v5/20261110/525a283c-b513-419f-84c0-ba5d9dd091c8/13196177/SMAP_L3_SSS_20250528_8DAYS_V5.0_smap_sss_reformatted.xml",
+                "checksum": "eb65c851f41b21c67e53a22d0e07365a5cbece1b2964dd276419b2e4bbd0ae6a73565d26ac60a3265bef0cff319c0558aabe354778080eacee2a379f19c66c72",
+                "checksumType": "SHA512",
+                "variable": "smap_sss",
+                "output_crs": "EPSG:4326",
+                "type": "metadata",
+                "subtype": "ImageMetadata-v1.2",
+                "dataday": "2025148",
+                "size": 335,
+                "uri": "s3://gitc-sandbox-bignbit-staging/bignbit-harmony-output/smap_jpl_l3_sss_cap_8day-runningmean_v5/20261110/525a283c-b513-419f-84c0-ba5d9dd091c8/13196177/SMAP_L3_SSS_20250528_8DAYS_V5.0_smap_sss_reformatted.xml",
+                "name": "SMAP_L3_SSS_20250528_8DAYS_V5.0_smap_sss_reformatted.xml"
+            },
+            {
+                "fileName": "SMAP_L3_SSS_20250528_8DAYS_V5.0_smap_sss_reformatted.pgw",
+                "bucket": "gitc-sandbox-bignbit-staging",
+                "key": "bignbit-harmony-output/smap_jpl_l3_sss_cap_8day-runningmean_v5/20261110/525a283c-b513-419f-84c0-ba5d9dd091c8/13196177/SMAP_L3_SSS_20250528_8DAYS_V5.0_smap_sss_reformatted.pgw",
+                "checksum": "a97d0a5c7d463443b30b12a96d26ea3a",
+                "checksumType": "MD5",
+                "variable": "smap_sss",
+                "output_crs": "EPSG:4326",
+                "type": "metadata",
+                "subtype": "world file",
+                "dataday": "2025148",
+                "uri": "s3://gitc-sandbox-bignbit-staging/bignbit-harmony-output/smap_jpl_l3_sss_cap_8day-runningmean_v5/20261110/525a283c-b513-419f-84c0-ba5d9dd091c8/13196177/SMAP_L3_SSS_20250528_8DAYS_V5.0_smap_sss_reformatted.pgw",
+                "name": "SMAP_L3_SSS_20250528_8DAYS_V5.0_smap_sss_reformatted.pgw"
+            }
+        ]
+    },
+    "provider": "POCLOUD"
+}

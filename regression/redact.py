@@ -1,11 +1,12 @@
 """
-Removes AWS account IDs from text. The regression report is published publicly, so nothing the suite writes or logs
-may contain one.
+Removes AWS account IDs and secrets from text. The regression report is published publicly, so nothing the suite
+writes or logs may contain them.
 """
 import logging
 import re
 
 PLACEHOLDER = 'XXXXXXXXXXXX'
+SECRET_PLACEHOLDER = '***'
 
 _ACCOUNT_ID = re.compile(r'\d{12}')
 
@@ -26,6 +27,7 @@ class Redactor:
 
     def __init__(self, account_ids=()):
         self._account_ids = set()
+        self._secrets = set()
         for account_id in account_ids:
             self.add_account_id(account_id)
 
@@ -34,9 +36,16 @@ class Redactor:
         if account_id and _ACCOUNT_ID.fullmatch(str(account_id)):
             self._account_ids.add(str(account_id))
 
+    def add_secret(self, secret: str) -> None:
+        """Register a secret, such as a password or token, to be redacted wherever it appears. Empty values are ignored."""
+        if secret:
+            self._secrets.add(str(secret))
+
     def redact(self, text: str) -> str:
-        """Return the text with account IDs replaced by the placeholder."""
+        """Return the text with secrets and account IDs replaced by placeholders."""
         text = str(text)
+        for secret in self._secrets:
+            text = text.replace(secret, SECRET_PLACEHOLDER)
         for account_id in self._account_ids:
             text = text.replace(account_id, PLACEHOLDER)
         for pattern in _PATTERNS:
