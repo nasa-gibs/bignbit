@@ -1,0 +1,57 @@
+{
+    "version": "1.5.1",
+    "duplicationid": "AQUA_MODIS.20230101_20231231.L3m.YR.SST.sst.4km_filtered_sst_reformatted_2023183_EPSG:4326!G1264447618-POCLOUD",
+    "collection": "MODIS_AQUA_L3_SST_THERMAL_ANNUAL_4KM_DAYTIME_V2019.0_sst_LL",
+    "submissionTime": "2026-06-19T03:01:59.011Z",
+    "identifier": "AQUA_MODIS.20230101_20231231.L3m.YR.SST.sst.4km_filtered_sst_reformatted_2023183_EPSG:4326!G1264447618-POCLOUD",
+    "product": {
+        "name": "AQUA_MODIS.20230101_20231231.L3m.YR.SST.sst.4km_filtered_sst_reformatted_2023183_EPSG:4326!G1264447618-POCLOUD",
+        "dataVersion": "1.5",
+        "files": [
+            {
+                "fileName": "AQUA_MODIS.20230101_20231231.L3m.YR.SST.sst.4km_filtered_sst_reformatted.png",
+                "bucket": "podaac-sit-svc-bignbit-staging",
+                "key": "bignbit-harmony-output/modis_aqua_l3_sst_thermal_annual_4km_daytime_v2019.0/20260619/0b22c4bf-bcfb-47d4-b49e-e01cd05b7b62/9632323/AQUA_MODIS.20230101_20231231.L3m.YR.SST.sst.4km_filtered_sst_reformatted.png",
+                "checksum": "37cced5f355ac763e679ef61edcadb30",
+                "checksumType": "MD5",
+                "variable": "sst",
+                "output_crs": "EPSG:4326",
+                "type": "browse",
+                "subtype": "png",
+                "dataday": "2023183",
+                "uri": "s3://podaac-sit-svc-bignbit-staging/bignbit-harmony-output/modis_aqua_l3_sst_thermal_annual_4km_daytime_v2019.0/20260619/0b22c4bf-bcfb-47d4-b49e-e01cd05b7b62/9632323/AQUA_MODIS.20230101_20231231.L3m.YR.SST.sst.4km_filtered_sst_reformatted.png",
+                "name": "AQUA_MODIS.20230101_20231231.L3m.YR.SST.sst.4km_filtered_sst_reformatted.png"
+            },
+            {
+                "fileName": "AQUA_MODIS.20230101_20231231.L3m.YR.SST.sst.4km_filtered_sst_reformatted.xml",
+                "bucket": "podaac-sit-svc-bignbit-staging",
+                "key": "bignbit-harmony-output/modis_aqua_l3_sst_thermal_annual_4km_daytime_v2019.0/20260619/0b22c4bf-bcfb-47d4-b49e-e01cd05b7b62/9632323/AQUA_MODIS.20230101_20231231.L3m.YR.SST.sst.4km_filtered_sst_reformatted.xml",
+                "checksum": "3a01e31c3b259cadaa9048b82b0fc93a312b16dfb7fd832d38b7872e2419cf92f581712f577cde38ddfb3c92a9d9ad5c94915a2ea13ced296df3a2b86664fbc4",
+                "checksumType": "SHA512",
+                "variable": "sst",
+                "output_crs": "EPSG:4326",
+                "type": "metadata",
+                "subtype": "ImageMetadata-v1.2",
+                "dataday": "2023183",
+                "size": 335,
+                "uri": "s3://podaac-sit-svc-bignbit-staging/bignbit-harmony-output/modis_aqua_l3_sst_thermal_annual_4km_daytime_v2019.0/20260619/0b22c4bf-bcfb-47d4-b49e-e01cd05b7b62/9632323/AQUA_MODIS.20230101_20231231.L3m.YR.SST.sst.4km_filtered_sst_reformatted.xml",
+                "name": "AQUA_MODIS.20230101_20231231.L3m.YR.SST.sst.4km_filtered_sst_reformatted.xml"
+            },
+            {
+                "fileName": "AQUA_MODIS.20230101_20231231.L3m.YR.SST.sst.4km_filtered_sst_reformatted.pgw",
+                "bucket": "podaac-sit-svc-bignbit-staging",
+                "key": "bignbit-harmony-output/modis_aqua_l3_sst_thermal_annual_4km_daytime_v2019.0/20260619/0b22c4bf-bcfb-47d4-b49e-e01cd05b7b62/9632323/AQUA_MODIS.20230101_20231231.L3m.YR.SST.sst.4km_filtered_sst_reformatted.pgw",
+                "checksum": "a181f5ecccbe8bbcd3fbccac2dfe3a98",
+                "checksumType": "MD5",
+                "variable": "sst",
+                "output_crs": "EPSG:4326",
+                "type": "metadata",
+                "subtype": "world file",
+                "dataday": "2023183",
+                "uri": "s3://podaac-sit-svc-bignbit-staging/bignbit-harmony-output/modis_aqua_l3_sst_thermal_annual_4km_daytime_v2019.0/20260619/0b22c4bf-bcfb-47d4-b49e-e01cd05b7b62/9632323/AQUA_MODIS.20230101_20231231.L3m.YR.SST.sst.4km_filtered_sst_reformatted.pgw",
+                "name": "AQUA_MODIS.20230101_20231231.L3m.YR.SST.sst.4km_filtered_sst_reformatted.pgw"
+            }
+        ]
+    },
+    "provider": "POCLOUD"
+}

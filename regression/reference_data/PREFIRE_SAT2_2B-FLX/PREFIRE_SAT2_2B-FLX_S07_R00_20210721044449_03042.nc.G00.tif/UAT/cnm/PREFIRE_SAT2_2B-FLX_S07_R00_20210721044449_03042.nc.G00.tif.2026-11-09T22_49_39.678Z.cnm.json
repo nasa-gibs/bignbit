@@ -1,0 +1,57 @@
+{
+    "version": "1.5.1",
+    "duplicationid": "PREFIRE_SAT2_2B-FLX_S07_R00_20210721044449_03042.nc.G00.r02c03_2021202_EPSG:4326!G1263096196-EEDTEST",
+    "collection": "PREFIRE_SAT2_2B-FLX_flx_LL",
+    "submissionTime": "2026-11-09T22:49:39.678Z",
+    "identifier": "PREFIRE_SAT2_2B-FLX_S07_R00_20210721044449_03042.nc.G00.r02c03_2021202_EPSG:4326!G1263096196-EEDTEST",
+    "product": {
+        "name": "PREFIRE_SAT2_2B-FLX_S07_R00_20210721044449_03042.nc.G00.r02c03_2021202_EPSG:4326!G1263096196-EEDTEST",
+        "dataVersion": "1.5",
+        "files": [
+            {
+                "fileName": "PREFIRE_SAT2_2B-FLX_S07_R00_20210721044449_03042.nc.G00.r02c03.png",
+                "bucket": "gitc-sandbox-bignbit-staging",
+                "key": "bignbit-harmony-output/prefire_sat2_2b-flx/20261109/29daf6d2-3d38-4151-a077-e092df284caa/13180977/PREFIRE_SAT2_2B-FLX_S07_R00_20210721044449_03042.nc.G00.r02c03.png",
+                "checksum": "8ac6825ae60a51e5673a14442f997906",
+                "checksumType": "MD5",
+                "variable": "flx",
+                "output_crs": "EPSG:4326",
+                "type": "browse",
+                "subtype": "png",
+                "dataday": "2021202",
+                "uri": "s3://gitc-sandbox-bignbit-staging/bignbit-harmony-output/prefire_sat2_2b-flx/20261109/29daf6d2-3d38-4151-a077-e092df284caa/13180977/PREFIRE_SAT2_2B-FLX_S07_R00_20210721044449_03042.nc.G00.r02c03.png",
+                "name": "PREFIRE_SAT2_2B-FLX_S07_R00_20210721044449_03042.nc.G00.r02c03.png"
+            },
+            {
+                "fileName": "PREFIRE_SAT2_2B-FLX_S07_R00_20210721044449_03042.nc.G00.r02c03.xml",
+                "bucket": "gitc-sandbox-bignbit-staging",
+                "key": "bignbit-harmony-output/prefire_sat2_2b-flx/20261109/29daf6d2-3d38-4151-a077-e092df284caa/13180977/PREFIRE_SAT2_2B-FLX_S07_R00_20210721044449_03042.nc.G00.r02c03.xml",
+                "checksum": "1cab6f924f1a4f968dc7b53404569f1e414eaf83438bf305835f8df0f42d1945665cb1900743297b58e9cc3a4fe5775c17ddabd8f8f0c8cc879280fece27c705",
+                "checksumType": "SHA512",
+                "variable": "flx",
+                "output_crs": "EPSG:4326",
+                "type": "metadata",
+                "subtype": "ImageMetadata-v1.2",
+                "dataday": "2021202",
+                "size": 335,
+                "uri": "s3://gitc-sandbox-bignbit-staging/bignbit-harmony-output/prefire_sat2_2b-flx/20261109/29daf6d2-3d38-4151-a077-e092df284caa/13180977/PREFIRE_SAT2_2B-FLX_S07_R00_20210721044449_03042.nc.G00.r02c03.xml",
+                "name": "PREFIRE_SAT2_2B-FLX_S07_R00_20210721044449_03042.nc.G00.r02c03.xml"
+            },
+            {
+                "fileName": "PREFIRE_SAT2_2B-FLX_S07_R00_20210721044449_03042.nc.G00.r02c03.pgw",
+                "bucket": "gitc-sandbox-bignbit-staging",
+                "key": "bignbit-harmony-output/prefire_sat2_2b-flx/20261109/29daf6d2-3d38-4151-a077-e092df284caa/13180977/PREFIRE_SAT2_2B-FLX_S07_R00_20210721044449_03042.nc.G00.r02c03.pgw",
+                "checksum": "a0310daf91fc4cc5989dbcb3e3449f2c",
+                "checksumType": "MD5",
+                "variable": "flx",
+                "output_crs": "EPSG:4326",
+                "type": "metadata",
+                "subtype": "world file",
+                "dataday": "2021202",
+                "uri": "s3://gitc-sandbox-bignbit-staging/bignbit-harmony-output/prefire_sat2_2b-flx/20261109/29daf6d2-3d38-4151-a077-e092df284caa/13180977/PREFIRE_SAT2_2B-FLX_S07_R00_20210721044449_03042.nc.G00.r02c03.pgw",
+                "name": "PREFIRE_SAT2_2B-FLX_S07_R00_20210721044449_03042.nc.G00.r02c03.pgw"
+            }
+        ]
+    },
+    "provider": "EEDTEST"
+}

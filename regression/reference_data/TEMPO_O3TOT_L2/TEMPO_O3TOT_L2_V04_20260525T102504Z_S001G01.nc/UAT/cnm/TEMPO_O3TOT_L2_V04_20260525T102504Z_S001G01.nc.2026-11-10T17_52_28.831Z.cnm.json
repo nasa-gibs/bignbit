@@ -1,0 +1,57 @@
+{
+    "version": "1.5.1",
+    "duplicationid": "TEMPO_O3TOT_L2_V04_20260525T102504Z_S001G01_regridded_filtered_product_uv_aerosol_index_reformatted_2026145_EPSG:4326!G1281975564-LARC_CLOUD",
+    "collection": "TEMPO_O3TOT_L2_product_uv_aerosol_index_LL",
+    "submissionTime": "2026-11-10T17:52:28.831Z",
+    "identifier": "TEMPO_O3TOT_L2_V04_20260525T102504Z_S001G01_regridded_filtered_product_uv_aerosol_index_reformatted_2026145_EPSG:4326!G1281975564-LARC_CLOUD",
+    "product": {
+        "name": "TEMPO_O3TOT_L2_V04_20260525T102504Z_S001G01_regridded_filtered_product_uv_aerosol_index_reformatted_2026145_EPSG:4326!G1281975564-LARC_CLOUD",
+        "dataVersion": "1.5",
+        "files": [
+            {
+                "fileName": "TEMPO_O3TOT_L2_V04_20260525T102504Z_S001G01_regridded_filtered_product_uv_aerosol_index_reformatted.png",
+                "bucket": "gitc-sandbox-bignbit-staging",
+                "key": "bignbit-harmony-output/tempo_o3tot_l2/20261110/940e0741-a568-40e2-8f5a-e836eb801222/13196425/TEMPO_O3TOT_L2_V04_20260525T102504Z_S001G01_regridded_filtered_product_uv_aerosol_index_reformatted.png",
+                "checksum": "cb22a4197f1e6695a9f644cde85d490f",
+                "checksumType": "MD5",
+                "variable": "product/uv_aerosol_index",
+                "output_crs": "EPSG:4326",
+                "type": "browse",
+                "subtype": "png",
+                "dataday": "2026145",
+                "uri": "s3://gitc-sandbox-bignbit-staging/bignbit-harmony-output/tempo_o3tot_l2/20261110/940e0741-a568-40e2-8f5a-e836eb801222/13196425/TEMPO_O3TOT_L2_V04_20260525T102504Z_S001G01_regridded_filtered_product_uv_aerosol_index_reformatted.png",
+                "name": "TEMPO_O3TOT_L2_V04_20260525T102504Z_S001G01_regridded_filtered_product_uv_aerosol_index_reformatted.png"
+            },
+            {
+                "fileName": "TEMPO_O3TOT_L2_V04_20260525T102504Z_S001G01_regridded_filtered_product_uv_aerosol_index_reformatted.xml",
+                "bucket": "gitc-sandbox-bignbit-staging",
+                "key": "bignbit-harmony-output/tempo_o3tot_l2/20261110/940e0741-a568-40e2-8f5a-e836eb801222/13196425/TEMPO_O3TOT_L2_V04_20260525T102504Z_S001G01_regridded_filtered_product_uv_aerosol_index_reformatted.xml",
+                "checksum": "318479eafb4007a4dd52034f5ae8485fa60edb844a7ad64693bf0c8a25d03f679b298502eee58f24b3f0e71f0eecd64e99b31ea2c2e7940e091e6e937c7a5778",
+                "checksumType": "SHA512",
+                "variable": "product/uv_aerosol_index",
+                "output_crs": "EPSG:4326",
+                "type": "metadata",
+                "subtype": "ImageMetadata-v1.2",
+                "dataday": "2026145",
+                "size": 365,
+                "uri": "s3://gitc-sandbox-bignbit-staging/bignbit-harmony-output/tempo_o3tot_l2/20261110/940e0741-a568-40e2-8f5a-e836eb801222/13196425/TEMPO_O3TOT_L2_V04_20260525T102504Z_S001G01_regridded_filtered_product_uv_aerosol_index_reformatted.xml",
+                "name": "TEMPO_O3TOT_L2_V04_20260525T102504Z_S001G01_regridded_filtered_product_uv_aerosol_index_reformatted.xml"
+            },
+            {
+                "fileName": "TEMPO_O3TOT_L2_V04_20260525T102504Z_S001G01_regridded_filtered_product_uv_aerosol_index_reformatted.pgw",
+                "bucket": "gitc-sandbox-bignbit-staging",
+                "key": "bignbit-harmony-output/tempo_o3tot_l2/20261110/940e0741-a568-40e2-8f5a-e836eb801222/13196425/TEMPO_O3TOT_L2_V04_20260525T102504Z_S001G01_regridded_filtered_product_uv_aerosol_index_reformatted.pgw",
+                "checksum": "0e8e6527a742931241d710c225820dab",
+                "checksumType": "MD5",
+                "variable": "product/uv_aerosol_index",
+                "output_crs": "EPSG:4326",
+                "type": "metadata",
+                "subtype": "world file",
+                "dataday": "2026145",
+                "uri": "s3://gitc-sandbox-bignbit-staging/bignbit-harmony-output/tempo_o3tot_l2/20261110/940e0741-a568-40e2-8f5a-e836eb801222/13196425/TEMPO_O3TOT_L2_V04_20260525T102504Z_S001G01_regridded_filtered_product_uv_aerosol_index_reformatted.pgw",
+                "name": "TEMPO_O3TOT_L2_V04_20260525T102504Z_S001G01_regridded_filtered_product_uv_aerosol_index_reformatted.pgw"
+            }
+        ]
+    },
+    "provider": "LARC_CLOUD"
+}

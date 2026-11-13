@@ -1,0 +1,57 @@
+{
+    "version": "1.5.1",
+    "duplicationid": "20260317090000-JPL-L4_GHRSST-SSTfnd-MUR25-GLOB-v02.0-fv04.2_filtered_sea_ice_fraction_reformatted_2026076_EPSG:4326!G1281443706-POCLOUD",
+    "collection": "MUR25-JPL-L4-GLOB-v04.2_sea_ice_fraction_LL",
+    "submissionTime": "2026-11-09T22:38:03.689Z",
+    "identifier": "20260317090000-JPL-L4_GHRSST-SSTfnd-MUR25-GLOB-v02.0-fv04.2_filtered_sea_ice_fraction_reformatted_2026076_EPSG:4326!G1281443706-POCLOUD",
+    "product": {
+        "name": "20260317090000-JPL-L4_GHRSST-SSTfnd-MUR25-GLOB-v02.0-fv04.2_filtered_sea_ice_fraction_reformatted_2026076_EPSG:4326!G1281443706-POCLOUD",
+        "dataVersion": "1.5",
+        "files": [
+            {
+                "fileName": "20260317090000-JPL-L4_GHRSST-SSTfnd-MUR25-GLOB-v02.0-fv04.2_filtered_sea_ice_fraction_reformatted.png",
+                "bucket": "gitc-sandbox-bignbit-staging",
+                "key": "bignbit-harmony-output/mur25-jpl-l4-glob-v04.2/20261109/1ef2f95d-8e1b-4424-8f73-cc771a701e12/13180898/20260317090000-JPL-L4_GHRSST-SSTfnd-MUR25-GLOB-v02.0-fv04.2_filtered_sea_ice_fraction_reformatted.png",
+                "checksum": "91f068f4a7e94867479b0a912365bd57",
+                "checksumType": "MD5",
+                "variable": "sea_ice_fraction",
+                "output_crs": "EPSG:4326",
+                "type": "browse",
+                "subtype": "png",
+                "dataday": "2026076",
+                "uri": "s3://gitc-sandbox-bignbit-staging/bignbit-harmony-output/mur25-jpl-l4-glob-v04.2/20261109/1ef2f95d-8e1b-4424-8f73-cc771a701e12/13180898/20260317090000-JPL-L4_GHRSST-SSTfnd-MUR25-GLOB-v02.0-fv04.2_filtered_sea_ice_fraction_reformatted.png",
+                "name": "20260317090000-JPL-L4_GHRSST-SSTfnd-MUR25-GLOB-v02.0-fv04.2_filtered_sea_ice_fraction_reformatted.png"
+            },
+            {
+                "fileName": "20260317090000-JPL-L4_GHRSST-SSTfnd-MUR25-GLOB-v02.0-fv04.2_filtered_sea_ice_fraction_reformatted.xml",
+                "bucket": "gitc-sandbox-bignbit-staging",
+                "key": "bignbit-harmony-output/mur25-jpl-l4-glob-v04.2/20261109/1ef2f95d-8e1b-4424-8f73-cc771a701e12/13180898/20260317090000-JPL-L4_GHRSST-SSTfnd-MUR25-GLOB-v02.0-fv04.2_filtered_sea_ice_fraction_reformatted.xml",
+                "checksum": "00f04709aca3d8d4e45f249ae059bfa272d3408f656427feac75616f02189be54bc9dcce1be0b8c6143d5fc390b714cad359cce3e8d27ea9281615d2dc36ede9",
+                "checksumType": "SHA512",
+                "variable": "sea_ice_fraction",
+                "output_crs": "EPSG:4326",
+                "type": "metadata",
+                "subtype": "ImageMetadata-v1.2",
+                "dataday": "2026076",
+                "size": 335,
+                "uri": "s3://gitc-sandbox-bignbit-staging/bignbit-harmony-output/mur25-jpl-l4-glob-v04.2/20261109/1ef2f95d-8e1b-4424-8f73-cc771a701e12/13180898/20260317090000-JPL-L4_GHRSST-SSTfnd-MUR25-GLOB-v02.0-fv04.2_filtered_sea_ice_fraction_reformatted.xml",
+                "name": "20260317090000-JPL-L4_GHRSST-SSTfnd-MUR25-GLOB-v02.0-fv04.2_filtered_sea_ice_fraction_reformatted.xml"
+            },
+            {
+                "fileName": "20260317090000-JPL-L4_GHRSST-SSTfnd-MUR25-GLOB-v02.0-fv04.2_filtered_sea_ice_fraction_reformatted.pgw",
+                "bucket": "gitc-sandbox-bignbit-staging",
+                "key": "bignbit-harmony-output/mur25-jpl-l4-glob-v04.2/20261109/1ef2f95d-8e1b-4424-8f73-cc771a701e12/13180898/20260317090000-JPL-L4_GHRSST-SSTfnd-MUR25-GLOB-v02.0-fv04.2_filtered_sea_ice_fraction_reformatted.pgw",
+                "checksum": "a97d0a5c7d463443b30b12a96d26ea3a",
+                "checksumType": "MD5",
+                "variable": "sea_ice_fraction",
+                "output_crs": "EPSG:4326",
+                "type": "metadata",
+                "subtype": "world file",
+                "dataday": "2026076",
+                "uri": "s3://gitc-sandbox-bignbit-staging/bignbit-harmony-output/mur25-jpl-l4-glob-v04.2/20261109/1ef2f95d-8e1b-4424-8f73-cc771a701e12/13180898/20260317090000-JPL-L4_GHRSST-SSTfnd-MUR25-GLOB-v02.0-fv04.2_filtered_sea_ice_fraction_reformatted.pgw",
+                "name": "20260317090000-JPL-L4_GHRSST-SSTfnd-MUR25-GLOB-v02.0-fv04.2_filtered_sea_ice_fraction_reformatted.pgw"
+            }
+        ]
+    },
+    "provider": "POCLOUD"
+}

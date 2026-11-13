@@ -1,0 +1,57 @@
+{
+    "version": "1.5.1",
+    "duplicationid": "TEMPO_O3TOT_L2_V04_20260525T102504Z_S001G01_regridded_filtered_product_fc_reformatted_2026145_EPSG:4326!G1281975564-LARC_CLOUD",
+    "collection": "TEMPO_O3TOT_L2_product_fc_LL",
+    "submissionTime": "2026-11-10T17:52:28.166Z",
+    "identifier": "TEMPO_O3TOT_L2_V04_20260525T102504Z_S001G01_regridded_filtered_product_fc_reformatted_2026145_EPSG:4326!G1281975564-LARC_CLOUD",
+    "product": {
+        "name": "TEMPO_O3TOT_L2_V04_20260525T102504Z_S001G01_regridded_filtered_product_fc_reformatted_2026145_EPSG:4326!G1281975564-LARC_CLOUD",
+        "dataVersion": "1.5",
+        "files": [
+            {
+                "fileName": "TEMPO_O3TOT_L2_V04_20260525T102504Z_S001G01_regridded_filtered_product_fc_reformatted.png",
+                "bucket": "gitc-sandbox-bignbit-staging",
+                "key": "bignbit-harmony-output/tempo_o3tot_l2/20261110/11eb65ba-25b6-4ee9-9b5d-42f3e1dd1c26/13196423/TEMPO_O3TOT_L2_V04_20260525T102504Z_S001G01_regridded_filtered_product_fc_reformatted.png",
+                "checksum": "ac5615ccc846bcc205cc79e42835622e",
+                "checksumType": "MD5",
+                "variable": "product/fc",
+                "output_crs": "EPSG:4326",
+                "type": "browse",
+                "subtype": "png",
+                "dataday": "2026145",
+                "uri": "s3://gitc-sandbox-bignbit-staging/bignbit-harmony-output/tempo_o3tot_l2/20261110/11eb65ba-25b6-4ee9-9b5d-42f3e1dd1c26/13196423/TEMPO_O3TOT_L2_V04_20260525T102504Z_S001G01_regridded_filtered_product_fc_reformatted.png",
+                "name": "TEMPO_O3TOT_L2_V04_20260525T102504Z_S001G01_regridded_filtered_product_fc_reformatted.png"
+            },
+            {
+                "fileName": "TEMPO_O3TOT_L2_V04_20260525T102504Z_S001G01_regridded_filtered_product_fc_reformatted.xml",
+                "bucket": "gitc-sandbox-bignbit-staging",
+                "key": "bignbit-harmony-output/tempo_o3tot_l2/20261110/11eb65ba-25b6-4ee9-9b5d-42f3e1dd1c26/13196423/TEMPO_O3TOT_L2_V04_20260525T102504Z_S001G01_regridded_filtered_product_fc_reformatted.xml",
+                "checksum": "c3878347486250413ea0be75276fe2992d2a3de372a26e6c1a538ef082a0accfe84bc5f4e387420aa2b62f7ae2af553ce984407c27eab53138a1c3e81c842122",
+                "checksumType": "SHA512",
+                "variable": "product/fc",
+                "output_crs": "EPSG:4326",
+                "type": "metadata",
+                "subtype": "ImageMetadata-v1.2",
+                "dataday": "2026145",
+                "size": 365,
+                "uri": "s3://gitc-sandbox-bignbit-staging/bignbit-harmony-output/tempo_o3tot_l2/20261110/11eb65ba-25b6-4ee9-9b5d-42f3e1dd1c26/13196423/TEMPO_O3TOT_L2_V04_20260525T102504Z_S001G01_regridded_filtered_product_fc_reformatted.xml",
+                "name": "TEMPO_O3TOT_L2_V04_20260525T102504Z_S001G01_regridded_filtered_product_fc_reformatted.xml"
+            },
+            {
+                "fileName": "TEMPO_O3TOT_L2_V04_20260525T102504Z_S001G01_regridded_filtered_product_fc_reformatted.pgw",
+                "bucket": "gitc-sandbox-bignbit-staging",
+                "key": "bignbit-harmony-output/tempo_o3tot_l2/20261110/11eb65ba-25b6-4ee9-9b5d-42f3e1dd1c26/13196423/TEMPO_O3TOT_L2_V04_20260525T102504Z_S001G01_regridded_filtered_product_fc_reformatted.pgw",
+                "checksum": "0e8e6527a742931241d710c225820dab",
+                "checksumType": "MD5",
+                "variable": "product/fc",
+                "output_crs": "EPSG:4326",
+                "type": "metadata",
+                "subtype": "world file",
+                "dataday": "2026145",
+                "uri": "s3://gitc-sandbox-bignbit-staging/bignbit-harmony-output/tempo_o3tot_l2/20261110/11eb65ba-25b6-4ee9-9b5d-42f3e1dd1c26/13196423/TEMPO_O3TOT_L2_V04_20260525T102504Z_S001G01_regridded_filtered_product_fc_reformatted.pgw",
+                "name": "TEMPO_O3TOT_L2_V04_20260525T102504Z_S001G01_regridded_filtered_product_fc_reformatted.pgw"
+            }
+        ]
+    },
+    "provider": "LARC_CLOUD"
+}

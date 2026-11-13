@@ -1,0 +1,57 @@
+{
+    "version": "1.5.1",
+    "duplicationid": "TEMPO_NO2_L3_V04_20260520T010534Z_S014_filtered_product_vertical_column_stratosphere_reformatted_2026140_EPSG:4326!G1281972721-LARC_CLOUD",
+    "collection": "TEMPO_NO2_L3_product_vertical_column_stratosphere_LL",
+    "submissionTime": "2026-11-10T17:49:45.509Z",
+    "identifier": "TEMPO_NO2_L3_V04_20260520T010534Z_S014_filtered_product_vertical_column_stratosphere_reformatted_2026140_EPSG:4326!G1281972721-LARC_CLOUD",
+    "product": {
+        "name": "TEMPO_NO2_L3_V04_20260520T010534Z_S014_filtered_product_vertical_column_stratosphere_reformatted_2026140_EPSG:4326!G1281972721-LARC_CLOUD",
+        "dataVersion": "1.5",
+        "files": [
+            {
+                "fileName": "TEMPO_NO2_L3_V04_20260520T010534Z_S014_filtered_product_vertical_column_stratosphere_reformatted.png",
+                "bucket": "gitc-sandbox-bignbit-staging",
+                "key": "bignbit-harmony-output/tempo_no2_l3/20261110/8f32f02f-3402-4a7f-9527-c5e0f6a03cb5/13196355/TEMPO_NO2_L3_V04_20260520T010534Z_S014_filtered_product_vertical_column_stratosphere_reformatted.png",
+                "checksum": "572a21bde99d555fb51211a47afdbc4d",
+                "checksumType": "MD5",
+                "variable": "product/vertical_column_stratosphere",
+                "output_crs": "EPSG:4326",
+                "type": "browse",
+                "subtype": "png",
+                "dataday": "2026140",
+                "uri": "s3://gitc-sandbox-bignbit-staging/bignbit-harmony-output/tempo_no2_l3/20261110/8f32f02f-3402-4a7f-9527-c5e0f6a03cb5/13196355/TEMPO_NO2_L3_V04_20260520T010534Z_S014_filtered_product_vertical_column_stratosphere_reformatted.png",
+                "name": "TEMPO_NO2_L3_V04_20260520T010534Z_S014_filtered_product_vertical_column_stratosphere_reformatted.png"
+            },
+            {
+                "fileName": "TEMPO_NO2_L3_V04_20260520T010534Z_S014_filtered_product_vertical_column_stratosphere_reformatted.xml",
+                "bucket": "gitc-sandbox-bignbit-staging",
+                "key": "bignbit-harmony-output/tempo_no2_l3/20261110/8f32f02f-3402-4a7f-9527-c5e0f6a03cb5/13196355/TEMPO_NO2_L3_V04_20260520T010534Z_S014_filtered_product_vertical_column_stratosphere_reformatted.xml",
+                "checksum": "516afc3dc519e21ba7ce6174d2a06c6e513b16d73889f741f849a889d3751ccbd922e257f5308825cc285c5837bfb5f6ae8074328b47dbdfc8928e6b3f8c8f12",
+                "checksumType": "SHA512",
+                "variable": "product/vertical_column_stratosphere",
+                "output_crs": "EPSG:4326",
+                "type": "metadata",
+                "subtype": "ImageMetadata-v1.2",
+                "dataday": "2026140",
+                "size": 365,
+                "uri": "s3://gitc-sandbox-bignbit-staging/bignbit-harmony-output/tempo_no2_l3/20261110/8f32f02f-3402-4a7f-9527-c5e0f6a03cb5/13196355/TEMPO_NO2_L3_V04_20260520T010534Z_S014_filtered_product_vertical_column_stratosphere_reformatted.xml",
+                "name": "TEMPO_NO2_L3_V04_20260520T010534Z_S014_filtered_product_vertical_column_stratosphere_reformatted.xml"
+            },
+            {
+                "fileName": "TEMPO_NO2_L3_V04_20260520T010534Z_S014_filtered_product_vertical_column_stratosphere_reformatted.pgw",
+                "bucket": "gitc-sandbox-bignbit-staging",
+                "key": "bignbit-harmony-output/tempo_no2_l3/20261110/8f32f02f-3402-4a7f-9527-c5e0f6a03cb5/13196355/TEMPO_NO2_L3_V04_20260520T010534Z_S014_filtered_product_vertical_column_stratosphere_reformatted.pgw",
+                "checksum": "06e5a176d36fd83c51f296b5c04b7462",
+                "checksumType": "MD5",
+                "variable": "product/vertical_column_stratosphere",
+                "output_crs": "EPSG:4326",
+                "type": "metadata",
+                "subtype": "world file",
+                "dataday": "2026140",
+                "uri": "s3://gitc-sandbox-bignbit-staging/bignbit-harmony-output/tempo_no2_l3/20261110/8f32f02f-3402-4a7f-9527-c5e0f6a03cb5/13196355/TEMPO_NO2_L3_V04_20260520T010534Z_S014_filtered_product_vertical_column_stratosphere_reformatted.pgw",
+                "name": "TEMPO_NO2_L3_V04_20260520T010534Z_S014_filtered_product_vertical_column_stratosphere_reformatted.pgw"
+            }
+        ]
+    },
+    "provider": "LARC_CLOUD"
+}
