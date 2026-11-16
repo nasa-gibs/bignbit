@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Deprecated
 ### Removed
 ### Fixed
+- Skip harmony-py's wait for completion poll when getting Harmony job status (fix introduced in GITC-9361 branch in v0.9.0)
 ### Security
 - Minor dependency updates (certifi, etc.) and docker image rebuild to pull in latest version of brotli library.
 

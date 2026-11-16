@@ -229,7 +229,11 @@ def process_harmony_results(harmony_job: dict[str, str], cmr_env: str) -> list[d
 
     s3_client = boto3.client('s3')
     harmony_client = utils.get_harmony_client(cmr_env)
-    result_urls = list(harmony_client.result_urls(job_id, link_type=LinkType.s3))
+    # The Get Harmony Job Status step has already confirmed this job finished, so skip
+    # harmony-py's wait-for-completion poll (allow_incomplete=True). That poll uses
+    # POST /jobs/status, which breaks on a fresh session: the EDL login redirect turns
+    # the POST into a GET, and Harmony rejects 'status' as an invalid job ID.
+    result_urls = list(harmony_client.result_urls(job_id, link_type=LinkType.s3, allow_incomplete=True))
 
     CUMULUS_LOGGER.info('Processing {} result files for {}', len(result_urls), variable)
     CUMULUS_LOGGER.debug('Results: {}', result_urls)
